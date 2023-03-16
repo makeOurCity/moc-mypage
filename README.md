@@ -1,6 +1,6 @@
-# MoC mypage
+# MoC Mypage
 
-Make our City mypage
+Make our City mypage.
 # Get Started
 
 Create and edit `.env.local` file.
