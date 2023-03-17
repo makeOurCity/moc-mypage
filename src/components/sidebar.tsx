@@ -7,9 +7,7 @@ import {
   Flex,
   HStack,
   VStack,
-  Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
@@ -33,7 +31,7 @@ import {
   FiChevronDown,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { ReactText } from 'react';
+import NavItem from '@/components/header'
 
 interface LinkItemProps {
   name: string;
@@ -110,40 +108,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: ReactText;
-}
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-  return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}>
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
-  );
-};
+
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
