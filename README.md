@@ -23,3 +23,7 @@ Install dependencies and launch dev server.
 $ npm install
 $ npm run dev
 ```
+
+# Development
+
+[Next.js](https://nextjs.org/) with [chakra-ui](https://chakra-ui.com/) and we are refferring to [chakra-templates](https://chakra-templates.dev/).
