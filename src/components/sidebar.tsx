@@ -98,7 +98,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Box w="6em">
+        <Box w="5em">
           <Image src="/logo.webp" alt="MoC" />
         </Box>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -136,8 +136,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         icon={<FiMenu />}
       />
 
-      <Box w="5em">
-        <Image src="/logo.webp" alt="MoC" />
+      <Box w="12em" mx="auto">
+        <Image src="/logo_long.webp" alt="MoC" />
       </Box>
 
       <HStack spacing={{ base: "0", md: "6" }}>
