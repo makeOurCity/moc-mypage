@@ -24,7 +24,7 @@ export default function NavItem({ icon, children, href, ...rest }: NavItemProps)
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'red.700',
           color: 'white',
         }}
         {...rest}>
