@@ -12,7 +12,7 @@ export default function Home() {
   const { data: session, status: loading } = useSession();
   return (
     <Layout>
-      <h1>sample</h1>
+      <LoginButton/>
     </Layout>
   );
 }

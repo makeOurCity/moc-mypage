@@ -5,19 +5,32 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import TwitterProvider from "next-auth/providers/twitter"
 import CognitoProvider from "next-auth/providers/cognito";
+import { Provider } from "next-auth/providers"
 // import EmailProvider from "next-auth/providers/email"
 // import AppleProvider from "next-auth/providers/apple"
+
+const providers: Provider[] = []
+
+// https://mseeeen.msen.jp/nextauth-cognito-token-refresh/
+if (process.env.COGNITO_CLIENT_ID && process.env.COGNITO_CLIENT_SECRET) {
+  providers.push(CognitoProvider({
+    clientId: process.env.COGNITO_CLIENT_ID!,
+    clientSecret: process.env.COGNITO_CLIENT_SECRET!,
+    issuer: process.env.COGNITO_ISSUER,
+  }))
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
-  providers: [
-    CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID!,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET!,
-      issuer: process.env.COGNITO_ISSUER,
-    })
+  providers,
+  // providers: [
+    // CognitoProvider({
+    //   clientId: process.env.COGNITO_CLIENT_ID!,
+    //   clientSecret: process.env.COGNITO_CLIENT_SECRET!,
+    //   issuer: process.env.COGNITO_ISSUER,
+    // })
     // EmailProvider({
     //   server: process.env.EMAIL_SERVER,
     //   from: process.env.EMAIL_FROM,
@@ -56,7 +69,7 @@ export default NextAuth({
     //   clientId: process.env.TWITTER_ID,
     //   clientSecret: process.env.TWITTER_SECRET,
     // }),
-  ],
+  // ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
   //

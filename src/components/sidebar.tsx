@@ -29,7 +29,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
-  { name: "Types", icon: FiHash, href: "/fiware/orion/type" },
+  { name: "Types", icon: FiHash, href: "/fiware/orion/types" },
   { name: "Trending", icon: FiTrendingUp },
   { name: "Explore", icon: FiCompass },
   { name: "Favourites", icon: FiStar },
