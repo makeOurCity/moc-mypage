@@ -10,11 +10,12 @@ import { ReactNode } from 'react';
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  href?: string;
   children: ReactNode;
 }
-export default function NavItem({ icon, children, ...rest }: NavItemProps) {
+export default function NavItem({ icon, children, href, ...rest }: NavItemProps) {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link href={href} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"

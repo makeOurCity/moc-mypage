@@ -23,10 +23,11 @@ import MobileNav from "@/components/header/mobile-nav";
 
 interface LinkItemProps {
   name: string;
+  href?: string;
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome },
+  { name: "Home", icon: FiHome, href: "/" },
   { name: "Trending", icon: FiTrendingUp },
   { name: "Explore", icon: FiCompass },
   { name: "Favourites", icon: FiStar },
@@ -90,7 +91,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} href={link.href} icon={link.icon}>
           {link.name}
         </NavItem>
       ))}
