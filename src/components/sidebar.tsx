@@ -34,6 +34,7 @@ import {
 import { IconType } from "react-icons";
 import NavItem from "@/components/header";
 import HeaderIcon from "./header/icon";
+import { useSession } from "next-auth/react";
 
 interface LinkItemProps {
   name: string;
@@ -116,6 +117,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const {data: session} = useSession();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -162,10 +164,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
+                  <Text fontSize="sm">{session?.user?.email || "example@example.com"}</Text>
+                  {/* <Text fontSize="xs" color="gray.600">
                     Admin
-                  </Text>
+                  </Text> */}
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
