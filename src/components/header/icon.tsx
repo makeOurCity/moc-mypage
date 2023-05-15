@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import GravatarIcon from "../gravatar/icon";
+import GravatarIcon from "../gravatar/Icon";
 
 
 export default function HeaderIcon() {

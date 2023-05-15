@@ -21,7 +21,7 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import { useSession } from "next-auth/react";
-import HeaderIcon from "./icon";
+import HeaderIcon from "./Icon";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;

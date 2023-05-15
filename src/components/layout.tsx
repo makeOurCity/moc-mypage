@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import SidebarWithHeader from "./sidebar";
+import SidebarWithHeader from "./Sidebar";
 
 type LayoutProps = Required<{
   readonly children: ReactElement;

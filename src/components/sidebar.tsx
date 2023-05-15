@@ -19,8 +19,8 @@ import {
   FiHash,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
-import NavItem from "@/components/header/nav-item";
-import MobileNav from "@/components/header/mobile-nav";
+import NavItem from "@/components/header/NavItem";
+import MobileNav from "@/components/header/MobileNav";
 
 interface LinkItemProps {
   name: string;
