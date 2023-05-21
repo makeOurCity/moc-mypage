@@ -1,5 +1,7 @@
 # MoC Mypage
 
+[![Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml)
+
 Make our City mypage.
 # Get Started
 
