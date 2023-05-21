@@ -1,4 +1,4 @@
-import { Layout } from "@/components/Layout";
+import { Layout } from "@/components/layouta";
 import { useAxios } from "@/hooks/useAxios";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
