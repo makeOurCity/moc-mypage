@@ -22,7 +22,12 @@ if (process.env.COGNITO_CLIENT_ID && process.env.COGNITO_CLIENT_SECRET) {
       clientId: process.env.COGNITO_CLIENT_ID!,
       clientSecret: process.env.COGNITO_CLIENT_SECRET!,
       issuer: process.env.COGNITO_ISSUER,
-      // idToken: true,
+      idToken: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
     })
   );
 }
@@ -141,21 +146,20 @@ export default NextAuth({
     },
     // async redirect({ url, baseUrl }) { return baseUrl },
     async session({ session, token, user }) {
-      session.accessToken = token.accessToken;
+      // session.accessToken = token.accessToken;
       session.idToken = token.idToken;
-      session.refreshToken = token.refreshToken;
+      // session.refreshToken = token.refreshToken;
       return session;
     },
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
     async jwt({ token, user, account, profile, isNewUser }) {
-      // console.log("jwt callback", user, token, account);
       if (account) {
         // account is provided upon the inital auth
         return {
           ...token,
-          accessToken: account.access_token,
+          // accessToken: account.access_token,
           idToken: account.id_token,
-          refreshToken: account.refresh_token,
+          // refreshToken: account.refresh_token,
         };
       }
       return token;
