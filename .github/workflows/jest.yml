@@ -36,4 +36,7 @@ jobs:
         run: npm i
 
       - name: jest
-        run: npm run test-ci
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-script: npm run test:ci
