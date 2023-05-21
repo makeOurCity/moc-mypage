@@ -29,3 +29,9 @@ $ npm run dev
 # Development
 
 [Next.js](https://nextjs.org/) with [chakra-ui](https://chakra-ui.com/) and we are refferring to [chakra-templates](https://chakra-templates.dev/).
+
+# Testing
+
+```console
+$ npm run test
+```
