@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "codegen": "npx openapi-generator-cli generate -g typescript -i https://fiware.github.io/specifications/OpenAPI/ngsiv2/ngsiv2-openapi.json",
     "test": "jest --watch",
     "test:ci": "jest --ci --collectCoverage --coverageDirectory=coverage"
   },
@@ -33,6 +34,7 @@
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.6.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "jest": "^29.5.0",
