@@ -1,62 +1,87 @@
-import NextAuth from "next-auth"
-import Auth0Provider from "next-auth/providers/auth0"
-import FacebookProvider from "next-auth/providers/facebook"
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
-import TwitterProvider from "next-auth/providers/twitter"
+import NextAuth from "next-auth";
+import Auth0Provider from "next-auth/providers/auth0";
+import FacebookProvider from "next-auth/providers/facebook";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 import CognitoProvider from "next-auth/providers/cognito";
+import { Provider } from "next-auth/providers";
+
+import axios from "axios";
+import { getToken } from "next-auth/jwt";
 // import EmailProvider from "next-auth/providers/email"
 // import AppleProvider from "next-auth/providers/apple"
+
+const providers: Provider[] = [];
+
+// https://mseeeen.msen.jp/nextauth-cognito-token-refresh/
+// https://kelvinmwinuka.com/social-login-with-cognito-and-nextauth
+if (process.env.COGNITO_CLIENT_ID && process.env.COGNITO_CLIENT_SECRET) {
+  providers.push(
+    CognitoProvider({
+      clientId: process.env.COGNITO_CLIENT_ID!,
+      clientSecret: process.env.COGNITO_CLIENT_SECRET!,
+      issuer: process.env.COGNITO_ISSUER,
+      idToken: true,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
+    })
+  );
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
-  providers: [
-    CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID!,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET!,
-      issuer: process.env.COGNITO_ISSUER,
-    })
-    // EmailProvider({
-    //   server: process.env.EMAIL_SERVER,
-    //   from: process.env.EMAIL_FROM,
-    // }),
-    // AppleProvider({
-    //   clientId: process.env.APPLE_ID,
-    //   clientSecret: {
-    //     appleId: process.env.APPLE_ID,
-    //     teamId: process.env.APPLE_TEAM_ID,
-    //     privateKey: process.env.APPLE_PRIVATE_KEY,
-    //     keyId: process.env.APPLE_KEY_ID,
-    //   },
-    // }),
-    // Auth0Provider({
-    //   clientId: process.env.AUTH0_ID,
-    //   clientSecret: process.env.AUTH0_SECRET,
-    //   // @ts-ignore
-    //   domain: process.env.AUTH0_DOMAIN,
-    // }),
-    // FacebookProvider({
-    //   clientId: process.env.FACEBOOK_ID,
-    //   clientSecret: process.env.FACEBOOK_SECRET,
-    // }),
-    // GithubProvider({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    //   // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
-    //   // @ts-ignore
-    //   scope: "read:user",
-    // }),
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_ID,
-    //   clientSecret: process.env.GOOGLE_SECRET,
-    // }),
-    // TwitterProvider({
-    //   clientId: process.env.TWITTER_ID,
-    //   clientSecret: process.env.TWITTER_SECRET,
-    // }),
-  ],
+  providers,
+  // providers: [
+  // CognitoProvider({
+  //   clientId: process.env.COGNITO_CLIENT_ID!,
+  //   clientSecret: process.env.COGNITO_CLIENT_SECRET!,
+  //   issuer: process.env.COGNITO_ISSUER,
+  // })
+  // EmailProvider({
+  //   server: process.env.EMAIL_SERVER,
+  //   from: process.env.EMAIL_FROM,
+  // }),
+  // AppleProvider({
+  //   clientId: process.env.APPLE_ID,
+  //   clientSecret: {
+  //     appleId: process.env.APPLE_ID,
+  //     teamId: process.env.APPLE_TEAM_ID,
+  //     privateKey: process.env.APPLE_PRIVATE_KEY,
+  //     keyId: process.env.APPLE_KEY_ID,
+  //   },
+  // }),
+  // Auth0Provider({
+  //   clientId: process.env.AUTH0_ID,
+  //   clientSecret: process.env.AUTH0_SECRET,
+  //   // @ts-ignore
+  //   domain: process.env.AUTH0_DOMAIN,
+  // }),
+  // FacebookProvider({
+  //   clientId: process.env.FACEBOOK_ID,
+  //   clientSecret: process.env.FACEBOOK_SECRET,
+  // }),
+  // GithubProvider({
+  //   clientId: process.env.GITHUB_ID,
+  //   clientSecret: process.env.GITHUB_SECRET,
+  //   // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
+  //   // @ts-ignore
+  //   scope: "read:user",
+  // }),
+  // GoogleProvider({
+  //   clientId: process.env.GOOGLE_ID,
+  //   clientSecret: process.env.GOOGLE_SECRET,
+  // }),
+  // TwitterProvider({
+  //   clientId: process.env.TWITTER_ID,
+  //   clientSecret: process.env.TWITTER_SECRET,
+  // }),
+  // ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
   //
@@ -74,7 +99,7 @@ export default NextAuth({
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `strategy` should be set to 'jwt' if no database is used.
-    strategy: 'jwt'
+    strategy: "jwt",
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -116,16 +141,34 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn({ user, account, profile, email, credentials }) { return true },
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
     // async redirect({ url, baseUrl }) { return baseUrl },
-    // async session({ session, token, user }) { return session },
+    async session({ session, token, user }) {
+      // session.accessToken = token.accessToken;
+      session.idToken = token.idToken;
+      // session.refreshToken = token.refreshToken;
+      return session;
+    },
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (account) {
+        // account is provided upon the inital auth
+        return {
+          ...token,
+          // accessToken: account.access_token,
+          idToken: account.id_token,
+          // refreshToken: account.refresh_token,
+        };
+      }
+      return token;
+    },
   },
-
   // Events are useful for logging
   // https://next-auth.js.org/configuration/events
   events: {},
 
   // Enable debug messages in the console if you are having problems
-  debug: process.env.NODE_ENV === "development",
-})
+  debug: process.env.NODE_ENV === "development" ? true : false,
+});
