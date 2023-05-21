@@ -56,7 +56,7 @@ http://localhost:3000 でアクセス可能です。
 
 # Testing
 
-以下のコマンドですとを実行してください。
+以下のコマンドで、テストが実行できます。
 
 ```console
 $ npm run test
