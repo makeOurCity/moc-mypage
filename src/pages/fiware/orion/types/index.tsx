@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import MultiTenancyForm from "@/components/ngsiv2/MultITenancyForm";
 import TypeList from "@/components/ngsiv2/TypeList";
 import { useNgsiV2 } from "@/hooks/useNgsiV2";
 import { Heading, Stack } from "@chakra-ui/react";
@@ -20,6 +21,7 @@ export default function FiwareOrionTypesIndex() {
       <Stack spacing={10}>
         <Heading as="h1" size="lg">テナント</Heading>
         <Heading as="h2" size="md">マルチテナントの設定</Heading>
+        <MultiTenancyForm />
         <Heading as="h2" size="md">タイプ一覧</Heading>
         <TypeList data={list} />
       </Stack>
