@@ -29,11 +29,11 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
-  { name: "Types", icon: FiHash, href: "/fiware/orion/types" },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
+  { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
+  // { name: "Trending", icon: FiTrendingUp },
+  // { name: "Explore", icon: FiCompass },
+  // { name: "Favourites", icon: FiStar },
+  // { name: "Settings", icon: FiSettings },
 ];
 
 export default function SidebarWithHeader({

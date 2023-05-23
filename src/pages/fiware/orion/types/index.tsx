@@ -1,23 +1,28 @@
 import { Layout } from "@/components/Layout";
-import { useAxios } from "@/hooks/useAxios";
+import TypeList from "@/components/ngsiv2/TypeList";
 import { useNgsiV2 } from "@/hooks/useNgsiV2";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { Heading, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { ListEntityTypesResponse } from "../../../../../codegens/ngsiv2";
 
 export default function FiwareOrionTypesIndex() {
-
-
-  // const {data: session, status } = useSession();
-
-
   const { api } = useNgsiV2();
+  const [list, setList] = useState<ListEntityTypesResponse[]>([]);
 
-  api.typesApi.listEntityTypes().then((res) => {
-    console.log(res);
-  });
+  useEffect(() => {
+    api.typesApi.listEntityTypes().then((res) => {
+      setList(res.data)
+    });
+  }, [api.typesApi])
 
-  // if (loading) return <p>Loading...</p>
-  // if (error) return <p>Error!</p>
-
-  return <Layout><>test</></Layout>;
+  return (
+    <Layout>
+      <Stack spacing={10}>
+        <Heading as="h1" size="lg">テナント</Heading>
+        <Heading as="h2" size="md">マルチテナントの設定</Heading>
+        <Heading as="h2" size="md">タイプ一覧</Heading>
+        <TypeList data={list} />
+      </Stack>
+    </Layout>
+  );
 }
