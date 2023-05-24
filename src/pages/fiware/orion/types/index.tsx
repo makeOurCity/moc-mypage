@@ -1,13 +1,13 @@
 import { Layout } from "@/components/Layout";
 import MultiTenancyForm from "@/components/ngsiv2/MultITenancyForm";
 import TypeList from "@/components/ngsiv2/TypeList";
-import { useNgsiV2 } from "@/hooks/useNgsiV2";
+import { useOrion } from "@/hooks/useOrion";
 import { Heading, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ListEntityTypesResponse } from "../../../../../codegens/ngsiv2";
 
 export default function FiwareOrionTypesIndex() {
-  const { api } = useNgsiV2();
+  const { api } = useOrion();
   const [list, setList] = useState<ListEntityTypesResponse[]>([]);
 
   useEffect(() => {
