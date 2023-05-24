@@ -4,7 +4,9 @@ import {
   SubscriptionsApiFactory,
 } from "../../codegens/ngsiv2";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
+import { logger } from "@/logger";
 
 const instance = axios.create({
   baseURL: `/api/orion`,
@@ -16,12 +18,18 @@ const entitiesApi = EntitiesApiFactory(undefined, "", instance);
 const subscriptionsApi = SubscriptionsApiFactory(undefined, "", instance);
 
 export function useOrion() {
-  const [fiwareService, setFiwareService] = useState<string | undefined>(
-    undefined
-  );
+  const setFiwareServiceHeader = (fiwareService: string) => {
+    if (fiwareService) {
+      logger.info("Set Fiware-Service", fiwareService);
+      instance.defaults.headers["Fiware-Service"] = fiwareService;
+    } else {
+      logger.info("Delete Fiware-Service");
+      delete instance.defaults.headers["Fiware-Service"];
+    }
+  };
 
   const resetFiwareService = () => {
-    setFiwareService(undefined);
+    setFiwareServiceHeader("");
   };
 
   return {
@@ -30,8 +38,7 @@ export function useOrion() {
       entitiesApi,
       subscriptionsApi,
     },
-    fiwareService,
-    setFiwareService,
+    setFiwareServiceHeader,
     resetFiwareService,
   };
 }

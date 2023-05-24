@@ -1,6 +1,14 @@
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useOrion } from "@/hooks/useOrion";
 import { logger } from "@/logger";
-import { Button, FormControl, FormErrorMessage, Input, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 /**
@@ -11,8 +19,8 @@ import { useForm } from "react-hook-form";
  */
 export default function MultiTenancyForm() {
   const toast = useToast();
-  const { fiwareService, setFiwareService, resetFiwareService } = useOrion();
-
+  const {setFiwareServiceHeader} = useOrion();
+  const [fiwareService, setFiwareService] = useLocalStorage<string>("fiware-service", "");
   const {
     handleSubmit,
     register,
@@ -20,13 +28,13 @@ export default function MultiTenancyForm() {
   } = useForm();
 
   const onSubmit = handleSubmit((v) => {
-    logger.info(`Set Fiware-Service: ${v.name}`);
-    setFiwareService(v.name);
+    setFiwareService(fiwareService);
+    setFiwareServiceHeader(fiwareService);
 
-    if (v.name) {
+    if (fiwareService) {
       toast({
         title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Service: 「${v.name}」 を使用します。`,
+        description: `Fiware-Service: 「${fiwareService}」 を使用します。`,
       });
     } else {
       toast({
@@ -36,22 +44,29 @@ export default function MultiTenancyForm() {
     }
   });
 
+  const onNameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    register("name").onChange(e);
+    const { name, value } = e.target
+    logger.info("on name change handler", { name, value });
+    setFiwareService(value)
+  }
+
   return (
     <>
       <form onSubmit={onSubmit}>
         <FormControl isInvalid={Boolean(errors.name)}>
           <Input
             id="name"
+            value={fiwareService || ""}
             placeholder="Fiware-Service"
             {...register("name", {
               required: false,
-              maxLength: { value: 1, message: "最大文字数は50文字です" },
+              maxLength: { value: 50, message: "最大文字数は50文字です" },
             })}
+            onChange={onNameChangeHandler}
           />
           <FormErrorMessage>
-            <>
-              {errors.name && errors.name.message}
-            </>
+            <>{errors.name && errors.name.message}</>
           </FormErrorMessage>
         </FormControl>
 

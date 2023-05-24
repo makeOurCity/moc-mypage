@@ -2,19 +2,23 @@ import { Layout } from "@/components/Layout";
 import MultiTenancyForm from "@/components/ngsiv2/MultITenancyForm";
 import TypeList from "@/components/ngsiv2/TypeList";
 import { useOrion } from "@/hooks/useOrion";
-import { Heading, Stack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Button, FormControl, Heading, Stack } from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
 import { ListEntityTypesResponse } from "../../../../../codegens/ngsiv2";
 
 export default function FiwareOrionTypesIndex() {
   const { api } = useOrion();
   const [list, setList] = useState<ListEntityTypesResponse[]>([]);
 
-  useEffect(() => {
+  const updateList = useCallback(() => {
     api.typesApi.listEntityTypes().then((res) => {
       setList(res.data)
     });
-  }, [api.typesApi])
+  }, [api.typesApi]);
+
+  useEffect(() => {
+    updateList();
+  }, [updateList])
 
   return (
     <Layout>
@@ -23,6 +27,9 @@ export default function FiwareOrionTypesIndex() {
         <Heading as="h2" size="md">マルチテナントの設定</Heading>
         <MultiTenancyForm />
         <Heading as="h2" size="md">タイプ一覧</Heading>
+        <FormControl>
+        <Button onClick={updateList} mt={4} colorScheme="teal">再読み込み</Button>
+        </FormControl>
         <TypeList data={list} />
       </Stack>
     </Layout>
