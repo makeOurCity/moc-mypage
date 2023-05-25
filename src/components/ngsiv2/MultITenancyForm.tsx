@@ -8,6 +8,7 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -51,12 +52,12 @@ export default function MultiTenancyForm({ onChangeFiwareService }: Props = {}) 
     }
   });
 
-  const onNameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
     const { name, value } = e.target
-    logger.info("on name change handler", { name, value });
+    // logger.info("on name change handler", { name, value });
     setFiwareService(value)
-  }
+  }, [setFiwareService, register]);
 
   return (
     <>

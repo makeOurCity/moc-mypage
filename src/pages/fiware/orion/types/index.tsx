@@ -2,8 +2,9 @@ import { Layout } from "@/components/Layout";
 import MultiTenancyForm from "@/components/ngsiv2/MultITenancyForm";
 import TypeList from "@/components/ngsiv2/TypeList";
 import { useOrion } from "@/hooks/useOrion";
-import { Button, FormControl, Heading, Stack } from "@chakra-ui/react";
+import { Button, FormControl, Heading, Stack, Icon } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
+import { FiRefreshCw } from "react-icons/fi";
 import { ListEntityTypesResponse } from "../../../../../codegens/ngsiv2";
 
 export default function FiwareOrionTypesIndex() {
@@ -16,9 +17,9 @@ export default function FiwareOrionTypesIndex() {
     });
   }, [api.typesApi]);
 
-  useEffect(() => {
-    updateList();
-  }, [updateList])
+  // useEffect(() => {
+  //   updateList();
+  // }, [updateList])
 
   return (
     <Layout>
@@ -26,10 +27,9 @@ export default function FiwareOrionTypesIndex() {
         <Heading as="h1" size="lg">テナント</Heading>
         <Heading as="h2" size="md">マルチテナントの設定</Heading>
         <MultiTenancyForm onChangeFiwareService={updateList} />
-        <Heading as="h2" size="md">タイプ一覧</Heading>
-        <FormControl>
-        <Button onClick={updateList} mt={4} colorScheme="teal">再読み込み</Button>
-        </FormControl>
+        <Heading as="h2" size="md">タイプ一覧<Button onClick={updateList}>
+          <Icon as={FiRefreshCw} /></Button>
+        </Heading>
         <TypeList data={list} />
       </Stack>
     </Layout>
