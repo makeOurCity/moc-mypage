@@ -2,6 +2,8 @@
 import { logger } from "@/logger";
 import { useState, useEffect } from "react";
 
+interface UseLocalStorageOptions {}
+
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T | undefined>();
   const setValue = (value: T) => {
@@ -14,19 +16,21 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     if (value) {
       try {
         const parsed = JSON.parse(value) as T;
+        logger.info("Set stored value from localStorage");
         setStoredValue(parsed);
       } catch (error) {
         logger.error(error);
         setStoredValue(initialValue);
       }
     } else {
-      logger.info("Set stored value", initialValue);
+      logger.info("Set stored value using initialValue", initialValue);
       setStoredValue(initialValue);
     }
   }, []);
 
   useEffect(() => {
     if (storedValue) {
+      logger.info("Set stored value useEffect[storedValue]", initialValue);
       setValue(storedValue);
     }
   }, [storedValue]);

@@ -20,10 +20,10 @@ const subscriptionsApi = SubscriptionsApiFactory(undefined, "", instance);
 export function useOrion() {
   const setFiwareServiceHeader = (fiwareService: string) => {
     if (fiwareService) {
-      logger.info("Set Fiware-Service", fiwareService);
+      logger.debug("Set Fiware-Service", fiwareService);
       instance.defaults.headers["Fiware-Service"] = fiwareService;
     } else {
-      logger.info("Delete Fiware-Service");
+      logger.debug("Delete Fiware-Service");
       delete instance.defaults.headers["Fiware-Service"];
     }
   };

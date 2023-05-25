@@ -12,7 +12,7 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
-  onChangeFiwareService?: (fiwareService: string) => void;
+  onSubmitFiwareService?: (fiwareService: string) => void;
 }
 
 /**
@@ -21,7 +21,7 @@ type Props = {
  *
  * https://fiware-orion.letsfiware.jp/3.7.0/user/multitenancy/
  */
-export default function MultiTenancyForm({ onChangeFiwareService }: Props = {}) {
+export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) {
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
   const [fiwareService, setFiwareService] = useLocalStorage<string>("fiware-service", "");
@@ -35,8 +35,8 @@ export default function MultiTenancyForm({ onChangeFiwareService }: Props = {}) 
     setFiwareService(fiwareService);
     setFiwareServiceHeader(fiwareService);
 
-    if (onChangeFiwareService) {
-      onChangeFiwareService(fiwareService);
+    if (onSubmitFiwareService) {
+      onSubmitFiwareService(fiwareService);
     }
 
     if (fiwareService) {
@@ -55,7 +55,7 @@ export default function MultiTenancyForm({ onChangeFiwareService }: Props = {}) 
   const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
     const { name, value } = e.target
-    // logger.info("on name change handler", { name, value });
+    logger.debug("on name change handler", { name, value });
     setFiwareService(value)
   }, [setFiwareService, register]);
 
