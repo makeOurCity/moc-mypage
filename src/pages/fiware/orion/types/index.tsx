@@ -25,7 +25,7 @@ export default function FiwareOrionTypesIndex() {
       <Stack spacing={10}>
         <Heading as="h1" size="lg">テナント</Heading>
         <Heading as="h2" size="md">マルチテナントの設定</Heading>
-        <MultiTenancyForm />
+        <MultiTenancyForm onChangeFiwareService={updateList} />
         <Heading as="h2" size="md">タイプ一覧</Heading>
         <FormControl>
         <Button onClick={updateList} mt={4} colorScheme="teal">再読み込み</Button>

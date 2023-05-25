@@ -8,8 +8,11 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+
+type Props = {
+  onChangeFiwareService?: (fiwareService: string) => void;
+}
 
 /**
  *
@@ -17,7 +20,7 @@ import { useForm } from "react-hook-form";
  *
  * https://fiware-orion.letsfiware.jp/3.7.0/user/multitenancy/
  */
-export default function MultiTenancyForm() {
+export default function MultiTenancyForm({ onChangeFiwareService }: Props = {}) {
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
   const [fiwareService, setFiwareService] = useLocalStorage<string>("fiware-service", "");
@@ -30,6 +33,10 @@ export default function MultiTenancyForm() {
   const onSubmit = handleSubmit((v) => {
     setFiwareService(fiwareService);
     setFiwareServiceHeader(fiwareService);
+
+    if (onChangeFiwareService) {
+      onChangeFiwareService(fiwareService);
+    }
 
     if (fiwareService) {
       toast({
