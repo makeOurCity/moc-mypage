@@ -2,7 +2,7 @@ import {
   EntitiesApiFactory,
   TypesApiFactory,
   SubscriptionsApiFactory,
-} from "../../codegens/ngsiv2";
+} from "../../codegens/orion";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "./useLocalStorage";

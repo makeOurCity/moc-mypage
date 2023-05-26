@@ -1,12 +1,12 @@
 import { Layout } from "@/components/Layout";
-import MultiTenancyForm from "@/components/ngsiv2/MultITenancyForm";
-import TypeList from "@/components/ngsiv2/TypeList";
+import MultiTenancyForm from "@/components/orion/MultITenancyForm";
+import TypeList from "@/components/orion/TypeList";
 import { useOrion } from "@/hooks/useOrion";
 import { logger } from "@/logger";
 import { Button, FormControl, Heading, Stack, Icon } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
-import { ListEntityTypesResponse } from "../../../../../codegens/ngsiv2";
+import { ListEntityTypesResponse } from "../../../../../codegens/orion";
 
 export default function FiwareOrionTypesIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
