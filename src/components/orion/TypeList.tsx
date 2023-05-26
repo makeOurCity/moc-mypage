@@ -1,5 +1,5 @@
 import { Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { ListEntityTypesResponse } from "../../../codegens/ngsiv2";
+import { ListEntityTypesResponse } from "../../../codegens/orion";
 
 type Props = {
   data: ListEntityTypesResponse[];
