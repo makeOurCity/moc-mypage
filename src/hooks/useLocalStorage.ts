@@ -6,6 +6,7 @@ interface UseLocalStorageOptions {}
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
   const setValue = (value: T) => {
     window.localStorage.setItem(key, JSON.stringify(value));
   };
@@ -29,11 +30,12 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
   }, []);
 
   useEffect(() => {
-    if (storedValue) {
+    if (storedValue !== initialValue) {
+      setLoading(false);
       logger.info("Set stored value useEffect[storedValue]", initialValue);
-      setValue(storedValue);
+      setValue(storedValue as T);
     }
   }, [storedValue]);
 
-  return [storedValue as T, setStoredValue] as const;
+  return [storedValue as T, setStoredValue, loading] as const;
 };

@@ -12,7 +12,7 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
-  onSubmitFiwareService?: (fiwareService: string) => void;
+  onSubmitFiwareService?: (fiwareService?: string) => void;
 }
 
 /**
@@ -24,16 +24,27 @@ type Props = {
 export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) {
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
-  const [fiwareService, setFiwareService] = useLocalStorage<string>("fiware-service", "");
+  const [fiwareService, setFiwareService, loadingLocalStorage] = useLocalStorage<string | undefined>("fiware-service", undefined);
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
 
+  useEffect(() => {
+    logger.info("loadingLocalStorage", loadingLocalStorage, fiwareService);
+    setFiwareServiceHeader(fiwareService || "");
+
+    if (loadingLocalStorage === false) {
+      if (onSubmitFiwareService) {
+        onSubmitFiwareService(fiwareService);
+      }
+    }
+  }, [loadingLocalStorage]);
+
   const onSubmit = handleSubmit((v) => {
     setFiwareService(fiwareService);
-    setFiwareServiceHeader(fiwareService);
+    setFiwareServiceHeader(fiwareService || "");
 
     if (onSubmitFiwareService) {
       onSubmitFiwareService(fiwareService);
@@ -43,11 +54,13 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
       toast({
         title: "マルチテナントの設定に成功しました。",
         description: `Fiware-Service: 「${fiwareService}」 を使用します。`,
+        duration: 1100,
       });
     } else {
       toast({
         title: "マルチテナントの設定に成功しました。",
         description: `Fiware-Serviceは使用しません。`,
+        duration: 900,
       });
     }
   });
@@ -66,7 +79,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
           <Input
             id="name"
             value={fiwareService || ""}
-            placeholder="Fiware-Service"
+            placeholder="Fiware-Serviceヘッダーに値を入れたい場合はここに入力してください"
             {...register("name", {
               required: false,
               maxLength: { value: 50, message: "最大文字数は50文字です" },
