@@ -17,6 +17,7 @@ import {
   FiStar,
   FiSettings,
   FiHash,
+  FiFile,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
@@ -30,6 +31,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/" },
   { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
+  { name: "Entity", icon: FiFile, href: "/fiware/orion/entities" },
   // { name: "Trending", icon: FiTrendingUp },
   // { name: "Explore", icon: FiCompass },
   // { name: "Favourites", icon: FiStar },
