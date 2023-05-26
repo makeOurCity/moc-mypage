@@ -11,6 +11,9 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     window.localStorage.setItem(key, JSON.stringify(value));
   };
 
+  /**
+   * 初回のlocalStorageの読み込み
+   */
   useEffect(() => {
     const value = window.localStorage.getItem(key);
 
@@ -29,6 +32,9 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     }
   }, []);
 
+  /**
+   * stateの値が変更されたら、ローカルストレージの値をstateに反映する。
+   */
   useEffect(() => {
     if (storedValue !== initialValue) {
       setLoading(false);

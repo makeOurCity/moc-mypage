@@ -12,6 +12,9 @@ export default function FiwareOrionTypesIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
   const [list, setList] = useState<ListEntityTypesResponse[]>([]);
 
+  /**
+   * Fiware-Serviceが変更された際の挙動
+   */
   const updateList = useCallback((fiwareService?: string) => {
     logger.info("Update type list ", fiwareService);
 
@@ -23,15 +26,14 @@ export default function FiwareOrionTypesIndex() {
     });
   }, [api.typesApi, setFiwareServiceHeader]);
 
+  /**
+   * 更新ボタンクリック時の挙動
+   */
   const onClickHandler = useCallback(() => {
     api.typesApi.listEntityTypes().then((res) => {
       setList(res.data)
     });
   }, [api.typesApi]);
-
-  // useEffect(() => {
-  //   updateList();
-  // }, [updateList])
 
   return (
     <Layout>

@@ -31,6 +31,9 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
     formState: { errors, isSubmitting },
   } = useForm();
 
+  /**
+   * ローカルストレージから読み込んだFiware-Serviceをヘッダーにセットする。
+   */
   useEffect(() => {
     logger.info("loadingLocalStorage", loadingLocalStorage, fiwareService);
     setFiwareServiceHeader(fiwareService || "");
@@ -42,6 +45,9 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
     }
   }, [loadingLocalStorage]);
 
+  /**
+   * Fiware-Serviceの設定ボタンsubmit時の挙動
+   */
   const onSubmit = handleSubmit((v) => {
     setFiwareService(fiwareService);
     setFiwareServiceHeader(fiwareService || "");
@@ -65,6 +71,9 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
     }
   });
 
+  /**
+   * フォームに入力された内容をリアルタイムでlocalStorageに反映する。
+   */
   const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
     const { name, value } = e.target
