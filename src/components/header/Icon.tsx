@@ -1,3 +1,4 @@
+import { Spacer } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import GravatarIcon from "../gravatar/Icon";
 
