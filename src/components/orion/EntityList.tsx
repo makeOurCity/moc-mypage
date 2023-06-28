@@ -9,7 +9,7 @@ export default function EnityList({ data }: Props) {
 
   const list = data.map((t) => {
     return (
-      <Tr key={t.type}>
+      <Tr key={t.id}>
         <Td>{ t.id }</Td>
         <Td>{ t.type }</Td>
       </Tr>
