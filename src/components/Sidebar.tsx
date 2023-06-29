@@ -21,7 +21,7 @@ import {
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
-import MobileNav from "@/components/header/MobileNav";
+import Header from "@/components/header/Header";
 
 interface LinkItemProps {
   name: string;
@@ -64,7 +64,7 @@ export default function SidebarWithHeader({
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <Header onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
