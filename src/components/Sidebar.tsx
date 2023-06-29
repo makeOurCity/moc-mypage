@@ -22,14 +22,16 @@ import {
 import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
 import Header from "@/components/header/Header";
+import { useSession } from "next-auth/react";
 
 interface LinkItemProps {
   name: string;
   href?: string;
+  showAnonymousUser?: boolean;
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, href: "/" },
+  { name: "Home", icon: FiHome, href: "/", showAnonymousUser: true },
   { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
   { name: "Entity", icon: FiFile, href: "/fiware/orion/entities" },
   // { name: "Trending", icon: FiTrendingUp },
@@ -77,6 +79,9 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const { data: session } = useSession();
+  const items = LinkItems.filter((item) => session || item.showAnonymousUser);
+
   return (
     <Box
       transition="3s ease"
@@ -94,7 +99,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Box>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
+      {items.map((link) => (
         <NavItem key={link.name} href={link.href} icon={link.icon}>
           {link.name}
         </NavItem>
