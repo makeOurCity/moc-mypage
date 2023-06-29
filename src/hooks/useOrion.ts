@@ -4,8 +4,6 @@ import {
   SubscriptionsApiFactory,
 } from "../../codegens/orion";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
 import { logger } from "@/logger";
 
 const instance = axios.create({
