@@ -28,7 +28,7 @@ export default function FiwareOrionTypesIndex() {
     api.entitiesApi.listEntities().then((res) => {
       setList(res.data)
     });
-  }, [loadingLocalStorage]);
+  }, []);
 
   useEffect(() =>{
     if (loadingLocalStorage === false) {

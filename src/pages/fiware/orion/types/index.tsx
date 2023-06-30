@@ -33,7 +33,7 @@ export default function FiwareOrionTypesIndex() {
     api.typesApi.listEntityTypes().then((res) => {
       setList(res.data)
     });
-  }, [api.typesApi]);
+  }, []);
 
   return (
     <Layout>
