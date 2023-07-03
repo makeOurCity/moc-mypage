@@ -1,5 +1,4 @@
 import { Layout } from "@/components/Layout";
-import EntityList from "@/components/orion/EntityList";
 import { useOrion } from "@/hooks/useOrion";
 import { logger } from "@/logger";
 import {
@@ -7,6 +6,7 @@ import {
   Heading,
   Stack,
   Icon,
+  Box,
   Card,
   CardHeader,
   CardBody,
@@ -15,13 +15,14 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import {
-  ListEntitiesResponse,
+  ListSubscriptionsResponse,
 } from "../../../../../codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import SubscriptionList from "@/components/orion/SubscriptionList";
 
-export default function FiwareOrionEntitiesIndex() {
+export default function FiwareOrionSubscriptionsIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
-  const [list, setList] = useState<ListEntitiesResponse[]>([]);
+  const [list, setList] = useState<ListSubscriptionsResponse[]>([]);
   const [fiwareService, setFiwareService, loadingLocalStorage] =
     useLocalStorage<string | undefined>("fiware-service", undefined);
 
@@ -35,7 +36,7 @@ export default function FiwareOrionEntitiesIndex() {
       setFiwareServiceHeader(fiwareService);
     }
 
-    api.entitiesApi.listEntities().then((res) => {
+    api.subscriptionsApi.listSubscriptions().then((res) => {
       setList(res.data);
     });
   }, [loadingLocalStorage]);
@@ -52,7 +53,7 @@ export default function FiwareOrionEntitiesIndex() {
         <Card>
           <CardHeader>
             <Heading as="h1" size="md">
-              エンティティ一覧 &nbsp;
+              サブスクリプション一覧 &nbsp;
               <Button variant="ghost" onClick={updateList}>
                 <Icon as={FiRefreshCw} />
               </Button>
@@ -60,7 +61,7 @@ export default function FiwareOrionEntitiesIndex() {
             <Text>Fiware-Service: {fiwareService}</Text>
           </CardHeader>
           <CardBody>
-            <EntityList data={list} />
+            <SubscriptionList data={list} />
           </CardBody>
         </Card>
       </Stack>
