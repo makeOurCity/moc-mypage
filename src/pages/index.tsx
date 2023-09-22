@@ -1,13 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import LoginButton from "@/components/LoginButton";
 import { Layout } from "@/components/Layout";
 import { useSession } from "next-auth/react";
-import DataTableCard from "@/components/card/DataTable";
 import { useMocApi } from "@/hooks/useMocApi";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
+import MocAppInfoTable from "@/components/moc/AppInfoTable";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,17 +13,17 @@ export default function Home() {
 
   const [basicData, setBasicData] = useState<{[key:string]: string}>({});
 
-  useEffect(() => {
-    // if (!session) return;
+  const cards = [];
 
-    mocApi.get('/api/info').then((res) => {
-      setBasicData(res.data);
-    })
-  }, []);
+  if (session) {
+    cards.push(
+      <MocAppInfoTable key="appInfoTable" />
+    );
+  }
 
   return (
     <Layout>
-      <DataTableCard title="接続情報" data={basicData} />
+      { cards }
     </Layout>
   );
 }
