@@ -10,21 +10,21 @@ export const config = {
   },
 };
 
-const OrionProxy = async (
+const MocProxy = async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<any> => {
   // const session = await getServerSession();
   const token = await getToken({ req, secret: process.env.SECRET, raw: false });
   const proxy = httpProxyMiddleware(req, res, {
-    target: process.env.NEXT_PUBLIC_ORION_BASE_URL,
+    target: process.env.NEXT_PUBLIC_MOC_API_BASE_URL,
     changeOrigin: true,
     headers: {
       Authorization: token!.idToken!,
     },
     pathRewrite: [
       {
-        patternStr: "^/api/orion",
+        patternStr: "^/api/moc",
         replaceStr: "",
       },
     ],
@@ -32,7 +32,8 @@ const OrionProxy = async (
       rejectUnauthorized: false,
     }),
   });
+
   return proxy;
 };
 
-export default OrionProxy;
+export default MocProxy;

@@ -1,18 +1,29 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import LoginButton from "@/components/LoginButton";
 import { Layout } from "@/components/Layout";
 import { useSession } from "next-auth/react";
+import { useMocApi } from "@/hooks/useMocApi";
+import {  useState } from "react";
+import MocAppInfoTable from "@/components/moc/AppInfoTable";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session, status: loading } = useSession();
+  const { mocApi } = useMocApi();
+
+  const [basicData, setBasicData] = useState<{[key:string]: string}>({});
+
+  const cards = [];
+
+  if (session) {
+    cards.push(
+      <MocAppInfoTable key="appInfoTable" />
+    );
+  }
+
   return (
     <Layout>
-      {/* <LoginButton/> */}
+      { cards }
     </Layout>
   );
 }
