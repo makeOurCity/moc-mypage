@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import { Layout } from "@/components/Layout";
 import { useSession } from "next-auth/react";
 import { useMocApi } from "@/hooks/useMocApi";
-import {  useState } from "react";
+import React, { useState } from "react";
 import MocAppInfoTable from "@/components/moc/AppInfoTable";
 import MocTokenTable from "@/components/moc/TokenTable";
 import { SimpleGrid } from "@chakra-ui/react";
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <Layout>
       <SimpleGrid spacing={4}>
-        { cards }
+        { cards.map((card, i) => { return <React.Fragment key={i}>{card}</React.Fragment> }) }
       </SimpleGrid>
     </Layout>
   );
