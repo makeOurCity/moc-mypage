@@ -2,8 +2,10 @@ import { Inter } from "next/font/google";
 import { Layout } from "@/components/Layout";
 import { useSession } from "next-auth/react";
 import { useMocApi } from "@/hooks/useMocApi";
-import {  useState } from "react";
+import React, { useState } from "react";
 import MocAppInfoTable from "@/components/moc/AppInfoTable";
+import MocTokenTable from "@/components/moc/TokenTable";
+import { SimpleGrid } from "@chakra-ui/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +21,17 @@ export default function Home() {
     cards.push(
       <MocAppInfoTable key="appInfoTable" />
     );
+
+    cards.push(
+      <MocTokenTable />
+    )
   }
 
   return (
     <Layout>
-      { cards }
+      <SimpleGrid spacing={4}>
+        { cards.map((card, i) => { return <React.Fragment key={i}>{card}</React.Fragment> }) }
+      </SimpleGrid>
     </Layout>
   );
 }
