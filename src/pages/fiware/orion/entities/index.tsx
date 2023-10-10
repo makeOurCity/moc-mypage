@@ -11,13 +11,14 @@ import {
   CardHeader,
   CardBody,
   Text,
+  Flex,
+  Box,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
-import {
-  ListEntitiesResponse,
-} from "../../../../../codegens/orion";
+import { ListEntitiesResponse } from "../../../../../codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import Link from "next/link";
 
 export default function FiwareOrionEntitiesIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
@@ -51,13 +52,22 @@ export default function FiwareOrionEntitiesIndex() {
       <Stack spacing={10}>
         <Card>
           <CardHeader>
-            <Heading as="h1" size="md">
-              エンティティ一覧 &nbsp;
-              <Button variant="ghost" onClick={updateList}>
-                <Icon as={FiRefreshCw} />
-              </Button>
-            </Heading>
-            <Text>Fiware-Service: {fiwareService}</Text>
+            <Flex justifyContent="space-between">
+              <Box>
+                <Heading as="h1" size="md">
+                  エンティティ一覧 &nbsp;
+                  <Button variant="ghost" onClick={updateList}>
+                    <Icon as={FiRefreshCw} />
+                  </Button>
+                </Heading>
+                <Text>Fiware-Service: {fiwareService}</Text>
+              </Box>
+              <Box>
+                <Link href="/fiware/orion/entities/new">
+                  <Button>新規Entity</Button>
+                </Link>
+              </Box>
+            </Flex>
           </CardHeader>
           <CardBody>
             <EntityList data={list} />
