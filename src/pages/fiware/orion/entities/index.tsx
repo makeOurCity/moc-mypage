@@ -13,6 +13,7 @@ import {
   Text,
   Flex,
   Box,
+  Input,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
@@ -25,6 +26,7 @@ export default function FiwareOrionEntitiesIndex() {
   const [list, setList] = useState<ListEntitiesResponse[]>([]);
   const [fiwareService, setFiwareService, loadingLocalStorage] =
     useLocalStorage<string | undefined>("fiware-service", undefined);
+  const [type, setType] = useState<string | undefined>(undefined);
 
   /**
    * 更新ボタンクリック時の挙動
@@ -36,10 +38,12 @@ export default function FiwareOrionEntitiesIndex() {
       setFiwareServiceHeader(fiwareService);
     }
 
-    api.entitiesApi.listEntities().then((res) => {
-      setList(res.data);
-    });
-  }, [loadingLocalStorage]);
+    api.entitiesApi
+      .listEntities(undefined, type ? type : undefined)
+      .then((res) => {
+        setList(res.data);
+      });
+  }, [loadingLocalStorage, type]);
 
   useEffect(() => {
     if (loadingLocalStorage === false) {
@@ -53,7 +57,7 @@ export default function FiwareOrionEntitiesIndex() {
         <Card>
           <CardHeader>
             <Flex justifyContent="space-between">
-              <Box>
+              <Stack rowGap={2}>
                 <Heading as="h1" size="md">
                   エンティティ一覧 &nbsp;
                   <Button variant="ghost" onClick={updateList}>
@@ -61,7 +65,15 @@ export default function FiwareOrionEntitiesIndex() {
                   </Button>
                 </Heading>
                 <Text>Fiware-Service: {fiwareService}</Text>
-              </Box>
+                <Flex gap={2}>
+                  Type:
+                  <Input
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    size="sm"
+                  />
+                </Flex>
+              </Stack>
               <Box>
                 <Link href="/fiware/orion/entities/new">
                   <Button>新規Entity</Button>

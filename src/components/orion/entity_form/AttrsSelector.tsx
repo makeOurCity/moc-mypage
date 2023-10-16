@@ -39,6 +39,10 @@ const AttrsSelector: FC<Props> = ({ handleAppend }) => {
       type: "geo:box",
       name: "ボックス（シンプル・ロケーション・フォーマット）",
     },
+    {
+      type: "Relationship",
+      name: "リレーション",
+    },
     // {
     //   type: "geo:json",
     //   geoJSONType: "Point",

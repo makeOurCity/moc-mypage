@@ -79,7 +79,10 @@ const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
         default:
           break;
       }
-      onChange(e.marker._latlngs || e.layer._latlng);
+      const val = e.layer._latlng
+        ? `${e.layer._latlng.lat},${e.layer._latlng.lng}`
+        : e.layer._latlngs.map((l: LatLng) => `${l.lat},${l.lng}`);
+      onChange(val);
       setLayer(e.layer);
     });
 
@@ -119,8 +122,8 @@ const SimpleLocationFormatInput: FC<Props> = ({ field, control, index }) => {
         render={({ field: controllerField }) => (
           <MapContainer
             style={{ height: "300px" }}
-            center={[51.505, -0.09]}
-            zoom={13}
+            center={[35.509831, 134.821322]}
+            zoom={11}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

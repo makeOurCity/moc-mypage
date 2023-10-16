@@ -11,7 +11,7 @@ type Props = {
 
 const TextInput: FC<Props> = ({ field, control, index }) => {
   return (
-    <Grid gridTemplateColumns="1fr 1fr" columnGap={3} key={field.id}>
+    <Grid gridTemplateColumns="1fr 1fr" columnGap={3}>
       <Controller
         control={control}
         name={`data.${index}.key` as const}
