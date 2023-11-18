@@ -91,7 +91,11 @@ const RelationInput: FC<Props> = ({ field, control, index }) => {
         control={control}
         name={`data.${index}.value`}
         render={({ field: controllerField }) => (
-          <Select backgroundColor="white" onChange={controllerField.onChange}>
+          <Select
+            backgroundColor="white"
+            onChange={controllerField.onChange}
+            value={controllerField.value}
+          >
             <option value="">Entityを選択</option>
             {entitySelectOptions.map((option) => (
               <option key={option.value} value={option.value}>

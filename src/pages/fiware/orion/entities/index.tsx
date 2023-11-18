@@ -81,7 +81,7 @@ export default function FiwareOrionEntitiesIndex() {
               </Box>
             </Flex>
           </CardHeader>
-          <CardBody>
+          <CardBody mr={5}>
             <EntityList data={list} />
           </CardBody>
         </Card>

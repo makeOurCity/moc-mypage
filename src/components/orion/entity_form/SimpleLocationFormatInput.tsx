@@ -41,6 +41,13 @@ const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
   });
 
   useEffect(() => {
+    map.on("load", (e) => {
+      const newLayer = e.layer;
+      console.log(newLayer);
+      // draw default line
+      setLayer(newLayer);
+    });
+
     map.on("pm:drawstart", () => {
       if (layer) {
         switch (type) {

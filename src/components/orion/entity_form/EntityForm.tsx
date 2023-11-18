@@ -29,19 +29,29 @@ const SimpleLocationFormatInput: any = dynamic(
   }
 );
 
+export type Props = {
+  defaultId?: string;
+  defaultType?: string;
+  defaultData?: { type: string; key: string; value: any }[];
+};
+
 export type EntityFormData = {
   id: string;
   type: string;
   data: { type: string; key: string; value: any }[];
 };
 
-const EntityForm: FC = () => {
+const EntityForm: FC<Props> = ({ defaultId, defaultType, defaultData }) => {
   const {
     api: { entitiesApi },
   } = useOrion();
   const { control, handleSubmit, setValue, watch, reset, formState } =
     useForm<EntityFormData>({
-      defaultValues: { id: "", type: "", data: [] },
+      defaultValues: {
+        id: defaultId || "",
+        type: defaultType || "",
+        data: defaultData || [],
+      },
     });
 
   const { fields, append, remove } = useFieldArray({ control, name: "data" });

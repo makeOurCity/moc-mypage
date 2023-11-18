@@ -1,3 +1,4 @@
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Box, Button, Flex, Grid, Input, InputGroup } from "@chakra-ui/react";
 import axios from "axios";
 import { ChangeEvent, FC, useCallback, useRef, useState } from "react";
@@ -11,24 +12,32 @@ type Props = {
 };
 
 const MediaUploadInput: FC<Props> = ({ field, control, index }) => {
-  const [prevImage, setPrevImage] = useState<any>();
+  const [file, setFile] = useState<File>();
+  const [prevFile, setPrevFile] = useState<any>();
+  const [isUploading, setIsUploading] = useState(false);
+  const [fiwareService] = useLocalStorage<string | undefined>(
+    "fiware-service",
+    undefined
+  );
 
   const upload = useCallback(
     async (onChange: (val: string) => void) => {
-      if (!prevImage) return;
+      if (!file) return;
+      setIsUploading(true);
       try {
         const { data } = await axios.post("/api/media-upload/s3-presigned", {
-          key: "test.jpg",
+          key: `${fiwareService}/${file.name}`,
         });
-        await axios.put(data.signedUrl, prevImage);
+        await axios.put(data.signedUrl, file);
 
         onChange(data.objectUrl);
       } catch (error) {
         console.log(error);
         alert("アップロードに失敗しました");
       }
+      setIsUploading(false);
     },
-    [prevImage]
+    [file, fiwareService]
   );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -42,8 +51,9 @@ const MediaUploadInput: FC<Props> = ({ field, control, index }) => {
       onChange("");
       const reader = new FileReader();
       reader.onload = () => {
-        setPrevImage(reader.result);
+        setPrevFile(reader.result);
       };
+      setFile(value.target.files?.[0]);
       value.target.files && reader.readAsDataURL(value.target.files?.[0]);
     },
     []
@@ -75,8 +85,8 @@ const MediaUploadInput: FC<Props> = ({ field, control, index }) => {
         render={({ field: controllerField }) => (
           <Box cursor="pointer">
             <div onClick={handleClick}>
-              {prevImage ? (
-                <img width="100%" src={prevImage} alt="" />
+              {prevFile ? (
+                <img width="100%" src={prevFile} alt="" />
               ) : (
                 <Flex
                   alignItems="center"
@@ -99,13 +109,14 @@ const MediaUploadInput: FC<Props> = ({ field, control, index }) => {
               ref={inputRef}
               hidden
             />
-            {prevImage && (
+            {file && (
               <Button
                 mt={2}
                 colorScheme={controllerField.value ? "blackAlpha" : "green"}
                 width="full"
                 onClick={() => upload(controllerField.onChange)}
                 disabled={!controllerField.value!}
+                isLoading={isUploading}
               >
                 {controllerField.value
                   ? "アップロード済"

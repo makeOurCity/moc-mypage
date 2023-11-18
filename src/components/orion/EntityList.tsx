@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  Flex,
   Grid,
   Table,
   TableContainer,
@@ -9,6 +11,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CodeBlock } from "react-code-blocks";
 import { ListEntitiesResponse } from "../../../codegens/orion";
@@ -47,6 +50,11 @@ export default function EnityList({ data }: Props) {
         </Table>
       </TableContainer>
       <Box mt={5}>
+        <Flex justifyContent="end" mb={2}>
+          <Link href={`/fiware/orion/entities/${selectedEntityId}`}>
+            <Button>編集</Button>
+          </Link>
+        </Flex>
         <CodeBlock
           text={JSON.stringify(selectedData, null, 4)}
           language="json"
