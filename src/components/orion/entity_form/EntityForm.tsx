@@ -117,7 +117,7 @@ const EntityForm: FC<Props> = ({ defaultId, defaultType, defaultData }) => {
               acc[cur.key] = { type: cur.type, value: Number(cur.value) };
             }
             if (cur.type === "Boolean") {
-              acc[cur.key] = { type: cur.type, value: cur.value === "true" };
+              acc[cur.key] = { type: cur.type, value: cur.value };
             }
             if (cur.type === "DateTime") {
               acc[cur.key] = { type: cur.type, value: new Date(cur.value) };
@@ -142,8 +142,11 @@ const EntityForm: FC<Props> = ({ defaultId, defaultType, defaultData }) => {
           }, {}),
         };
         await entitiesApi.createEntity("application/json", ngsiEntity);
-      } catch (error) {}
-      reset();
+        reset();
+        console.log(ngsiEntity);
+      } catch (error) {
+        alert("エラーが発生しました");
+      }
     },
     [reset, formState.isSubmitting]
   );
