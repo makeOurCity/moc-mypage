@@ -20,6 +20,7 @@ import { useOrion } from "@/hooks/useOrion";
 import TypeSelector from "./TypeSelector";
 import { ListEntityTypesResponse } from "../../../../codegens/orion";
 import RelationInput from "./RelationInput";
+import MediaUploadInput from "./MediaUpload";
 
 const SimpleLocationFormatInput: any = dynamic(
   () => import("./SimpleLocationFormatInput"),
@@ -114,6 +115,9 @@ const EntityForm: FC = () => {
             if (cur.type === "Relationship") {
               acc[cur.key] = { type: cur.type, value: cur.value };
             }
+            if (cur.type === "SingleFile") {
+              acc[cur.key] = { type: cur.type, value: cur.value };
+            }
             if (
               ["geo:point", "geo:line", "geo:polygon", "geo:box"].includes(
                 cur.type
@@ -190,6 +194,13 @@ const EntityForm: FC = () => {
                 )}
                 {field.type === "DateTime" && (
                   <DateTimeInput
+                    control={control}
+                    index={index}
+                    field={field}
+                  />
+                )}
+                {field.type === "SingleFile" && (
+                  <MediaUploadInput
                     control={control}
                     index={index}
                     field={field}

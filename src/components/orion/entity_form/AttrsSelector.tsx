@@ -24,6 +24,10 @@ const AttrsSelector: FC<Props> = ({ handleAppend }) => {
       name: "日時",
     },
     {
+      type: "SingleFile",
+      name: "ファイル",
+    },
+    {
       type: "geo:point",
       name: "地点（シンプル・ロケーション・フォーマット）",
     },
