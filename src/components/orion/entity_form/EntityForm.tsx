@@ -117,7 +117,7 @@ const EntityForm: FC<Props> = ({ defaultId, defaultType, defaultData }) => {
               acc[cur.key] = { type: cur.type, value: Number(cur.value) };
             }
             if (cur.type === "Boolean") {
-              acc[cur.key] = { type: cur.type, value: cur.value };
+              acc[cur.key] = { type: cur.type, value: cur.value === true };
             }
             if (cur.type === "DateTime") {
               acc[cur.key] = { type: cur.type, value: new Date(cur.value) };
