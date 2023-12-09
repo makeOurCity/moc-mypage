@@ -1,6 +1,6 @@
 import { Layout } from "@/components/Layout";
 import SubscriptionFormIdPatternTypeForm from "@/components/orion/subscription/SubscriptionFormIdPatternType";
-import { Card, CardBody, CardHeader, Heading, Stack } from "@chakra-ui/react";
+import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Heading, Stack } from "@chakra-ui/react";
 
 
 export default function FiwareOrionSubscriptionsNew() {
@@ -16,6 +16,12 @@ export default function FiwareOrionSubscriptionsNew() {
             <CardBody>
               <SubscriptionFormIdPatternTypeForm />
             </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing={4}>
+                <Button colorScheme="teal">作成</Button>
+                <Button >キャンセル</Button>
+              </ButtonGroup>
+            </CardFooter>
           </Card>
         </Stack>
       </Layout>

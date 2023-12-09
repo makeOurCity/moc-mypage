@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Textarea, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 export type SubscriptionFormIdPatternTypeData = {
@@ -40,9 +40,6 @@ export default function SubscriptionFormIdPatternTypeForm() {
             <Textarea />
             <FormHelperText>用途や、どこへのデータ送信なのかなどのメモを記入してください。</FormHelperText>
           </FormControl>
-
-          <Button >キャンセル</Button>
-          <Button colorScheme="teal">作成</Button>
         </VStack>
       </form>
     </>
