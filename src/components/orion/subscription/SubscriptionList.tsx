@@ -12,15 +12,24 @@ import {
   ListEntitiesResponse,
   ListEntityTypesResponse,
   ListSubscriptionsResponse,
-} from "../../../codegens/orion";
-import SubscriptionDeleteButton from "./SubscriptionDeleteButton";
+} from "../../../../codegens/orion";
+import { useOrion } from "@/hooks/useOrion";
+import DeleteButton from "../DeleteButton";
 
 type Props = {
   data: ListSubscriptionsResponse[];
+  onDeleted?(id: string): void;
 };
 
-export default function SubscriptionList({ data }: Props) {
-  const deleteButton = SubscriptionDeleteButton();
+export default function SubscriptionList({ data, onDeleted }: Props) {
+  const { api } = useOrion();
+
+  const onAccept = async (id: string): Promise<void> => {
+    await api.subscriptionsApi.deleteSubscription(id);
+    if (onDeleted) {
+      onDeleted(id);
+    }
+  };
 
   const list = data.map((t) => {
     return (
@@ -29,7 +38,9 @@ export default function SubscriptionList({ data }: Props) {
         <Td>{t.status}</Td>
         <Td>{t.description}</Td>
         <Td>{t.expires || "なし"}</Td>
-        <Td>{deleteButton}</Td>
+        <Td>
+          <DeleteButton id={t.id} onAccept={onAccept} />
+        </Td>
       </Tr>
     );
   });
