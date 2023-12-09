@@ -18,7 +18,7 @@ import {
   ListSubscriptionsResponse,
 } from "../../../../../codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import SubscriptionList from "@/components/orion/SubscriptionList";
+import SubscriptionList from "@/components/orion/subscription/SubscriptionList";
 
 export default function FiwareOrionSubscriptionsIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
@@ -61,7 +61,7 @@ export default function FiwareOrionSubscriptionsIndex() {
             <Text>Fiware-Service: {fiwareService}</Text>
           </CardHeader>
           <CardBody>
-            <SubscriptionList data={list} />
+            <SubscriptionList data={list} onDeleted={updateList} />
           </CardBody>
         </Card>
       </Stack>

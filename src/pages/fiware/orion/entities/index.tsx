@@ -1,5 +1,5 @@
 import { Layout } from "@/components/Layout";
-import EntityList from "@/components/orion/EntityList";
+import EntityList from "@/components/orion/entity/EntityList";
 import { useOrion } from "@/hooks/useOrion";
 import { logger } from "@/logger";
 import {
