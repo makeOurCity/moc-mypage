@@ -1,5 +1,7 @@
 import {
+  Box,
   Center,
+  Grid,
   Table,
   TableContainer,
   Tbody,
@@ -15,6 +17,8 @@ import {
 } from "../../../../codegens/orion";
 import { useOrion } from "@/hooks/useOrion";
 import DeleteButton from "../DeleteButton";
+import { CodeBlock } from "react-code-blocks";
+import { useMemo, useState } from "react";
 
 type Props = {
   data: ListSubscriptionsResponse[];
@@ -23,6 +27,11 @@ type Props = {
 
 export default function SubscriptionList({ data, onDeleted }: Props) {
   const { api } = useOrion();
+  
+  const [selectedEntityId, selectEntityId] = useState<string>();
+  const selectedData = useMemo(() => {
+    return data.find((d) => d.id === selectedEntityId);
+  }, [data, selectedEntityId]);
 
   const onAccept = async (id: string): Promise<void> => {
     await api.subscriptionsApi.deleteSubscription(id);
@@ -33,7 +42,7 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
 
   const list = data.map((t) => {
     return (
-      <Tr key={t.id}>
+      <Tr key={t.id} onClick={() => selectEntityId(t.id)}>
         <Td>{t.id}</Td>
         <Td>{t.status}</Td>
         <Td>{t.description}</Td>
@@ -46,7 +55,7 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
   });
 
   return (
-    <Center>
+    <Grid gridTemplateColumns="50% 50%" gap={5}>
       <TableContainer>
         <Table variant="striped" size="sm">
           <Thead>
@@ -61,6 +70,13 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
           <Tbody>{list}</Tbody>
         </Table>
       </TableContainer>
-    </Center>
+      <Box mt={5}>
+        <CodeBlock
+          text={JSON.stringify(selectedData, null, 4)}
+          language="json"
+          showLineNumbers={true}
+        />
+      </Box>
+    </Grid>
   );
 }

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { CodeBlock } from "react-code-blocks";
-import { ListEntitiesResponse } from "../../../codegens/orion";
+import { ListEntitiesResponse } from "../../../../codegens/orion";
 
 type Props = {
   data: ListEntitiesResponse[];
