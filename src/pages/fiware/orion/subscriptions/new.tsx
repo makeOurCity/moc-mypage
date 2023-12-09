@@ -17,7 +17,7 @@ export default function FiwareOrionSubscriptionsNew() {
               <SubscriptionFormIdPatternTypeForm />
             </CardBody>
             <CardFooter>
-              <ButtonGroup spacing={4}>
+              <ButtonGroup>
                 <Button colorScheme="teal">作成</Button>
                 <Button >キャンセル</Button>
               </ButtonGroup>
