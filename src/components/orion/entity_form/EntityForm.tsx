@@ -46,7 +46,16 @@ const EntityForm: FC = () => {
   const { fields, append, remove } = useFieldArray({ control, name: "data" });
 
   const setUUID = useCallback(() => {
-    setValue("id", `${watch("id")}${uuidv7()}`);
+
+    let id = `${watch("id")}${uuidv7()}`
+
+    const type = watch("type");
+    if (type) {
+      id = `urn:ngsild:${type}:${uuidv7()}`;
+    }
+
+
+    setValue("id", id);
   }, []);
 
   const handleSelectType = useCallback((data: ListEntityTypesResponse) => {
@@ -155,7 +164,7 @@ const EntityForm: FC = () => {
                 )}
               />
               <Button colorScheme="blue" onClick={setUUID}>
-                UUID
+                ID生成
               </Button>
             </Grid>
           </Box>
