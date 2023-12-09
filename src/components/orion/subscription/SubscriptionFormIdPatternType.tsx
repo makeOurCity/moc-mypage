@@ -1,4 +1,4 @@
-import { Box, FormControl, FormHelperText, FormLabel, Input, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Textarea, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 export type SubscriptionFormIdPatternTypeData = {
@@ -31,7 +31,7 @@ export default function SubscriptionFormIdPatternTypeForm() {
         
           <FormControl>
             <FormLabel>送信先URL</FormLabel>
-            <Input type='text' placeholder="https://"/>
+            <Input type='text' placeholder="https://example.com"/>
             <FormHelperText>連携先のURLをhttpsから始まる形で記入してください。</FormHelperText>
           </FormControl>
         
@@ -40,8 +40,10 @@ export default function SubscriptionFormIdPatternTypeForm() {
             <Textarea />
             <FormHelperText>用途や、どこへのデータ送信なのかなどのメモを記入してください。</FormHelperText>
           </FormControl>
-        </VStack>
 
+          <Button >キャンセル</Button>
+          <Button colorScheme="teal">作成</Button>
+        </VStack>
       </form>
     </>
   )
