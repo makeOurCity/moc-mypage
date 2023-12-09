@@ -26,7 +26,7 @@ export default function EnityList({ data }: Props) {
 
   const list = data.map((t) => {
     return (
-      <Tr key={t.id} onClick={() => selectEntityId(t.id)}>
+      <Tr _hover={{ bg: "blue.50"}} cursor="pointer" key={t.id} onClick={() => selectEntityId(t.id)}>
         <Td>{t.id}</Td>
         <Td>{t.type}</Td>
       </Tr>
@@ -36,7 +36,7 @@ export default function EnityList({ data }: Props) {
   return (
     <Grid gridTemplateColumns="50% 50%" gap={5}>
       <TableContainer>
-        <Table variant="striped" size="sm">
+        <Table size="sm">
           <Thead>
             <Tr>
               <Th>ID</Th>

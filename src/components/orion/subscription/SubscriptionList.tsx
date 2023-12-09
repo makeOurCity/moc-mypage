@@ -42,7 +42,7 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
 
   const list = data.map((t) => {
     return (
-      <Tr key={t.id} onClick={() => selectEntityId(t.id)}>
+      <Tr _hover={{ bg: "red.50" }} cursor="pointer" key={t.id} onClick={() => selectEntityId(t.id)}>
         <Td>{t.id}</Td>
         <Td>{t.status}</Td>
         <Td>{t.description}</Td>
@@ -57,7 +57,7 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
   return (
     <Grid gridTemplateColumns="50% 50%" gap={5}>
       <TableContainer>
-        <Table variant="striped" size="sm">
+        <Table size="sm">
           <Thead>
             <Tr>
               <Th>ID</Th>
