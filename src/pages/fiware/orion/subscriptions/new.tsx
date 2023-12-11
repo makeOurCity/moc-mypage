@@ -2,13 +2,23 @@ import { Layout } from "@/components/Layout";
 import SubscriptionFormIdPatternType, { SubscriptionFormIdPatternTypeData } from "@/components/orion/subscription/SubscriptionFormIdPatternType";
 import { useOrion } from "@/hooks/useOrion";
 import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Heading, Stack, useToast } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { SubscriptionFormIdPatternTypeDataToJson } from "@/libs/parse/subscription";
 import { useRouter } from "next/router";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 
 export default function FiwareOrionSubscriptionsNew() {
+  const [fiwareService] = useLocalStorage<string | undefined>(
+    "fiware-service",
+    undefined
+  );
+  const { api, setFiwareServiceHeader } = useOrion();
+  useEffect(() => {
+    setFiwareServiceHeader(fiwareService || "");
+  }, [fiwareService]);
+
   const { control, handleSubmit, setValue, watch, reset, formState } = useForm<SubscriptionFormIdPatternTypeData>({
     defaultValues: { 
       description: "",
@@ -16,7 +26,6 @@ export default function FiwareOrionSubscriptionsNew() {
       url: "https://",
     },
   });
-  const { api } = useOrion();
   const router = useRouter();
   const toast = useToast();
 

@@ -37,13 +37,16 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
 
   const onAccept = async (id: string): Promise<void> => {
     const response = await api.subscriptionsApi.deleteSubscription(id);
-    if (response.status == 200) {
+    if (response.status == 204) {
       if (onDeleted) {
         onDeleted(id);
       }
-      // toast({
-      //   title: ""
-      // })
+      toast({
+        title: "Subscriptionの削除",
+        description: "Subscriptionの削除に成功しました。",
+        status: "success",
+        isClosable: true,
+      })
     }
   };
 
