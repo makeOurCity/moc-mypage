@@ -2,7 +2,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useOrion } from "@/hooks/useOrion";
 import { Select } from "@chakra-ui/react";
 import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
-import { ListEntityTypesResponse } from "../../../../codegens/orion";
+import { ListEntityTypesResponse } from "@/codegens/orion";
 
 type Props = {
   onChange: (data: ListEntityTypesResponse) => void;

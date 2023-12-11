@@ -30,6 +30,17 @@ $ openssl rand -base64 32
 
 ```console
 $ npm install
+```
+
+次に、ORIONを使用するAPIのクライアントを生成します。
+
+```console
+$ npm run codegen
+```
+
+以下のコマンドで起動します。
+
+```console
 $ npm run dev
 ```
 

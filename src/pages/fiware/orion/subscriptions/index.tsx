@@ -11,16 +11,20 @@ import {
   CardHeader,
   CardBody,
   Text,
+  Link,
+  Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import {
   ListSubscriptionsResponse,
-} from "../../../../../codegens/orion";
+} from "@/codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import SubscriptionList from "@/components/orion/subscription/SubscriptionList";
 
 export default function FiwareOrionSubscriptionsIndex() {
+  const toast = useToast();
   const { api, setFiwareServiceHeader } = useOrion();
   const [list, setList] = useState<ListSubscriptionsResponse[]>([]);
   const [fiwareService, setFiwareService, loadingLocalStorage] =
@@ -52,13 +56,23 @@ export default function FiwareOrionSubscriptionsIndex() {
       <Stack spacing={10}>
         <Card>
           <CardHeader>
-            <Heading as="h1" size="md">
-              サブスクリプション一覧 &nbsp;
-              <Button variant="ghost" onClick={updateList}>
-                <Icon as={FiRefreshCw} />
-              </Button>
-            </Heading>
-            <Text>Fiware-Service: {fiwareService}</Text>
+            <Flex justifyContent="space-between">
+              <Stack rowGap={2}>
+                <Heading as="h1" size="md">
+                  サブスクリプション一覧 &nbsp;
+                  <Button variant="ghost" onClick={updateList}>
+                    <Icon as={FiRefreshCw} />
+                  </Button>
+                </Heading>
+                <Text>Fiware-Service: {fiwareService}</Text>
+              </Stack>
+
+              <Box>
+                <Link href="/fiware/orion/subscriptions/new">
+                  <Button>新規Subscription</Button>
+                </Link>
+              </Box>
+            </Flex>
           </CardHeader>
           <CardBody>
             <SubscriptionList data={list} onDeleted={updateList} />

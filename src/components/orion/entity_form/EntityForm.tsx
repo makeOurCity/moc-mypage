@@ -18,7 +18,7 @@ import NumberInput from "./NumberInput";
 import TextInput from "./TextInput";
 import { useOrion } from "@/hooks/useOrion";
 import TypeSelector from "./TypeSelector";
-import { ListEntityTypesResponse } from "../../../../codegens/orion";
+import { ListEntityTypesResponse } from "@/codegens/orion";
 import RelationInput from "./RelationInput";
 
 const SimpleLocationFormatInput: any = dynamic(

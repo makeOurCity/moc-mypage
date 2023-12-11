@@ -9,12 +9,13 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import {
   ListEntitiesResponse,
   ListEntityTypesResponse,
   ListSubscriptionsResponse,
-} from "../../../../codegens/orion";
+} from "@/codegens/orion";
 import { useOrion } from "@/hooks/useOrion";
 import DeleteButton from "../DeleteButton";
 import { CodeBlock } from "react-code-blocks";
@@ -26,6 +27,7 @@ type Props = {
 };
 
 export default function SubscriptionList({ data, onDeleted }: Props) {
+  const toast = useToast();
   const { api } = useOrion();
   
   const [selectedEntityId, selectEntityId] = useState<string>();
@@ -34,9 +36,17 @@ export default function SubscriptionList({ data, onDeleted }: Props) {
   }, [data, selectedEntityId]);
 
   const onAccept = async (id: string): Promise<void> => {
-    await api.subscriptionsApi.deleteSubscription(id);
-    if (onDeleted) {
-      onDeleted(id);
+    const response = await api.subscriptionsApi.deleteSubscription(id);
+    if (response.status == 204) {
+      if (onDeleted) {
+        onDeleted(id);
+      }
+      toast({
+        title: "Subscriptionの削除",
+        description: "Subscriptionの削除に成功しました。",
+        status: "success",
+        isClosable: true,
+      })
     }
   };
 
