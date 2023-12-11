@@ -1,8 +1,11 @@
 import { Layout } from "@/components/Layout";
-import SubscriptionFormIdPatternTypeForm, { SubscriptionFormIdPatternTypeData } from "@/components/orion/subscription/SubscriptionFormIdPatternType";
-import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Heading, Stack } from "@chakra-ui/react";
+import SubscriptionFormIdPatternType, { SubscriptionFormIdPatternTypeData } from "@/components/orion/subscription/SubscriptionFormIdPatternType";
+import { useOrion } from "@/hooks/useOrion";
+import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Heading, Stack, useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { SubscriptionFormIdPatternTypeDataToJson } from "@/libs/parse/subscription";
+import { useRouter } from "next/router";
 
 
 export default function FiwareOrionSubscriptionsNew() {
@@ -13,15 +16,50 @@ export default function FiwareOrionSubscriptionsNew() {
       url: "https://",
     },
   });
+  const { api } = useOrion();
+  const router = useRouter();
+  const toast = useToast();
 
   const onSubmit = useCallback(
     async (data: SubscriptionFormIdPatternTypeData) => {
       if (formState.isSubmitting) return;
 
-      console.log(data);
+      const request = SubscriptionFormIdPatternTypeDataToJson(data);
+      try {
+        const resp = await api.subscriptionsApi.createSubscription("application/json", request);
+
+        if (resp.status == 201) {
+          reset();
+          toast({
+            title: "Subscriptionの作成",
+            description: "Subscriptionの作成に成功しました。",
+            status: "success",
+            isClosable: true,
+          })
+          router.push("/fiware/orion/subscriptions")
+          return;
+        }
+      } catch(e: any) {
+        console.error(e);
+
+        reset({}, {
+          keepValues: true,
+        })
+        toast({
+          title: "Subscriptionの作成",
+          description: `Subscriptionの作成に失敗しました。(${e.message})`,
+          status: "error",
+        })
+      }
+    },
+    [reset, formState.isSubmitting, api.subscriptionsApi, router, toast],
+  )
+
+  const onCancel = useCallback(
+    async () => {
       reset();
     },
-    [reset, formState.isSubmitting],
+    [reset],
   )
 
   return (
@@ -35,11 +73,11 @@ export default function FiwareOrionSubscriptionsNew() {
             </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
               <CardBody>
-                <SubscriptionFormIdPatternTypeForm control={control} />
+                <SubscriptionFormIdPatternType control={control} />
               </CardBody>
               <CardFooter>
                 <ButtonGroup>
-                  <Button type="submit" colorScheme="teal">作成</Button>
+                  <Button type="submit" colorScheme="teal" isLoading={formState.isSubmitting}>作成</Button>
                   <Button >キャンセル</Button>
                 </ButtonGroup>
               </CardFooter>

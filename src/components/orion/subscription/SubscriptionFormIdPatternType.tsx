@@ -12,7 +12,7 @@ type props = {
   control: Control<SubscriptionFormIdPatternTypeData>
 }
 
-export default function SubscriptionFormIdPatternTypeForm({control}:props) {
+export default function SubscriptionFormIdPatternType({control}:props) {
   return(
     <>
       <VStack spacing={4}>

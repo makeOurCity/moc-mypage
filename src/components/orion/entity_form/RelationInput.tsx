@@ -5,7 +5,7 @@ import { Control, Controller, FieldArrayWithId } from "react-hook-form";
 import {
   ListEntitiesResponse,
   ListEntityTypesResponse,
-} from "../../../../codegens/orion";
+} from "@/codegens/orion";
 import { EntityFormData } from "./EntityForm";
 
 type Props = {

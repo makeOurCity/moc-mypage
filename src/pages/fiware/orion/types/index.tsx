@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
-import { ListEntityTypesResponse } from "../../../../../codegens/orion";
+import { ListEntityTypesResponse } from "@/codegens/orion";
 
 export default function FiwareOrionTypesIndex() {
   const { api, setFiwareServiceHeader } = useOrion();

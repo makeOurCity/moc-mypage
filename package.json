@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint --dir src",
     "lint:fix": "next lint --dir src --fix",
-    "codegen": "npx openapi-generator-cli generate -o ./codegens/orion -g typescript-axios -i https://fiware.github.io/specifications/OpenAPI/ngsiv2/ngsiv2-openapi.json",
+    "codegen": "npx openapi-generator-cli generate -o ./src/codegens/orion -g typescript-axios -i https://fiware.github.io/specifications/OpenAPI/ngsiv2/ngsiv2-openapi.json",
     "test": "jest --watch",
     "test:ci": "jest --ci --collectCoverage --coverageDirectory=coverage"
   },

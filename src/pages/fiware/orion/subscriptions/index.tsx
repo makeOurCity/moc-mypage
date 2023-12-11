@@ -13,16 +13,18 @@ import {
   Text,
   Link,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import {
   ListSubscriptionsResponse,
-} from "../../../../../codegens/orion";
+} from "@/codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import SubscriptionList from "@/components/orion/subscription/SubscriptionList";
 
 export default function FiwareOrionSubscriptionsIndex() {
+  const toast = useToast();
   const { api, setFiwareServiceHeader } = useOrion();
   const [list, setList] = useState<ListSubscriptionsResponse[]>([]);
   const [fiwareService, setFiwareService, loadingLocalStorage] =

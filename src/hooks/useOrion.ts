@@ -2,7 +2,7 @@ import {
   EntitiesApiFactory,
   TypesApiFactory,
   SubscriptionsApiFactory,
-} from "../../codegens/orion";
+} from "@/codegens/orion";
 import axios from "axios";
 import { logger } from "@/logger";
 

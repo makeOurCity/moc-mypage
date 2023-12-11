@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
-import { ListEntitiesResponse } from "../../../../../codegens/orion";
+import { ListEntitiesResponse } from "@/codegens/orion";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import Link from "next/link";
 
