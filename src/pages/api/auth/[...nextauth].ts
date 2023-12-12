@@ -4,32 +4,34 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
-import CognitoProvider from "next-auth/providers/cognito";
-import { Provider } from "next-auth/providers";
+import CognitoProvider, { CognitoProfile } from "next-auth/providers/cognito";
+import { OAuthConfig, Provider } from "next-auth/providers";
+import { Issuer } from "openid-client";
 
 import axios from "axios";
-import { getToken } from "next-auth/jwt";
+import { JWT, getToken} from "next-auth/jwt";
 // import EmailProvider from "next-auth/providers/email"
 // import AppleProvider from "next-auth/providers/apple"
 
+
 const providers: Provider[] = [];
+let cognitoProvider: OAuthConfig<CognitoProfile> | undefined = undefined;
 
 // https://mseeeen.msen.jp/nextauth-cognito-token-refresh/
 // https://kelvinmwinuka.com/social-login-with-cognito-and-nextauth
 if (process.env.COGNITO_CLIENT_ID && process.env.COGNITO_CLIENT_SECRET) {
-  providers.push(
-    CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID!,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET!,
-      issuer: process.env.COGNITO_ISSUER,
-      idToken: true,
-      authorization: {
-        params: {
-          scope: "openid email profile",
-        },
+  cognitoProvider = CognitoProvider({
+    clientId: process.env.COGNITO_CLIENT_ID!,
+    clientSecret: process.env.COGNITO_CLIENT_SECRET!,
+    issuer: process.env.COGNITO_ISSUER,
+    idToken: true,
+    authorization: {
+      params: {
+        scope: "openid email profile",
       },
-    })
-  );
+    },
+  })
+  providers.push(cognitoProvider);
 }
 
 // For more information on each option (and a full list of options) go to
@@ -146,9 +148,10 @@ export default NextAuth({
     },
     // async redirect({ url, baseUrl }) { return baseUrl },
     async session({ session, token, user }) {
-      // session.accessToken = token.accessToken;
+      session.user = token.user;
+      session.accessToken = token.accessToken;
+      session.error = token.error;
       session.idToken = token.idToken;
-      // session.refreshToken = token.refreshToken;
       return session;
     },
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
@@ -157,12 +160,22 @@ export default NextAuth({
         // account is provided upon the inital auth
         return {
           ...token,
-          // accessToken: account.access_token,
+          error: undefined,
+          accessToken: account.access_token,
           idToken: account.id_token,
-          // refreshToken: account.refresh_token,
+          refreshToken: account.refresh_token,
+          accessTokenExpires: account.expires_at ? Date.now() + account.expires_at * 1000 : Date.now(),
+          user,
         };
       }
-      return token;
+      
+      if (Date.now() < (token.accessTokenExpires ?? 0) * 1000) {
+        console.debug(`Token available (expires at: ${token.accessTokenExpires})`);
+        return token;
+      }
+      console.debug(`Token expired at ${token.accessTokenExpires}. Trying to refresh...`);
+      // Access token has expired, try to update it
+      return refreshAccessToken(token);
     },
   },
   // Events are useful for logging
@@ -172,3 +185,58 @@ export default NextAuth({
   // Enable debug messages in the console if you are having problems
   debug: process.env.NODE_ENV === "development" ? true : false,
 });
+
+
+async function refreshAccessToken(token: any): Promise<JWT> {
+  if (cognitoProvider) {
+    try {
+      const client_id = cognitoProvider.options?.clientId ?? "";
+      const client_secret = cognitoProvider.options?.clientSecret ?? "";
+      const issuer = await Issuer.discover(cognitoProvider.wellKnown!);
+      const token_endpoint = issuer.metadata.token_endpoint ?? "";
+      const basicAuthParams = `${client_id}:${client_secret}`;
+      const basicAuth = Buffer.from(basicAuthParams).toString("base64");
+      const params = new URLSearchParams({
+        client_id,
+        client_secret,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      });
+      // Refresh token
+      const response = await fetch(token_endpoint, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${basicAuth}`,
+        },
+        method: "POST",
+        body: params.toString(),
+      });
+      const newTokens = await response.json();
+      if (!response.ok) {
+        throw newTokens;
+      }
+      // Next expiration period
+      const accessTokenExpires =
+        Math.floor(Date.now() / 1000) + newTokens.expires_in;
+      console.debug(`Token refreshed (expires at: ${accessTokenExpires})`);
+      // Return new token set
+      return {
+        ...token,
+        error: undefined,
+        accessToken: newTokens.access_token,
+        accessTokenExpires,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ...token,
+        error: "RefreshAccessTokenError",
+      };
+    }
+  }
+
+  return {
+    ...token,
+    error: "RefreshAccessTokenError",
+  }
+}
