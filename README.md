@@ -72,3 +72,9 @@ http://localhost:3000 でアクセス可能です。
 ```console
 $ npm run test
 ```
+
+# Deployment
+
+## moc sandbox mypage
+
+[vercel moc-mypage](https://vercel.com/c4j/moc-mypage)にて、 `main` ブランチを連携中。
