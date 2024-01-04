@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import MocAppInfoTable from "@/components/moc/AppInfoTable";
 import MocTokenTable from "@/components/moc/TokenTable";
 import { SimpleGrid } from "@chakra-ui/react";
+import MoCTutorialCard from "@/components/moc/TutorialCard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,11 @@ export default function Home() {
   const cards = [];
 
   if (session) {
+
+    cards.push(
+      <MoCTutorialCard />
+    )
+
     cards.push(
       <MocAppInfoTable key="appInfoTable" />
     );
