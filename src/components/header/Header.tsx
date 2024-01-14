@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IconButton,
   Box,
@@ -14,6 +14,7 @@ import HeaderMenu from "./Menu";
 import LoginHeader from "./LoginHeader";
 import LogoutHeader from "./LogoutHeader";
 import { Environments } from "@/libs/environments";
+import TextLogo from "../../libs/textLogo";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -26,6 +27,13 @@ export default function Header({ onOpen, ...rest }: MobileProps) {
   let header = <LogoutHeader />;
   if (session) {
     header = <LoginHeader />;
+  }
+
+  let headerIcon = <></>;
+  if (Environments.getMocHeaderLogoText()) {
+    headerIcon = (<Image src="/api/fonts/logo" alt={Environments.getMocHeaderLogoText()}/>)
+  } else {
+    headerIcon = (<Image src={Environments.getMocHeaderLogoImageUrl()} alt="MoC" />)
   }
 
   return (
@@ -49,7 +57,7 @@ export default function Header({ onOpen, ...rest }: MobileProps) {
       />
 
       <Box w="12em" mx="auto">
-        <Image src={Environments.getMocHeaderLogImageUrl()} alt="MoC" />
+        { headerIcon }
       </Box>
 
       {header}
