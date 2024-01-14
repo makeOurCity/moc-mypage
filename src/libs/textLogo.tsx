@@ -6,15 +6,20 @@ export default async function TextLogo(text: string) {
   // const fontData = await fetch("https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap").then((resp) => resp.arrayBuffer());
 
   const svg = await satori(
-    <div style={{ color: "black" }}>{ text }</div>,
+    <pre style={{
+      color: "black",
+      fontSize: "1.5em",
+      textAlign: "center",
+      lineHeight: "0.9em",
+    }}>{ text }</pre>,
     {
-      width: 800,
-      height: 400,
+      width: 180,
+      height: 80,
       fonts: [
         {
-          name: "NotoSerifJP-Bold",
+          name: "Noto Serif JP",
           data: fontData,
-          weight: 400,
+          weight: 800,
           style: "normal",
           lang: "ja-JP",
         },
