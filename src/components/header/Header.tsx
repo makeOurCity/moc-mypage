@@ -13,6 +13,7 @@ import HeaderIcon from "./Icon";
 import HeaderMenu from "./Menu";
 import LoginHeader from "./LoginHeader";
 import LogoutHeader from "./LogoutHeader";
+import { Environments } from "@/libs/environments";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -48,7 +49,7 @@ export default function Header({ onOpen, ...rest }: MobileProps) {
       />
 
       <Box w="12em" mx="auto">
-        <Image src="/logo_long.webp" alt="MoC" />
+        <Image src={Environments.getMocHeaderLogImageUrl()} alt="MoC" />
       </Box>
 
       {header}
