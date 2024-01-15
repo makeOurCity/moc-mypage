@@ -19,4 +19,12 @@ export class Environments {
   public static getMocHeaderLogoText(): string | undefined {
     return process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_TEXT;
   }
+
+  /**
+   * チュートリアルURLの取得
+   * @returns
+   */
+  public static getTutorialUrl(): string | undefined {
+    return process.env.NEXT_PUBLIC_MOC_TUTORIAL_URL;
+  }
 }
