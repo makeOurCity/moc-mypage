@@ -7,6 +7,7 @@ import MocAppInfoTable from "@/components/moc/AppInfoTable";
 import MocTokenTable from "@/components/moc/TokenTable";
 import { SimpleGrid } from "@chakra-ui/react";
 import MoCTutorialCard from "@/components/moc/TutorialCard";
+import { Environments } from "@/libs/environments";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,11 @@ export default function Home() {
 
   if (session) {
 
-    cards.push(
-      <MoCTutorialCard />
-    )
+    if (Environments.getTutorialUrl()) {
+      cards.push(
+        <MoCTutorialCard />
+      )
+    }
 
     cards.push(
       <MocAppInfoTable key="appInfoTable" />

@@ -1,3 +1,4 @@
+import { Environments } from "@/libs/environments";
 import {
   Card,
   CardBody,
@@ -18,7 +19,11 @@ import { ReactNode, useEffect, useState } from "react";
 import { set } from "react-hook-form";
 
 export default function MoCTutorialCard() {
-  const tutorialLink: string = "https://www.postman.com/code4japan/workspace/moc/documentation/132091-d3e49f53-b38e-4757-bb2e-a949ea176ff0"
+  const tutorialLink = Environments.getTutorialUrl();
+
+  if (!tutorialLink) {
+    return <></>
+  }
 
   return (
     <Card>
