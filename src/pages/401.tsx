@@ -18,10 +18,10 @@ export default function Home() {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          ログインが必要です
+          サインインが必要です
         </ModalHeader>
         <ModalBody pb={ 6 }>
-          このページにアクセスするためにはログインをしてください。
+          このページにアクセスするためにはサインインしてください。
 
           <Flex mt={ 6 }>
             <Button
