@@ -20,7 +20,7 @@ const OrionProxy = async (
     target: process.env.NEXT_PUBLIC_ORION_BASE_URL,
     changeOrigin: true,
     headers: {
-      Authorization: token!.idToken!,
+      Authorization: token?.idToken || "",
     },
     pathRewrite: [
       {
