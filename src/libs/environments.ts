@@ -27,4 +27,12 @@ export class Environments {
   public static getTutorialUrl(): string | undefined {
     return process.env.NEXT_PUBLIC_MOC_TUTORIAL_URL;
   }
+
+  /**
+   * サインアップURLの取得
+   * @returns
+   */
+  public static getSignUpUrl(): string | undefined {
+    return process.env.NEXT_PUBLIC_SIGN_UP_URL;
+  }
 }
