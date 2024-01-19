@@ -27,4 +27,20 @@ export class Environments {
   public static getTutorialUrl(): string | undefined {
     return process.env.NEXT_PUBLIC_MOC_TUTORIAL_URL;
   }
+
+  /**
+   * サインアップURLの取得
+   * @returns
+   */
+  public static getSignUpUrl(): string | undefined {
+    return process.env.NEXT_PUBLIC_SIGN_UP_URL;
+  }
+
+  /**
+   * タイトル取得
+   * @returns
+   */
+  public static getTitle(): string {
+    return process.env.NEXT_PUBLIC_MOC_TITLE || process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_TEXT || "MoCデータ連携基盤マイページ";
+  }
 }
