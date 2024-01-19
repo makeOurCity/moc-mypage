@@ -10,6 +10,7 @@ import {
   ModalOverlay
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
+import { Environments } from "@/libs/environments";
 
 export default function Home() {
 
@@ -18,27 +19,21 @@ export default function Home() {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          ログインが必要です
+          サインインが必要です
         </ModalHeader>
         <ModalBody pb={ 6 }>
-          このページにアクセスするためにはログインをしてください。
+          このページにアクセスするためにはサインインしてください。
 
           <Flex mt={ 6 }>
-            <Button
-              bg="red.700"
-              color="white"
-              _hover={{
-                bg: "red.600",
-                color: "white",
-              }}
+            {Environments.getSignUpUrl() && <Button
               as={ Link }
-              href={ process.env.NEXT_PUBLIC_SIGN_UP_URL }
-              variant="solid"
+              href={ Environments.getSignUpUrl() }
+              variant="ghost"
             >
               Sign Up
-            </Button>
+            </Button>}
             <Button
-              bg="gray.700"
+              bg="red.700"
               color="white"
               _hover={{
                 bg: "gray.600",
