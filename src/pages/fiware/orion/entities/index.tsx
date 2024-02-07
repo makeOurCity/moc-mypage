@@ -74,11 +74,14 @@ export default function FiwareOrionEntitiesIndex() {
                   />
                 </Flex>
               </Stack>
-              <Box>
+              <Flex gap={2}>
+                <Link href="/fiware/orion/entities/csv">
+                  <Button>CSVインポート</Button>
+                </Link>
                 <Link href="/fiware/orion/entities/new">
                   <Button>新規Entity</Button>
                 </Link>
-              </Box>
+              </Flex>
             </Flex>
           </CardHeader>
           <CardBody>
