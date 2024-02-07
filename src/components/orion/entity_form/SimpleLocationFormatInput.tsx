@@ -87,7 +87,10 @@ const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
     });
 
     layer?.on("pm:update", (e: any) => {
-      onChange(e.layer._latlngs || e.layer._latlng);
+      const val = e.layer._latlng
+        ? `${e.layer._latlng.lat},${e.layer._latlng.lng}`
+        : e.layer._latlngs.map((l: LatLng) => `${l.lat},${l.lng}`);
+      onChange(val);
     });
 
     return () => {
