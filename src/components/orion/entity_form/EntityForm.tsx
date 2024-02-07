@@ -267,4 +267,6 @@ const EntityForm = forwardRef(
   }
 );
 
+EntityForm.displayName = "EntityForm";
+
 export default EntityForm;
