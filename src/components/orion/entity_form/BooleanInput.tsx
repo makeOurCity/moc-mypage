@@ -30,11 +30,7 @@ const BooleanInput: FC<Props> = ({ field, control, index }) => {
         name={`data.${index}.value` as const}
         render={({ field: controllerField }) => (
           <Flex gap={2}>
-            <Switch
-              value={controllerField.value}
-              onChange={controllerField.onChange}
-              size="lg"
-            />
+            <Switch onChange={controllerField.onChange} size="lg" />
             {controllerField.value ? "true" : "false"}
           </Flex>
         )}
