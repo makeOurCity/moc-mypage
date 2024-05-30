@@ -2,7 +2,7 @@ import { Box, Grid, Input } from "@chakra-ui/react";
 import { FC, useEffect, useRef, useState } from "react";
 import { Control, Controller, FieldArrayWithId } from "react-hook-form";
 import { EntityFormData } from "./EntityForm";
-import leaflet, { LatLng, Layer, Marker } from "leaflet";
+import leaflet, { latLng, LatLng, Layer, Marker } from "leaflet";
 import "leaflet";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
@@ -20,9 +20,10 @@ type Props = {
 type GeoManProps = {
   type: "geo:point" | "geo:line" | "geo:polygon" | "geo:box";
   onChange: (value: LatLng | LatLng[]) => void;
+  value?: string;
 };
 
-const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
+const GeoMan: FC<GeoManProps> = ({ type, onChange, value }) => {
   const [layer, setLayer] = useState<Layer>();
 
   const map = useMap();
@@ -87,7 +88,10 @@ const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
     });
 
     layer?.on("pm:update", (e: any) => {
-      onChange(e.layer._latlngs || e.layer._latlng);
+      const val = e.layer._latlng
+        ? `${e.layer._latlng.lat},${e.layer._latlng.lng}`
+        : e.layer._latlngs.map((l: LatLng) => `${l.lat},${l.lng}`);
+      onChange(val);
     });
 
     return () => {
@@ -96,6 +100,28 @@ const GeoMan: FC<GeoManProps> = ({ type, onChange }) => {
       map.off("pm:update");
     };
   }, [layer]);
+
+  useEffect(() => {
+    if (value && !layer) {
+      if (Array.isArray(value)) {
+        const latlngs = value.map((v) => {
+          return latLng(
+            v.split(",").map((v: any) => parseFloat(v)) as any as LatLng
+          );
+        });
+        const layer = new leaflet.Polygon(latlngs);
+        map.addLayer(layer);
+        setLayer(layer);
+      } else {
+        const latlng = latLng(
+          value.split(",").map((v) => parseFloat(v)) as any as LatLng
+        );
+        const layer = new Marker(latlng);
+        map.addLayer(layer);
+        setLayer(layer);
+      }
+    }
+  }, [value, layer]);
 
   return <></>;
 };
@@ -132,6 +158,7 @@ const SimpleLocationFormatInput: FC<Props> = ({ field, control, index }) => {
             <GeoMan
               type={field.type as any}
               onChange={controllerField.onChange}
+              value={controllerField.value}
             />
           </MapContainer>
         )}

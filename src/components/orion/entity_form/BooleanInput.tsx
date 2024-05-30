@@ -31,9 +31,9 @@ const BooleanInput: FC<Props> = ({ field, control, index }) => {
         render={({ field: controllerField }) => (
           <Flex gap={2}>
             <Switch
-              value={controllerField.value}
               onChange={controllerField.onChange}
               size="lg"
+              defaultChecked={controllerField.value}
             />
             {controllerField.value ? "true" : "false"}
           </Flex>

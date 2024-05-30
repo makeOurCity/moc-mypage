@@ -38,8 +38,10 @@ export default function FiwareOrionEntitiesIndex() {
       setFiwareServiceHeader(fiwareService);
     }
 
+    const _ = undefined;
+
     api.entitiesApi
-      .listEntities(undefined, type ? type : undefined)
+      .listEntities(_, type ? type : _, _, _, _, _, _, _, _, 100, _, _)
       .then((res) => {
         setList(res.data);
       });
@@ -74,11 +76,14 @@ export default function FiwareOrionEntitiesIndex() {
                   />
                 </Flex>
               </Stack>
-              <Box>
+              <Flex gap={2}>
+                <Link href="/fiware/orion/entities/csv">
+                  <Button>CSVインポート</Button>
+                </Link>
                 <Link href="/fiware/orion/entities/new">
                   <Button>新規Entity</Button>
                 </Link>
-              </Box>
+              </Flex>
             </Flex>
           </CardHeader>
           <CardBody>
