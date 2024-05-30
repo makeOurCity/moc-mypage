@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { FC, forwardRef, useCallback, useImperativeHandle } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { uuidv7 } from "uuidv7";
 import AttrsSelector from "./AttrsSelector";
@@ -30,6 +30,7 @@ const SimpleLocationFormatInput: any = dynamic(
 type Props = {
   onSuccess?: () => void;
   resetOnSuccess?: boolean;
+  initialData?: any;
 };
 
 export type EntityFormData = {
@@ -39,10 +40,11 @@ export type EntityFormData = {
 };
 
 const EntityForm = forwardRef(
-  ({ onSuccess, resetOnSuccess = true }: Props, ref) => {
+  ({ onSuccess, resetOnSuccess = true, initialData }: Props, ref) => {
     const {
       api: { entitiesApi },
     } = useOrion();
+
     const { control, handleSubmit, setValue, watch, reset, formState } =
       useForm<EntityFormData>({
         defaultValues: { id: "", type: "", data: [] },
@@ -154,15 +156,40 @@ const EntityForm = forwardRef(
               return acc;
             }, {}),
           };
-          await entitiesApi.createEntity("application/json", ngsiEntity);
+          if (initialData) {
+            delete ngsiEntity.id;
+            delete ngsiEntity.type;
+            await entitiesApi.updateExistingEntityAttributes(
+              initialData.id,
+              "application/json",
+              ngsiEntity
+            );
+          } else {
+            await entitiesApi.createEntity("application/json", ngsiEntity);
+          }
           resetOnSuccess && reset();
           onSuccess && onSuccess();
         } catch (error) {
           alert(error);
         }
       },
-      [reset, formState.isSubmitting]
+      [reset, formState.isSubmitting, initialData]
     );
+
+    // Editページの場合initialDataをセット
+    useEffect(() => {
+      if (initialData) {
+        setValue("id", initialData.id);
+        setValue("type", initialData.type);
+        for (const key of Object.keys(initialData)) {
+          if (key === "id" || key === "type") continue;
+          const type = initialData[key].type;
+          if (fields.some((f) => f.key === key)) continue;
+          const value = initialData[key].value;
+          append({ type, key, value });
+        }
+      }
+    }, [initialData]);
 
     return (
       <>
@@ -180,10 +207,15 @@ const EntityForm = forwardRef(
                       onChange={field.onChange}
                       backgroundColor="white"
                       placeholder="ID"
+                      disabled={initialData}
                     />
                   )}
                 />
-                <Button colorScheme="blue" onClick={setUUID}>
+                <Button
+                  colorScheme="blue"
+                  onClick={setUUID}
+                  isDisabled={initialData}
+                >
                   ID生成
                 </Button>
               </Grid>
@@ -200,6 +232,7 @@ const EntityForm = forwardRef(
                     onChange={field.onChange}
                     backgroundColor="white"
                     placeholder="タイプ"
+                    disabled={initialData}
                   />
                 )}
               />

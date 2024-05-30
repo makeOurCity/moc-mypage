@@ -15,6 +15,7 @@ import { useCallback, useMemo, useState } from "react";
 import { CodeBlock } from "react-code-blocks";
 import { ListEntitiesResponse } from "@/codegens/orion";
 import { useOrion } from "@/hooks/useOrion";
+import Link from "next/link";
 
 type Props = {
   data: ListEntitiesResponse[];
@@ -45,6 +46,8 @@ export default function EnityList({ data }: Props) {
   });
 
   const deleteEntity = useCallback(async () => {
+    const confirm = window.confirm("本当に削除しますか？");
+    if (!confirm) return;
     try {
       if (!selectedEntityId) return;
       await entitiesApi.removeEntity(selectedEntityId);
@@ -67,7 +70,12 @@ export default function EnityList({ data }: Props) {
         </Table>
       </TableContainer>
       <Box>
-        <Flex justifyContent="flex-end" mb={2}>
+        <Flex justifyContent="flex-end" mb={2} gap={2}>
+          <Link href={`/fiware/orion/entities/${selectedEntityId}/edit`}>
+            <Button colorScheme="blue" size="sm">
+              編集
+            </Button>
+          </Link>
           <Button colorScheme="red" size="sm" onClick={deleteEntity}>
             削除
           </Button>

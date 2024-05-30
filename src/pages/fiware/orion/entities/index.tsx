@@ -38,8 +38,10 @@ export default function FiwareOrionEntitiesIndex() {
       setFiwareServiceHeader(fiwareService);
     }
 
+    const _ = undefined;
+
     api.entitiesApi
-      .listEntities(undefined, type ? type : undefined)
+      .listEntities(_, type ? type : _, _, _, _, _, _, _, _, 100, _, _)
       .then((res) => {
         setList(res.data);
       });
