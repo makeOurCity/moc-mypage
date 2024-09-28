@@ -15,6 +15,7 @@ import {
   FiCompass,
   FiFile,
   FiPackage,
+  FiUploadCloud,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
@@ -32,6 +33,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
   { name: "Entity", icon: FiFile, href: "/fiware/orion/entities" },
   { name: "Subscriptions", icon: FiPackage, href: "/fiware/orion/subscriptions" },
+  { name: "File", icon: FiUploadCloud, href: "/objects/upload" },
   // { name: "Trending", icon: FiTrendingUp },
   // { name: "Explore", icon: FiCompass },
   // { name: "Favourites", icon: FiStar },
