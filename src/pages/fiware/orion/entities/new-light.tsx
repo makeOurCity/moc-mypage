@@ -1,25 +1,49 @@
 import { Layout } from "@/components/Layout";
-import EntityForm from "@/components/orion/entity_form/EntityForm";
+import EntityFormLight from "@/components/orion/entity_form/EntityFormLight";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useOrion } from "@/hooks/useOrion";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Stack, Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
-import TypeSelector from "@/components/orion/entity_form/TypeSelector";
+import { useSearchParams } from "next/navigation";
+import { uuidv7 } from "uuidv7";
+import { ListEntityTypesResponse } from "@/codegens/orion";
 
 const FiwareOrionEntitiesNew: FC = () => {
+  const searchParams = useSearchParams();
+  const paramType = searchParams.get("type") || "";
   const [fiwareService] = useLocalStorage<string | undefined>(
     "fiware-service",
     undefined
   );
-  const [type, setType] = useState<string>("");
+  const setUUID = useCallback(() => {
+    let id = uuidv7();
+    if (paramType) {
+      id = `urn:ngsild:${paramType}:${uuidv7()}`;
+    }
+    return id;
+  }, []);
 
-  const { setFiwareServiceHeader } = useOrion();
+  const { api, setFiwareServiceHeader } = useOrion();
+
+  const [targetData, setTargetData] =
+    useState<ListEntityTypesResponse | null>();
+
+  const entityFormRef = useRef<any>();
 
   useEffect(() => {
     setFiwareServiceHeader(fiwareService || "");
-  }, [fiwareService]);
-
-  const entityFormRef = useRef<any>();
+    const fetch = async () => {
+      const { data } = await api.typesApi.listEntityTypes();
+      if (paramType) {
+        const target = data.find((type) => type.type === paramType);
+        if (target) {
+          setTargetData(target);
+          entityFormRef.current.handleSelectType(target);
+        }
+      }
+    };
+    fetch();
+  }, [fiwareService, searchParams]);
 
   return (
     <Layout>
@@ -27,18 +51,12 @@ const FiwareOrionEntitiesNew: FC = () => {
         <Card>
           <CardHeader>
             <Heading as="h1" size="md">
-              新規Entity作成
+              新規Entity作成 ({paramType})
             </Heading>
           </CardHeader>
 
           <CardBody>
-            <TypeSelector
-              onChange={(data) => {
-                entityFormRef.current.handleSelectType(data);
-              }}
-              value={type}
-            />
-            <EntityForm ref={entityFormRef} />
+            <EntityFormLight ref={entityFormRef} />
           </CardBody>
         </Card>
       </Stack>
