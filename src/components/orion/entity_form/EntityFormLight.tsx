@@ -9,7 +9,8 @@ import {
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { forwardRef, useCallback, useEffect, useImperativeHandle } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
+import { uuidv7 } from "uuidv7";
 import AttrsSelector from "./AttrsSelector";
 import BooleanInput from "./BooleanInput";
 import DateTimeInput from "./DateTimeInput";
@@ -44,7 +45,7 @@ const EntityForm = forwardRef(
       api: { entitiesApi },
     } = useOrion();
 
-    const { control, handleSubmit, setValue, watch, reset, formState } =
+    const { control, handleSubmit, setValue, reset, formState } =
       useForm<EntityFormData>({
         defaultValues: { id: "", type: "", data: [] },
       });
@@ -58,6 +59,7 @@ const EntityForm = forwardRef(
       handleSelectType: (data: ListEntityTypesResponse) => {
         reset();
         setValue("type", data.type);
+        setValue("id", `urn:ngsild:${data.type}:${uuidv7()}`);
         for (const attrKey of Object.keys(data.attrs)) {
           const types = (data.attrs as any)[attrKey].types;
           let type = types[0];
@@ -183,23 +185,6 @@ const EntityForm = forwardRef(
       <>
         <form onSubmit={handleSubmit(submit)}>
           <Stack spacing={4}>
-            <Box>
-              <Badge colorScheme="blue">TYPE</Badge>
-              <Controller
-                control={control}
-                name="type"
-                render={({ field }) => (
-                  <Input
-                    mt={1}
-                    value={field.value}
-                    onChange={field.onChange}
-                    backgroundColor="white"
-                    placeholder="タイプ"
-                    disabled={initialData}
-                  />
-                )}
-              />
-            </Box>
             {fields.map((field, index) => (
               <Box key={field.id}>
                 <Badge colorScheme="blue">データ型: {field.type}</Badge>
