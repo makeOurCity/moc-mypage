@@ -19,6 +19,7 @@ import TextInput from "./TextInput";
 import { useOrion } from "@/hooks/useOrion";
 import { ListEntityTypesResponse } from "@/codegens/orion";
 import RelationInput from "./RelationInput";
+import { localize } from "@/localization/localize";
 
 const SimpleLocationFormatInput: any = dynamic(
   () => import("./SimpleLocationFormatInput"),
@@ -187,7 +188,7 @@ const EntityForm = forwardRef(
           <Stack spacing={4}>
             {fields.map((field, index) => (
               <Box key={field.id}>
-                <Badge colorScheme="blue">データ型: {field.type}</Badge>
+                <Badge colorScheme="blue">データ型: {localize(field.type)}</Badge>
                 <Grid gridTemplateColumns="1fr auto" columnGap={3} mt={1}>
                   {field.type === "Text" && (
                     <TextInput control={control} index={index} field={field} isAttrFixed />

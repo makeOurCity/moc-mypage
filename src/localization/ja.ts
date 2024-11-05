@@ -1,0 +1,16 @@
+export const ja = {
+  "eventdate": "イベント開催日時",
+  "since": "イベント開始日時",
+  "create_datetime": "ページ作成日時",
+  "overview": "イベント概要",
+  "description": "イベントの説明",
+  "event_source": "イベント情報源(URLなど)",
+  "title": "イベント名",
+  "string": "文字列",
+  "text": "文字列",
+  "array": "リスト",
+  "geo:point": "地理座標",
+  "geo:json": "地理情報",
+  "geo:line": "地理情報",
+  "datetime": "日時",
+}

@@ -1,7 +1,8 @@
-import { Flex, Grid, Input, Switch, Text } from "@chakra-ui/react";
+import { Flex, Grid, Input, Switch, Badge } from "@chakra-ui/react";
 import { FC } from "react";
 import { Control, Controller, FieldArrayWithId } from "react-hook-form";
 import { EntityFormData } from "./EntityForm";
+import { localize } from "@/localization/localize";
 
 type Props = {
   field: FieldArrayWithId<EntityFormData, "data", "id">;
@@ -23,13 +24,13 @@ const BooleanInput: FC<Props> = ({ field, control, index, isAttrFixed }) => {
         render={({ field: controllerField }) => (
           !isAttrFixed ? (
             <Input
-              value={controllerField.value}
+              value={localize(controllerField.value)}
               onChange={controllerField.onChange}
               backgroundColor="white"
               placeholder="属性名"
             />
           ): (
-            <Text>{controllerField.value}</Text>
+            <Badge marginBottom="3px">{localize(controllerField.value)}</Badge>
           )
         )}
       />

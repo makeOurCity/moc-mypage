@@ -1,4 +1,4 @@
-import { Box, Grid, Input, Text } from "@chakra-ui/react";
+import { Grid, Input, Badge } from "@chakra-ui/react";
 import { FC, useEffect, useRef, useState } from "react";
 import { Control, Controller, FieldArrayWithId } from "react-hook-form";
 import { EntityFormData } from "./EntityForm";
@@ -146,7 +146,7 @@ const SimpleLocationFormatInput: FC<Props> = ({ field, control, index, isAttrFix
               placeholder="属性名"
             />
           ) : (
-            <Text>{controllerField.value}</Text>
+            <Badge marginBottom="3px">{controllerField.value}</Badge>
           )
         )}
       />
