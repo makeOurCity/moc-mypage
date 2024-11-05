@@ -190,13 +190,14 @@ const EntityForm = forwardRef(
                 <Badge colorScheme="blue">データ型: {field.type}</Badge>
                 <Grid gridTemplateColumns="1fr auto" columnGap={3} mt={1}>
                   {field.type === "Text" && (
-                    <TextInput control={control} index={index} field={field} />
+                    <TextInput control={control} index={index} field={field} isAttrFixed />
                   )}
                   {field.type === "Number" && (
                     <NumberInput
                       control={control}
                       index={index}
                       field={field}
+                      isAttrFixed
                     />
                   )}
                   {field.type === "Boolean" && (
@@ -204,6 +205,7 @@ const EntityForm = forwardRef(
                       control={control}
                       index={index}
                       field={field}
+                      isAttrFixed
                     />
                   )}
                   {field.type === "DateTime" && (
@@ -211,6 +213,7 @@ const EntityForm = forwardRef(
                       control={control}
                       index={index}
                       field={field}
+                      isAttrFixed
                     />
                   )}
                   {["geo:point", "geo:line", "geo:polygon", "geo:box"].includes(
@@ -220,6 +223,7 @@ const EntityForm = forwardRef(
                       control={control}
                       index={index}
                       field={field}
+                      isAttrFixed
                     />
                   )}
                   {field.type === "Relationship" && (

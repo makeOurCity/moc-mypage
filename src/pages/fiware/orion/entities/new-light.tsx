@@ -38,7 +38,7 @@ const FiwareOrionEntitiesNew: FC = () => {
         <Card>
           <CardHeader>
             <Heading as="h1" size="md">
-              新規Entity作成
+              新規Entity作成 ({paramType})
             </Heading>
           </CardHeader>
 
