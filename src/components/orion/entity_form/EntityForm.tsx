@@ -159,7 +159,7 @@ const EntityForm = forwardRef(
           if (initialData) {
             delete ngsiEntity.id;
             delete ngsiEntity.type;
-            await entitiesApi.updateExistingEntityAttributes(
+            await entitiesApi.updateOrAppendEntityAttributes(
               initialData.id,
               "application/json",
               ngsiEntity
