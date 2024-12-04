@@ -24,18 +24,22 @@ const DateTimeInput: FC<Props> = ({ field, control, index, isAttrFixed }) => {
   );
 
   return (
-    <Grid gridTemplateColumns={{
-      base: "1fr",
-      md: "1fr 1fr"
-    }} columnGap={3} key={field.id}>
+    <Grid
+      gridTemplateColumns={{
+        base: "1fr",
+        md: "1fr 1fr",
+      }}
+      columnGap={3}
+      key={field.id}
+    >
       <Controller
         control={control}
         name={`data.${index}.key` as const}
         rules={{ required: "必須" }}
-        render={({ field: controllerField }) => (
+        render={({ field: controllerField }) =>
           !isAttrFixed ? (
             <Input
-              value={localize(controllerField.value)}
+              value={controllerField.value}
               onChange={controllerField.onChange}
               backgroundColor="white"
               placeholder="属性名"
@@ -43,7 +47,7 @@ const DateTimeInput: FC<Props> = ({ field, control, index, isAttrFixed }) => {
           ) : (
             <Badge marginBottom="3px">{localize(controllerField.value)}</Badge>
           )
-        )}
+        }
       />
       <Controller
         control={control}
