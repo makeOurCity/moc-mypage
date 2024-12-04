@@ -1,17 +1,8 @@
-import {
-  Badge,
-  Box,
-  Button,
-  CloseButton,
-  Grid,
-  Input,
-  Stack,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, CloseButton, Grid, Stack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { forwardRef, useCallback, useEffect, useImperativeHandle } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { uuidv7 } from "uuidv7";
-import AttrsSelector from "./AttrsSelector";
 import BooleanInput from "./BooleanInput";
 import DateTimeInput from "./DateTimeInput";
 import NumberInput from "./NumberInput";
@@ -95,22 +86,6 @@ const EntityForm = forwardRef(
       },
     }));
 
-    const handleAppend = useCallback(
-      (t: { type: string; geoJSONType?: string }) => {
-        const defaultKey = [
-          "geo:point",
-          "geo:line",
-          "geo:polygon",
-          "geo:box",
-          "geo:json",
-        ].includes(t.type)
-          ? "location"
-          : "";
-        append({ type: t.type, key: defaultKey, value: "" });
-      },
-      []
-    );
-
     const submit = useCallback(
       async (data: EntityFormData) => {
         if (formState.isSubmitting) return;
@@ -188,10 +163,17 @@ const EntityForm = forwardRef(
           <Stack spacing={4}>
             {fields.map((field, index) => (
               <Box key={field.id}>
-                <Badge colorScheme="blue">データ型: {localize(field.type)}</Badge>
+                <Badge colorScheme="blue">
+                  データ型: {localize(field.type)}
+                </Badge>
                 <Grid gridTemplateColumns="1fr auto" columnGap={3} mt={1}>
                   {field.type === "Text" && (
-                    <TextInput control={control} index={index} field={field} isAttrFixed />
+                    <TextInput
+                      control={control}
+                      index={index}
+                      field={field}
+                      isAttrFixed
+                    />
                   )}
                   {field.type === "Number" && (
                     <NumberInput
@@ -247,7 +229,6 @@ const EntityForm = forwardRef(
             </Button>
           </Stack>
         </form>
-        <AttrsSelector handleAppend={handleAppend} />
       </>
     );
   }

@@ -9,6 +9,8 @@ import { useSearchParams } from "next/navigation";
 const FiwareOrionEntitiesNew: FC = () => {
   const searchParams = useSearchParams();
   const paramType = searchParams.get("type") || "";
+  const paramFiwareService = searchParams.get("fiwareService") || "";
+
   const [fiwareService] = useLocalStorage<string | undefined>(
     "fiware-service",
     undefined
@@ -19,7 +21,7 @@ const FiwareOrionEntitiesNew: FC = () => {
   const entityFormRef = useRef<any>();
 
   useEffect(() => {
-    setFiwareServiceHeader(fiwareService || "");
+    setFiwareServiceHeader(paramFiwareService || fiwareService || "");
     const fetch = async () => {
       const { data } = await api.typesApi.listEntityTypes();
       if (paramType) {
@@ -30,7 +32,7 @@ const FiwareOrionEntitiesNew: FC = () => {
       }
     };
     fetch();
-  }, [fiwareService, paramType]);
+  }, [fiwareService, paramType, paramFiwareService]);
 
   return (
     <Layout>
@@ -43,7 +45,12 @@ const FiwareOrionEntitiesNew: FC = () => {
           </CardHeader>
 
           <CardBody>
-            <EntityFormLight ref={entityFormRef} />
+            <EntityFormLight
+              onSuccess={() => {
+                alert("新規作成しました");
+              }}
+              ref={entityFormRef}
+            />
           </CardBody>
         </Card>
       </Stack>
