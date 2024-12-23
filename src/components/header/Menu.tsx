@@ -4,6 +4,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Link,
 } from "@chakra-ui/react";
 import {  signOut } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -21,9 +22,7 @@ export default function HeaderMenu() {
 
   return (
     <MenuList bg={white} borderColor={gray}>
-      <MenuItem>Profile</MenuItem>
-      <MenuItem>Settings</MenuItem>
-      <MenuItem>Billing</MenuItem>
+      <MenuItem><Link href="about">About MyPage</Link></MenuItem>
       <MenuDivider />
 
       <MenuItem onClick={() => handleSignOut()}>Sign Out</MenuItem>
