@@ -66,6 +66,26 @@ services:
       retries: 10
     restart: on-failure
 
+  mongodb:
+    image: mongo:5.0
+    command: mongod --port 27017
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongodb:/data/db
+      - ./data/configdb:/data/configdb
+
+  orion:
+    image: fiware/orion:3.7.0
+    ports:
+      - 1026:1026
+    environment:
+      ORION_MONGO_HOST: mongodb:27017
+      ORION_PORT: 1026
+      ORION_LOG_LEVEL: INFO
+    depends_on:
+      - mongodb
+
 volumes:
   node_modules:
   kong_data:

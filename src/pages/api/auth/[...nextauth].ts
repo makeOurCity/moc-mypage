@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
+import { OAuthConfig } from "next-auth/providers";
 import FacebookProvider from "next-auth/providers/facebook";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -13,6 +14,32 @@ import { getToken } from "next-auth/jwt";
 // import AppleProvider from "next-auth/providers/apple"
 
 const providers: Provider[] = [];
+
+if (process.env.KONG_CLIENT_ID && process.env.KONG_CLIENT_SECRET) {
+  providers.push({
+    id: "kong",
+    name: "Kong",
+    type: "oauth",
+    // wellKnown: `${process.env.KONG_ISSUER}/.well-known/openid-configuration`,
+    token: `${process.env.KONG_URL}/oauth2/token`,
+    // userinfo: `${process.env.KONG_URL}/api/v4/user`,
+    authorization: {
+      url: `${process.env.KONG_URL}/oauth2/authorize`,
+      params: { scope: "openid email profile" },
+    },
+    idToken: true,
+    clientId: process.env.KONG_CLIENT_ID,
+    clientSecret: process.env.KONG_CLIENT_SECRET,
+    profile(profile: any) {
+      return {
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture,
+      };
+    },
+  } as OAuthConfig<any>);
+}
 
 // https://mseeeen.msen.jp/nextauth-cognito-token-refresh/
 // https://kelvinmwinuka.com/social-login-with-cognito-and-nextauth
