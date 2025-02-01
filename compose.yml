@@ -92,6 +92,19 @@ services:
     depends_on:
       - mongodb
 
+  terraform:
+    image: hashicorp/terraform:1.7
+    volumes:
+      - ./terraform:/workspace
+    working_dir: /workspace
+    environment:
+      - TF_LOG=INFO
+    depends_on:
+      kong:
+        condition: service_healthy
+    entrypoint: [""]
+    command: ["terraform", "init"]
+
 volumes:
   node_modules:
   kong_data:

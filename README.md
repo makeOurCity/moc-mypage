@@ -72,3 +72,16 @@ http://localhost:3000 でアクセス可能です。
 ```console
 $ npm run test
 ```
+
+# KONG
+
+```bash
+# 初期化
+docker compose up terraform
+
+# プラン確認
+docker compose run --rm terraform terraform plan
+
+# 適用
+docker compose run --rm terraform terraform apply
+```
