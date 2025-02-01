@@ -2,8 +2,7 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/kong/kong-gateway" {
-  version     = "0.3.0"
-  constraints = "~> 0.3.0"
+  version = "0.3.0"
   hashes = [
     "h1:3n0D3t534VL0q1pY0nNfFClRBNTEKSkMzRPIxdEKE0w=",
     "zh:1e43dabb1b3a450d7d35b3ccb418997d3ddeaa5fe3d83f3981e7172c2e68df07",

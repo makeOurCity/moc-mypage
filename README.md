@@ -79,6 +79,10 @@ $ npm run test
 # 初期化
 docker compose up terraform
 
+
+# lockファイルの更新
+docker compose run --rm terraform terraform init -upgrade
+
 # プラン確認
 docker compose run --rm terraform terraform plan
 

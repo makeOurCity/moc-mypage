@@ -1,12 +1,11 @@
 terraform {
   required_providers {
-    kong = {
-      source  = "kong/kong-gateway"
-      version = "~> 0.3.0"
+    kong-gateway = {
+      source = "kong/kong-gateway"
     }
   }
 }
 
-provider "kong" {
+provider "kong-gateway" {
   server_url = "http://kong:8001"
 }
