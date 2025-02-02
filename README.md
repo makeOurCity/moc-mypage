@@ -85,13 +85,16 @@ https://registry.terraform.io/providers/Kong/kong-gateway/latest/docs
 # 初期化
 docker compose up terraform
 
-
 # lockファイルの更新
-docker compose run --rm terraform terraform init -upgrade
+docker compose run --rm --no-deps terraform terraform init -upgrade
 
 # プラン確認
-docker compose run --rm terraform terraform plan
+docker compose run --rm --no-deps terraform terraform plan
 
 # 適用
-docker compose run --rm terraform terraform apply
+docker compose run --rm --no-deps terraform terraform apply
+```
+
+```
+$ curl http://localhost:8000/orion/version
 ```

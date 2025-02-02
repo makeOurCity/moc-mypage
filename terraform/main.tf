@@ -1,8 +1,3 @@
-# Create Kong services
-resource "kong-gateway_upstream" "orion_upstream" {
-  name = "orion"
-}
-
 resource "kong-gateway_service" "orion_service" {
   name            = "orion"
   host            = "orion"
@@ -21,6 +16,6 @@ resource "kong-gateway_route" "orion_route" {
   }
 
   paths         = ["/orion"]
-  strip_path    = false
+  strip_path    = true
   preserve_host = true
 }
