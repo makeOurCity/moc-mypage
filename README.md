@@ -79,6 +79,8 @@ GUI http://localhost:8002/
 
 ## terraform for kong
 
+https://registry.terraform.io/providers/Kong/kong-gateway/latest/docs
+
 ```bash
 # 初期化
 docker compose up terraform
