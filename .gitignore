@@ -47,6 +47,3 @@ data
 # env
 .env
 !.env.example
-
-# terraform
-terraform/.terraform

@@ -75,6 +75,10 @@ $ npm run test
 
 # KONG
 
+GUI http://localhost:8002/
+
+## terraform for kong
+
 ```bash
 # 初期化
 docker compose up terraform
