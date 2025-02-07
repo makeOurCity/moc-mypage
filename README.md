@@ -92,7 +92,7 @@ docker compose run --rm --no-deps terraform terraform init -upgrade
 docker compose run --rm --no-deps terraform terraform plan
 
 # 適用
-docker compose run --rm --no-deps terraform terraform apply
+docker compose run --rm --no-deps terraform terraform apply -auto-approve
 ```
 
 ```
