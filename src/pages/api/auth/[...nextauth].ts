@@ -21,11 +21,31 @@ if (process.env.KONG_CLIENT_ID && process.env.KONG_CLIENT_SECRET) {
     name: "Kong",
     type: "oauth",
     // wellKnown: `${process.env.KONG_ISSUER}/.well-known/openid-configuration`,
-    token: `${process.env.KONG_URL}/oauth2/token`,
+    token: {
+      url: `${process.env.KONG_URL}/oauth2/token`,
+      request: async ({ client, provider, params, checks }) => {
+        const tokens = await client.grant({
+          grant_type: "authorization_code",
+          code: params.code,
+          redirect_uri: provider.callbackUrl,
+          code_verifier: checks.code_verifier,
+        });
+        return { tokens };
+      },
+    },
     // userinfo: `${process.env.KONG_URL}/api/v4/user`,
     authorization: {
       url: `${process.env.KONG_URL}/oauth2/authorize`,
       params: { scope: "openid email profile" },
+      request: async ({ provider, client }) => {
+        const url = await client.authorizationUrl({
+          scope: provider.authorization?.params?.scope,
+          redirect_uri: provider.callbackUrl,
+          response_type: "code",
+          method: "POST",
+        });
+        return { url };
+      },
     },
     idToken: true,
     clientId: process.env.KONG_CLIENT_ID,
