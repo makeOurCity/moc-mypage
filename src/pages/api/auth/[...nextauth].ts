@@ -43,26 +43,30 @@ export const authOptions: NextAuthOptions = {
         console.log(credentials);
         if (!credentials) return null;
 
-        const params = new URLSearchParams();
-        params.append("grant_type", "client_credentials");
-        params.append("client_id", process.env.KONG_CLIENT_ID || "");
-        params.append("client_secret", process.env.KONG_CLIENT_SECRET || "");
+        try {
+          const params = new URLSearchParams();
+          params.append("grant_type", "client_credentials");
+          params.append("client_id", process.env.KONG_CLIENT_ID || "");
+          params.append("client_secret", process.env.KONG_CLIENT_SECRET || "");
 
-        // try {
-        const tokenUrl = `${process.env.KONG_URL}/oauth2/token`;
-        console.log(tokenUrl, params);
-        const resp = await axios.post(tokenUrl, params, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        });
+          // try {
+          const tokenUrl = `${process.env.KONG_URL}/oauth2/token`;
+          console.log(tokenUrl, params);
+          const resp = await axios.post(tokenUrl, params, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          });
 
-        console.log("resp");
+          console.log(resp.data);
 
-        console.log(resp);
-        // } catch (error) {
-        //   throw new Error("Invalid credentials");
-        // }
+          return {
+            id: resp.data.state,
+            idToken: resp.data.access_token,
+          };
+        } catch (error) {
+          throw new Error("Invalid credentials");
+        }
         return null;
       },
     }),
