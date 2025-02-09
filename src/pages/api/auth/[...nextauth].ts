@@ -1,11 +1,19 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthOptions } from "next-auth";
+import Axios from "axios";
+import https from "https";
 
 interface KongProfile {
   sub: string;
   name?: string;
   email?: string;
 }
+
+const axios = Axios.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false,
+  }),
+});
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
@@ -43,12 +51,10 @@ export const authOptions: NextAuthOptions = {
         // try {
         const tokenUrl = `${process.env.KONG_URL}/oauth2/token`;
         console.log(tokenUrl, params);
-        const resp = await fetch(tokenUrl, {
-          method: "POST",
+        const resp = await axios.post(tokenUrl, params, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: params,
         });
 
         console.log("resp");
