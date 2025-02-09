@@ -1,25 +1,39 @@
+import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthOptions } from "next-auth";
+
+interface KongProfile {
+  sub: string;
+  name?: string;
+  email?: string;
+}
 
 export const authOptions: NextAuthOptions = {
   debug: true,
   providers: [
     {
-      id: "kong", // プロバイダーのID
-      name: "Kong", // プロバイダーの名前
-      type: "oauth", // プロバイダーのタイプ
-      clientId: process.env.KONG_CLIENT_ID, // クライアントID
-      clientSecret: process.env.KONG_CLIENT_SECRET, // クライアントシークレット
+      id: "kong",
+      name: "Kong",
+      type: "oauth",
+      clientId: process.env.KONG_CLIENT_ID,
+      clientSecret: process.env.KONG_CLIENT_SECRET,
       authorization: {
-        url: `${process.env.KONG_URL}/oauth2/authorize`, // 認証エンドポイント
-        params: { scope: "email profile" }, // スコープ
+        url: `${process.env.KONG_URL}/oauth2/authorize`,
+        params: {
+          scope: "email profile",
+          response_type: "code",
+          client_id: process.env.KONG_CLIENT_ID,
+          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/kong`,
+        },
       },
-      token: `${process.env.KONG_URL}/oauth2/token`, // トークンエンドポイント
-      userinfo: `${process.env.KONG_URL}/oauth2/userinfo`, // ユーザー情報エンドポイント
-      profile: (profile: any) => {
+      token: {
+        url: `${process.env.KONG_URL}/oauth2/token`,
+      },
+      userinfo: `${process.env.KONG_URL}/oauth2/userinfo`,
+      profile: (profile: KongProfile) => {
         return {
-          id: profile.sub, // ユーザーID
-          name: profile.name, // ユーザー名
-          email: profile.email, // メールアドレス
+          id: profile.sub,
+          name: profile.name || "Unknown",
+          email: profile.email || "",
         };
       },
     },
@@ -38,7 +52,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET, // NextAuthのシークレットキー
+  secret: process.env.SECRET,
 };
 
 export default NextAuth(authOptions);
