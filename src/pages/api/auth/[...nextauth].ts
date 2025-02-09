@@ -8,51 +8,83 @@ interface KongProfile {
 }
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.SECRET,
   debug: true,
+  logger: {
+    error(code, metadata) {
+      console.error(code, metadata);
+    },
+    warn(code) {
+      console.warn(code);
+    },
+  },
   providers: [
-    {
-      id: "kong",
-      name: "Kong",
-      type: "oauth",
-      clientId: process.env.KONG_CLIENT_ID,
-      clientSecret: process.env.KONG_CLIENT_SECRET,
-      authorization: {
-        url: `${process.env.KONG_URL}/oauth2/authorize`,
-        params: {
-          scope: "email profile",
-          response_type: "code",
-          client_id: process.env.KONG_CLIENT_ID,
-          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/kong`,
+    // ex:https://zenn.dev/bosushi/articles/cff6ac4071f6c6
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          // type: "email",
+          placeholder: "example@example.com",
         },
+        password: { label: "Password", type: "password" },
       },
-      token: {
-        url: `${process.env.KONG_URL}/oauth2/token`,
+
+      async authorize(credentials) {
+        console.log(credentials);
+        if (!credentials) return null;
+
+        const params = new URLSearchParams();
+        params.append("grant_type", "client_credentials");
+        params.append("client_id", process.env.KONG_CLIENT_ID || "");
+        params.append("client_secret", process.env.KONG_CLIENT_SECRET || "");
+
+        // try {
+        const tokenUrl = `${process.env.KONG_URL}/oauth2/token`;
+        console.log(tokenUrl, params);
+        const resp = await fetch(tokenUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params,
+        });
+
+        console.log("resp");
+
+        console.log(resp);
+        // } catch (error) {
+        //   throw new Error("Invalid credentials");
+        // }
+        return null;
       },
-      userinfo: `${process.env.KONG_URL}/oauth2/userinfo`,
-      profile: (profile: KongProfile) => {
-        return {
-          id: profile.sub,
-          name: profile.name || "Unknown",
-          email: profile.email || "",
-        };
-      },
-    },
+    }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
+    async signIn({ user, account, profile, credentials }) {
+      return true;
     },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-      }
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
+    async jwt({ token, trigger, session, user }) {
+      if (trigger === "update") token.name = session?.user?.name;
+      return {
+        ...user,
+        ...token,
+      };
+    },
+    async session({ user, session, token }) {
+      session.user = user;
+      session.accessToken = token.accessToken;
+      session.idToken = token.idToken;
       return session;
     },
   },
-  secret: process.env.SECRET,
 };
 
 export default NextAuth(authOptions);
