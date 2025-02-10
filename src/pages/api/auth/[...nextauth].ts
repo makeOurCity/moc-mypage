@@ -62,11 +62,12 @@ export const authOptions: NextAuthOptions = {
 
           return {
             id: resp.data.state,
-            idToken: resp.data.access_token,
+            idToken: resp.data.access_token.trim(),
           };
         } catch (error) {
           throw new Error("Invalid credentials");
         }
+
         return null;
       },
     }),
