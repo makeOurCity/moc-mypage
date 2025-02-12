@@ -31,34 +31,39 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: {
-          label: "Email",
-          // type: "email",
-          placeholder: "example@example.com",
+        client_id: {
+          label: "Client ID",
+          placeholder: "xxxxx-xxxxx-xxxxx-xxxxx",
         },
-        password: { label: "Password", type: "password" },
+        client_secret: { label: "Client Secret", type: "password" },
       },
 
       async authorize(credentials) {
-        console.log(credentials);
-        if (!credentials) return null;
+        // console.log(credentials);
+        if (!credentials) {
+          throw new Error("Missing credentials");
+        }
+
+        if (!credentials.client_id || !credentials.client_secret) {
+          throw new Error("Missing credentials");
+        }
 
         try {
           const params = new URLSearchParams();
           params.append("grant_type", "client_credentials");
-          params.append("client_id", process.env.KONG_CLIENT_ID || "");
-          params.append("client_secret", process.env.KONG_CLIENT_SECRET || "");
+          params.append("client_id", credentials.client_id);
+          params.append("client_secret", credentials.client_secret);
 
           // try {
           const tokenUrl = `${process.env.KONG_URL}/oauth2/token`;
-          console.log(tokenUrl, params);
+          // console.log(tokenUrl, params);
           const resp = await axios.post(tokenUrl, params, {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
             },
           });
 
-          console.log(resp.data);
+          // console.log(resp.data);
 
           return {
             id: resp.data.state,
