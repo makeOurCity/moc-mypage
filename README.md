@@ -12,19 +12,25 @@ $ cp .env.example .env.local
 $ vi .env.local
 ```
 
-- `COGNITO_XXXX` の値は、管理者に問い合わせてください。
 - `SECRET` は、以下のコマンドから生成した文字列を使用してください。
 
 ```console
 $ openssl rand -base64 32
 ```
 
+`.env.example.cognito` も参考にしてください。
+
+
+## Cognitoを使用する場合
+
+- `COGNITO_XXXX` の値は、管理者に問い合わせてください。
+
 次に起動方法を以下から選択してください。
 
 - [ローカルのnodeで起動する](#ローカル環境での実行)
 - [dockerを使用する](#docker-環境での実行)
 
-## ローカル環境での実行
+### ローカル環境での実行
 
 以下のコマンドで、依存ライブラリをインストールしてください。
 
@@ -46,17 +52,32 @@ $ npm run dev
 
 http://localhost:3000 でアクセス可能です。
 
-## Docker 環境での実行
+### Docker 環境での実行
 
 以下のコマンドで、dockerイメージをビルドし、起動してください。
 
 ```console
 $ docker compose build
-$ docker compose up
+$ docker compose up app
 ```
 
 http://localhost:3000 でアクセス可能です。
 
+
+## KONGを使用する場合
+
+各種サービスの立ち上げ
+
+```console
+$ docker compose up -d # アプリケーションの起動
+$ docker compose run --rm --no-deps terraform terraform apply -auto-approve # terraformによるkongの設定
+```
+
+kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
+
+http://localhost:3000 で、発行した `client id`, `client secret` を使用してログインする。
+
+`.env.example.kong` も参考にしてください
 
 # Development
 

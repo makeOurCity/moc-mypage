@@ -1,22 +1,17 @@
 import KongProvider, { KongCallbacks } from "../../../providers/KongProvider";
-import NextAuth, { type NextAuthOptions } from "next-auth";
+import NextAuth, { CallbacksOptions, type NextAuthOptions } from "next-auth";
+import { Provider } from "next-auth/providers";
+import CognitoProvider, { CognitoCallbacks } from "@/providers/CognitoProvider";
 
 const providers: Provider[] = [];
+let callbacks: Partial<CallbacksOptions> = {};
 
 if (process.env.COGNITO_CLIENT_ID && process.env.COGNITO_CLIENT_SECRET) {
-  providers.push(
-    CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID!,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET!,
-      issuer: process.env.COGNITO_ISSUER,
-      idToken: true,
-      authorization: {
-        params: {
-          scope: "openid email profile",
-        },
-      },
-    })
-  );
+  providers.push(CognitoProvider);
+  callbacks = CognitoCallbacks;
+} else {
+  providers.push(KongProvider);
+  callbacks = KongCallbacks;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -30,11 +25,11 @@ export const authOptions: NextAuthOptions = {
       console.warn(code);
     },
   },
-  providers: [KongProvider],
+  providers,
   session: {
     strategy: "jwt",
   },
-  callbacks: KongCallbacks,
+  callbacks,
 };
 
 export default NextAuth(authOptions);
