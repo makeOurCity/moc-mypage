@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import httpProxyMiddleware from "next-http-proxy-middleware";
-import https from "https";
 import { getToken } from "next-auth/jwt";
 
 // ファイルのアップロードなどでmultipart/form-dataを使用するときの設定
@@ -20,7 +19,7 @@ const OrionProxy = async (
     target: process.env.NEXT_PUBLIC_ORION_BASE_URL,
     changeOrigin: true,
     headers: {
-      Authorization: token?.idToken || "",
+      Authorization: `Bearer ${token?.idToken}`,
     },
     pathRewrite: [
       {
@@ -28,9 +27,7 @@ const OrionProxy = async (
         replaceStr: "",
       },
     ],
-    agent: new https.Agent({
-      rejectUnauthorized: false,
-    }),
+    secure: process.env.NODE_ENV === "development" ? false : true,
   });
   return proxy;
 };

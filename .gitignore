@@ -40,3 +40,10 @@ next-env.d.ts
 
 # swagger
 src/codegens
+
+# docker
+data
+
+# env
+.env
+!.env.example

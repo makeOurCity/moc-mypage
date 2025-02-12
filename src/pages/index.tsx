@@ -27,9 +27,9 @@ export default function Home() {
       )
     }
 
-    cards.push(
-      <MocAppInfoTable key="appInfoTable" />
-    );
+    // cards.push(
+    //   <MocAppInfoTable key="appInfoTable" />
+    // );
 
     cards.push(
       <MocTokenTable />

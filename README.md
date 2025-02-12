@@ -6,25 +6,32 @@ Make our City mypage.
 # Get Started
 
 `.env.local` ファイルを作成し、編集してください。
+kong, cognitoなど用途に合わせて `.env.example.cognito`, `.env.example.kong` をご利用ください。
 
 ```console
 $ cp .env.example .env.local
 $ vi .env.local
 ```
 
-- `COGNITO_XXXX` の値は、管理者に問い合わせてください。
 - `SECRET` は、以下のコマンドから生成した文字列を使用してください。
 
 ```console
 $ openssl rand -base64 32
 ```
 
+
+## Cognitoを使用する場合
+
+### 環境変数
+
+- `COGNITO_XXXX` の値は、管理者に問い合わせてください。
+
 次に起動方法を以下から選択してください。
 
 - [ローカルのnodeで起動する](#ローカル環境での実行)
 - [dockerを使用する](#docker-環境での実行)
 
-## ローカル環境での実行
+### ローカル環境での実行
 
 以下のコマンドで、依存ライブラリをインストールしてください。
 
@@ -46,17 +53,30 @@ $ npm run dev
 
 http://localhost:3000 でアクセス可能です。
 
-## Docker 環境での実行
+### Docker 環境での実行
 
 以下のコマンドで、dockerイメージをビルドし、起動してください。
 
 ```console
 $ docker compose build
-$ docker compose up
+$ docker compose up app
 ```
 
-http://localhost:3000 でアクセス可能です。
+http://localhost:3000 にアクセス可能です。
 
+
+## KONGを使用する場合(dockerのみ)
+
+各種サービスの立ち上げ
+
+```console
+$ docker compose up -d # アプリケーションの起動
+$ docker compose run --rm --no-deps terraform terraform apply -auto-approve # terraformによるkongの設定
+```
+
+kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
+
+http://localhost:3000 で、kong managerで発行した `client id`, `client secret` を使用してログインする。
 
 # Development
 
@@ -71,4 +91,30 @@ http://localhost:3000 でアクセス可能です。
 
 ```console
 $ npm run test
+```
+
+# KONG
+
+GUI http://localhost:8002/
+
+## terraform for kong
+
+https://registry.terraform.io/providers/Kong/kong-gateway/latest/docs
+
+```bash
+# 初期化
+docker compose up terraform
+
+# lockファイルの更新
+docker compose run --rm --no-deps terraform terraform init -upgrade
+
+# プラン確認
+docker compose run --rm --no-deps terraform terraform plan
+
+# 適用
+docker compose run --rm --no-deps terraform terraform apply -auto-approve
+```
+
+```
+$ curl http://localhost:8000/orion/version
 ```
