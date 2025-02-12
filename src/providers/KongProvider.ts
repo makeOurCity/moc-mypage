@@ -11,7 +11,7 @@ const axios = Axios.create({
 
 // ref:https://zenn.dev/bosushi/articles/cff6ac4071f6c6
 const KongProvider = CredentialsProvider({
-  name: "credentials",
+  name: "kong",
   credentials: {
     client_id: {
       label: "Client ID",
