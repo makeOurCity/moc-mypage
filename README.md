@@ -6,6 +6,7 @@ Make our City mypage.
 # Get Started
 
 `.env.local` ファイルを作成し、編集してください。
+kong, cognitoなど用途に合わせて `.env.example.cognito`, `.env.example.kong` をご利用ください。
 
 ```console
 $ cp .env.example .env.local
@@ -18,10 +19,10 @@ $ vi .env.local
 $ openssl rand -base64 32
 ```
 
-`.env.example.cognito` も参考にしてください。
-
 
 ## Cognitoを使用する場合
+
+### 環境変数
 
 - `COGNITO_XXXX` の値は、管理者に問い合わせてください。
 
@@ -61,10 +62,10 @@ $ docker compose build
 $ docker compose up app
 ```
 
-http://localhost:3000 でアクセス可能です。
+http://localhost:3000 にアクセス可能です。
 
 
-## KONGを使用する場合
+## KONGを使用する場合(dockerのみ)
 
 各種サービスの立ち上げ
 
@@ -75,9 +76,7 @@ $ docker compose run --rm --no-deps terraform terraform apply -auto-approve # te
 
 kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
 
-http://localhost:3000 で、発行した `client id`, `client secret` を使用してログインする。
-
-`.env.example.kong` も参考にしてください
+http://localhost:3000 で、kong managerで発行した `client id`, `client secret` を使用してログインする。
 
 # Development
 
