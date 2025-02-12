@@ -2,13 +2,14 @@
  * 環境変数からの値の取得を徐々にこのクラスからに移していきたい。
  */
 export class Environments {
-
   /**
    * ヘッダーロゴ画像のURLを取得する。
    * @returns
    */
   public static getMocHeaderLogoImageUrl(): string {
-    return process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_IMAGE_URL || "/logo_long.webp";
+    return (
+      process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_IMAGE_URL || "/logo_long.webp"
+    );
   }
 
   /**
@@ -29,6 +30,14 @@ export class Environments {
   }
 
   /**
+   * 接続情報など取得のURL取得
+   * @returns
+   */
+  public static getMocApiBaseUrl(): string | undefined {
+    return process.env.NEXT_PUBLIC_MOC_API_BASE_URL;
+  }
+
+  /**
    * サインアップURLの取得
    * @returns
    */
@@ -41,6 +50,10 @@ export class Environments {
    * @returns
    */
   public static getTitle(): string {
-    return process.env.NEXT_PUBLIC_MOC_TITLE || process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_TEXT || "MoCデータ連携基盤マイページ";
+    return (
+      process.env.NEXT_PUBLIC_MOC_TITLE ||
+      process.env.NEXT_PUBLIC_MOC_HEADER_LOGO_TEXT ||
+      "MoCデータ連携基盤マイページ"
+    );
   }
 }

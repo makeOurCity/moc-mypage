@@ -27,9 +27,11 @@ export default function Home() {
       )
     }
 
-    // cards.push(
-    //   <MocAppInfoTable key="appInfoTable" />
-    // );
+    if (Environments.getMocApiBaseUrl()) {
+      cards.push(
+        <MocAppInfoTable key="appInfoTable" />
+      );
+    }
 
     cards.push(
       <MocTokenTable />
