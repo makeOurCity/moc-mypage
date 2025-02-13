@@ -42,7 +42,9 @@ const KongProvider = CredentialsProvider({
         },
       });
 
-      console.log(resp.data);
+      // console.log("KongProvider");
+      // console.log(resp.headers);
+      // console.log(resp.data);
 
       return {
         id: resp.data.state,
@@ -57,6 +59,7 @@ const KongProvider = CredentialsProvider({
 });
 
 export const KongCallbacks: Partial<CallbacksOptions> = {
+  // TODO: 見直し
   async signIn({ user, account, profile, credentials }) {
     return true;
   },
