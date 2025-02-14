@@ -20,9 +20,10 @@ http://localhost:8002/ にアクセスすると、以下のような画面が表
 
 さらに `Credentials` タブを選択することで credentials 一覧ページに遷移します。
 
-<img src="./img/kong_manager_consumer_credentials.png" />
+<img src="./img/kong_manager_credentials.png" />
 
 ## 3. Credentialの発行
 
+`New Auth 2.0 Credential` のボタンをクリックして、以下の作成フォームを表示します。
 
-<img src="./img/kong_manager_consumer_credentials_create.png" />
+<img src="./img/kong_manager_credentials_create.png" />
