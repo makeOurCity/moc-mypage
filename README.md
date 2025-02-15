@@ -19,6 +19,11 @@ $ vi .env.local
 $ openssl rand -base64 32
 ```
 
+## 認証サービスの選択
+
+- [Amazon Cognitoを使用する](#Cognitoを使用する場合)
+- [Kong API Gatewayを使用する](#kongを使用する場合dockerのみ)
+
 
 ## Cognitoを使用する場合
 
@@ -28,11 +33,8 @@ $ openssl rand -base64 32
 
 次に起動方法を以下から選択してください。
 
-- Amazon Cognito を使用
-  - [ローカルのnodeで起動する](#ローカル環境での実行)
-  - [dockerを使用する](#docker-環境での実行)
-- Kong API Gateway を使用
-  - [dockerを使用する](#KONGを使用する場合(dockerのみ))  
+- [ローカルのnodeで起動する](#ローカル環境での実行)
+- [dockerを使用する](#docker-環境での実行)  
 
 ### ローカル環境での実行
 
