@@ -75,8 +75,9 @@ $ docker compose run --rm --no-deps terraform terraform apply -auto-approve # te
 ```
 
 kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
+（[Client ID と Client secret の取得方法](./docs/credential.md) を参照）
 
-http://localhost:3000 で、kong managerで発行した `client id`, `client secret` を使用してログインする。
+http://localhost:3000 にアクセスし、kong managerで発行・取得した `client id`, `client secret` を使用してログインする。
 
 # Development
 
@@ -93,7 +94,7 @@ http://localhost:3000 で、kong managerで発行した `client id`, `client sec
 $ npm run test
 ```
 
-# KONG
+# KONG情報
 
 GUI http://localhost:8002/
 

@@ -1,4 +1,4 @@
-# 
+# Client ID と Client secret の取得方法
 
 ## 1. Kong ManagerのConsumerページに遷移する
 
@@ -27,3 +27,9 @@ http://localhost:8002/ にアクセスすると、以下のような画面が表
 `New Auth 2.0 Credential` のボタンをクリックして、以下の作成フォームを表示します。
 
 <img src="./img/kong_manager_credentials_create.png" />
+
+`Name` の項目に適当な名前を入れて、画面右下の `Save` ボタンをクリックして作成します。
+
+<img src="./img/kong_manager_credentials_list.png" />
+
+`Client ID` と `Client secret` が発行されるので、こちらを使用してください。
