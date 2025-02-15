@@ -5,6 +5,8 @@
 Make our City mypage.
 # Get Started
 
+### 環境変数の設定
+
 `.env.local` ファイルを作成し、編集してください。
 kong, cognitoなど用途に合わせて `.env.example.cognito`, `.env.example.kong` をご利用ください。
 
@@ -19,7 +21,7 @@ $ vi .env.local
 $ openssl rand -base64 32
 ```
 
-## 認証サービスの選択
+### 認証サービスの選択
 
 - [Amazon Cognitoを使用する](#Cognitoを使用する場合)
 - [Kong API Gatewayを使用する](#kongを使用する場合dockerのみ)
