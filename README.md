@@ -5,6 +5,8 @@
 Make our City mypage.
 # Get Started
 
+### 環境変数の設定
+
 `.env.local` ファイルを作成し、編集してください。
 kong, cognitoなど用途に合わせて `.env.example.cognito`, `.env.example.kong` をご利用ください。
 
@@ -19,8 +21,15 @@ $ vi .env.local
 $ openssl rand -base64 32
 ```
 
+### 認証サービスの選択
+
+- [Amazon Cognitoを使用する](#Cognitoを使用する場合)
+- [Kong API Gatewayを使用する](#kongを使用する場合dockerのみ)
+
 
 ## Cognitoを使用する場合
+
+Cognitoを使用する場合は、すでにAWS上にcognitoやorionなどが存在しているとします。それらのリソースがない場合は、kongを使用した起動方法をお試しください。
 
 ### 環境変数
 
@@ -29,7 +38,7 @@ $ openssl rand -base64 32
 次に起動方法を以下から選択してください。
 
 - [ローカルのnodeで起動する](#ローカル環境での実行)
-- [dockerを使用する](#docker-環境での実行)
+- [dockerを使用する](#docker-環境での実行)  
 
 ### ローカル環境での実行
 
@@ -67,16 +76,21 @@ http://localhost:3000 にアクセス可能です。
 
 ## KONGを使用する場合(dockerのみ)
 
-各種サービスの立ち上げ
+### 1.各種サービスの立ち上げ
 
 ```console
 $ docker compose up -d # アプリケーションの起動
 $ docker compose run --rm --no-deps terraform terraform apply -auto-approve # terraformによるkongの設定
 ```
 
-kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
+### 2. 認証情報の取得
 
-http://localhost:3000 で、kong managerで発行した `client id`, `client secret` を使用してログインする。
+kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
+（[Client ID と Client secret の取得方法](./docs/credential.md) を参照）
+
+
+### 3. ログイン
+http://localhost:3000 にアクセスし、kong managerで発行・取得した `client id`, `client secret` を使用してログインする。
 
 # Development
 
@@ -93,7 +107,7 @@ http://localhost:3000 で、kong managerで発行した `client id`, `client sec
 $ npm run test
 ```
 
-# KONG
+# KONG情報
 
 GUI http://localhost:8002/
 
