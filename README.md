@@ -29,6 +29,8 @@ $ openssl rand -base64 32
 
 ## Cognitoを使用する場合
 
+Cognitoを使用する場合は、すでにAWS上にcognitoやorionなどが存在しているとします。それらのリソースがない場合は、kongを使用した起動方法をお試しください。
+
 ### 環境変数
 
 - `COGNITO_XXXX` の値は、管理者に問い合わせてください。
@@ -74,16 +76,20 @@ http://localhost:3000 にアクセス可能です。
 
 ## KONGを使用する場合(dockerのみ)
 
-各種サービスの立ち上げ
+### 1.各種サービスの立ち上げ
 
 ```console
 $ docker compose up -d # アプリケーションの起動
 $ docker compose run --rm --no-deps terraform terraform apply -auto-approve # terraformによるkongの設定
 ```
 
+### 2. 認証情報の取得
+
 kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを発行する。
 （[Client ID と Client secret の取得方法](./docs/credential.md) を参照）
 
+
+### 3. ログイン
 http://localhost:3000 にアクセスし、kong managerで発行・取得した `client id`, `client secret` を使用してログインする。
 
 # Development
