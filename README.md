@@ -28,8 +28,11 @@ $ openssl rand -base64 32
 
 次に起動方法を以下から選択してください。
 
-- [ローカルのnodeで起動する](#ローカル環境での実行)
-- [dockerを使用する](#docker-環境での実行)
+- Amazon Cognito を使用
+  - [ローカルのnodeで起動する](#ローカル環境での実行)
+  - [dockerを使用する](#docker-環境での実行)
+- Kong API Gateway を使用
+  - [dockerを使用する](#KONGを使用する場合(dockerのみ))  
 
 ### ローカル環境での実行
 
