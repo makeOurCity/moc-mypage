@@ -14,3 +14,9 @@ jobs:
 
       - name: docker builds
         run: docker compose build
+
+      - name: up services
+        run: docker compose up -d
+
+      - name: terraform apply for kong
+        run: docker compose run --rm --no-deps terraform terraform apply -auto-approve
