@@ -12,6 +12,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: create certs
+        run: openssl req -newkey rsa:2048 -nodes -keyout ssl/key.pem -x509 -days 365 -out ssl/cert.pem
+
       - name: docker builds
         run: docker compose build
 
