@@ -12,5 +12,20 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: create certs
+        run: openssl req -newkey rsa:2048 -nodes -keyout ssl/key.pem -x509 -days 365 -out ssl/cert.pem -subj "/C=AU/ST=Some-State/L=City/O=Organization/OU=Unit/CN=example.com/emailAddress=email@example.com"
+
+      - name: terrafrom init
+        run: docker compose run --rm --no-deps terraform terraform init
+
       - name: docker builds
         run: docker compose build
+
+      - name: up services
+        run: docker compose up -d
+
+      - name: terraform apply for kong
+        run: docker compose run --rm --no-deps terraform terraform apply -auto-approve
+
+      - name: Check endpoint without credentials
+        run: scripts/check-http-status-code.sh https://localhost:8443/orion 401
