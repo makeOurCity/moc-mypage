@@ -1,6 +1,6 @@
 # MoC Mypage
 
-[![Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml) [![Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml) [![Docker Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/docker_build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/docker_build.yml)
+[![Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/build.yml) [![Docker Build Test](https://github.com/makeOurCity/moc-mypage/actions/workflows/docker_build.yml/badge.svg)](https://github.com/makeOurCity/moc-mypage/actions/workflows/docker_build.yml)
 
 Make our City mypage.
 
