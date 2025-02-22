@@ -34,5 +34,5 @@ kong manager(GUI) http://localhost:8002/ でadminユーザーにcredentialsを�
 （[Client ID と Client secret の取得方法](./docs/credential.md) を参照）
 
 
-### 3. ログイン
+### 5. ログイン
 http://localhost:3000 にアクセスし、kong managerで発行・取得した `client id`, `client secret` を使用してログインする。
