@@ -117,6 +117,9 @@ services:
     working_dir: /workspace
     environment:
       - TF_LOG=INFO
+    depends_on:
+      kong:
+        condition: service_healthy
     entrypoint: [""]
     command: ["terraform", "init"]
 
