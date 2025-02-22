@@ -26,3 +26,9 @@ jobs:
 
       - name: terraform apply for kong
         run: docker compose run --rm --no-deps terraform terraform apply -auto-approve
+
+      - name: Check http status code no credentials
+        uses: lakuapik/gh-actions-http-status@v1
+        with:
+          sites: '["https://localhost:8443/orion", "http://localhost:8000/orion"]'
+          expected: "[401]"
