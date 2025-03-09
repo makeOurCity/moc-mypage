@@ -1,0 +1,25 @@
+# Important Rules for Code Changes
+
+## 1. Commit Practices
+- When a task is completed and ready to report to the user, commit the source code changes.
+- Before starting any work, check the status of changes using `git status`.
+- For large-scale changes, consult with the user before proceeding.
+
+## 2. Testing Requirements
+- All tests must be executed and passed before committing any changes.
+- Run the complete test suite to ensure overall system stability.
+
+## 3. Error Handling
+- If any test fails consecutively 5 times or more, stop and consult with the user.
+- Report persistent test failures to get user guidance on how to proceed.
+
+# Test Execution Process
+
+I will execute tests using the following command:
+```
+npm run test:ai
+```
+
+The testing process follows these steps:
+1. First, run tests focused on the implemented components.
+2. Once these targeted tests pass, proceed with running the complete test suite for comprehensive validation.
