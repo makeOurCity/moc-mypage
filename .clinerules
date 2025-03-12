@@ -1,25 +1,25 @@
-# Important Rules for Code Changes
+# コード変更に関する重要なルール
 
-## 1. Commit Practices
-- When a task is completed and ready to report to the user, commit the source code changes.
-- Before starting any work, check the status of changes using `git status`.
-- For large-scale changes, consult with the user before proceeding.
+## 1. コミットの実践
+- タスクが完了してユーザーに報告する準備ができたら、ソースコードの変更をコミットします。
+- 作業を開始する前に、`git status`を使用して変更の状態を確認します。
+- 大規模な変更を行う場合は、事前にユーザーに相談します。
 
-## 2. Testing Requirements
-- All tests must be executed and passed before committing any changes.
-- Run the complete test suite to ensure overall system stability.
+## 2. テスト要件
+- 変更をコミットする前に、すべてのテストを実行し、パスする必要があります。
+- システム全体の安定性を確保するため、完全なテストスイートを実行します。
 
-## 3. Error Handling
-- If any test fails consecutively 5 times or more, stop and consult with the user.
-- Report persistent test failures to get user guidance on how to proceed.
+## 3. エラー処理
+- テストが連続して5回以上失敗した場合は、作業を中止してユーザーに相談します。
+- 継続的なテスト失敗が発生した場合は、対処方法についてユーザーのガイダンスを求めます。
 
-# Test Execution Process
+# テスト実行プロセス
 
-I will execute tests using the following command:
+以下のコマンドを使用してテストを実行します：
 ```
 npm run test:ai
 ```
 
-The testing process follows these steps:
-1. First, run tests focused on the implemented components.
-2. Once these targeted tests pass, proceed with running the complete test suite for comprehensive validation.
+テストプロセスは以下の手順で行います：
+1. まず、実装したコンポーネントに焦点を当てたテストを実行します。
+2. これらのターゲットテストがパスしたら、包括的な検証のために完全なテストスイートの実行に進みます。
