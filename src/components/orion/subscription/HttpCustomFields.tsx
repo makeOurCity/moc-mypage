@@ -1,4 +1,3 @@
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, IconButton, Input, VStack } from "@chakra-ui/react";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import { SubscriptionFormData } from "./SubscriptionForm";
@@ -45,24 +44,23 @@ export default function HttpCustomFields({ control }: Props) {
                   )}
                 />
               </FormControl>
-              <IconButton
-                aria-label="フィールドを削除"
-                icon={<DeleteIcon />}
+              <Button
                 onClick={() => remove(index)}
                 size="sm"
                 colorScheme="red"
                 mt={8}
-              />
+              >
+                削除
+              </Button>
             </HStack>
           </Box>
         ))}
         <Button
-          leftIcon={<AddIcon />}
           onClick={() => append({ key: "", value: "" })}
           size="sm"
           width="fit-content"
         >
-          フィールドを追加
+          + フィールドを追加
         </Button>
       </VStack>
       <FormHelperText>
