@@ -24,6 +24,7 @@ export default function FiwareOrionSubscriptionsNew() {
       idPattern: ".*",
       notificationType: "url",
       url: "https://",
+      httpCustomFields: [],
     },
   });
   const router = useRouter();

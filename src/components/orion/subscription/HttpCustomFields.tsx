@@ -1,54 +1,74 @@
-import { FormControl, FormHelperText, FormLabel, Textarea } from "@chakra-ui/react";
-import { Control, Controller } from "react-hook-form";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, IconButton, Input, VStack } from "@chakra-ui/react";
+import { Control, Controller, useFieldArray } from "react-hook-form";
 import { SubscriptionFormData } from "./SubscriptionForm";
 
 type Props = {
   control: Control<SubscriptionFormData>;
 };
 
+type CustomField = {
+  key: string;
+  value: string;
+};
+
 export default function HttpCustomFields({ control }: Props) {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "httpCustomFields",
+  });
+
   return (
     <FormControl>
       <FormLabel>HTTP Custom設定</FormLabel>
-      <Controller
-        control={control}
-        name="httpCustom"
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <Textarea
-              value={field.value ? JSON.stringify(field.value, null, 2) : ""}
-              onChange={(e) => {
-                try {
-                  const value = e.target.value ? JSON.parse(e.target.value) : undefined;
-                  field.onChange(value);
-                } catch (err) {
-                  // JSONパースエラーの場合は生の文字列をそのまま保持
-                  field.onChange(e.target.value);
-                }
-              }}
-              placeholder={`{
-  "headers": {
-    "Authorization": "Bearer token"
-  },
-  "qs": {
-    "authkey": "value"
-  }
-}`}
-              isInvalid={!!error}
-              fontFamily="monospace"
-              minHeight="200px"
-            />
-            {error ? (
-              <FormHelperText color="red.500">{error.message}</FormHelperText>
-            ) : (
-              <FormHelperText>
-                HTTPリクエストのカスタマイズ設定をJSON形式で入力してください。
-                headers、qs（クエリパラメータ）などが設定可能です。
-              </FormHelperText>
-            )}
-          </>
-        )}
-      />
+      <VStack spacing={4} align="stretch">
+        {fields.map((field, index) => (
+          <Box key={field.id}>
+            <HStack spacing={2} align="flex-start">
+              <FormControl>
+                <FormLabel fontSize="sm">キー</FormLabel>
+                <Controller
+                  control={control}
+                  name={`httpCustomFields.${index}.key`}
+                  render={({ field }) => (
+                    <Input size="sm" {...field} placeholder="Authorization" />
+                  )}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel fontSize="sm">値</FormLabel>
+                <Controller
+                  control={control}
+                  name={`httpCustomFields.${index}.value`}
+                  render={({ field }) => (
+                    <Input size="sm" {...field} placeholder="Bearer token" />
+                  )}
+                />
+              </FormControl>
+              <IconButton
+                aria-label="フィールドを削除"
+                icon={<DeleteIcon />}
+                onClick={() => remove(index)}
+                size="sm"
+                colorScheme="red"
+                mt={8}
+              />
+            </HStack>
+          </Box>
+        ))}
+        <Button
+          leftIcon={<AddIcon />}
+          onClick={() => append({ key: "", value: "" })}
+          size="sm"
+          width="fit-content"
+        >
+          フィールドを追加
+        </Button>
+      </VStack>
+      <FormHelperText>
+        HTTPリクエストのカスタマイズ設定を入力してください。
+        ヘッダーやクエリパラメータなどのキーと値のペアを設定できます。
+      </FormHelperText>
     </FormControl>
   );
 }

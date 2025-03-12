@@ -6,12 +6,17 @@ import HttpCustomFields from "./HttpCustomFields";
 
 export type NotificationType = "url" | "httpCustom";
 
+export interface HttpCustomField {
+  key: string;
+  value: string;
+}
+
 export interface SubscriptionFormData {
   description: string;
   idPattern: string;
   notificationType: NotificationType;
   url?: string;
-  httpCustom?: Record<string, unknown>;
+  httpCustomFields: HttpCustomField[];
 }
 
 type Props = {

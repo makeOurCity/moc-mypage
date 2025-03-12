@@ -24,9 +24,26 @@ export function SubscriptionFormIdPatternTypeDataToJson(
   };
 }
 
+function convertHttpCustomFields(
+  fields: SubscriptionFormData["httpCustomFields"]
+) {
+  const result: Record<string, string> = {};
+  for (const field of fields) {
+    if (field.key && field.value) {
+      result[field.key] = field.value;
+    }
+  }
+  return result;
+}
+
 export function createSubscriptionRequest(
   data: SubscriptionFormData
 ): CreateSubscriptionRequest {
+  const httpCustom =
+    data.notificationType === "httpCustom"
+      ? convertHttpCustomFields(data.httpCustomFields)
+      : undefined;
+
   return {
     description: data.description,
     subject: {
@@ -39,7 +56,7 @@ export function createSubscriptionRequest(
     notification:
       data.notificationType === "url"
         ? { http: { url: data.url } }
-        : { httpCustom: data.httpCustom },
+        : { httpCustom },
     expires: "",
     throttling: 0,
   };
