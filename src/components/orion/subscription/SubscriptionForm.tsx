@@ -1,8 +1,7 @@
 import { Box, Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@chakra-ui/react";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
-import NotificationTypeSelector from "./NotificationTypeSelector";
-import UrlNotificationFields from "./UrlNotificationFields";
 import HttpCustomFields from "./HttpCustomFields";
+import UrlNotificationFields from "./UrlNotificationFields";
 
 export type NotificationType = "url" | "httpCustom";
 
@@ -15,7 +14,7 @@ export interface SubscriptionFormData {
   description: string;
   idPattern: string;
   notificationType: NotificationType;
-  url?: string;
+  url: string;
   httpCustomFields: HttpCustomField[];
 }
 
@@ -63,24 +62,37 @@ export default function SubscriptionForm({
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>通知方式</FormLabel>
+        <FormLabel>URL設定</FormLabel>
+        <Controller
+          control={control}
+          name="url"
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Input
+                type="text"
+                placeholder="https://example.com"
+                value={field.value}
+                onChange={field.onChange}
+                isInvalid={!!error}
+              />
+              {error ? (
+                <FormHelperText color="red.500">{error.message}</FormHelperText>
+              ) : (
+                <FormHelperText>
+                  連携先のURLをhttpsから始まる形で記入してください。
+                </FormHelperText>
+              )}
+            </>
+          )}
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
         <Controller
           control={control}
           name="notificationType"
           render={({ field }) => (
-            <NotificationTypeSelector
-              options={[
-                {
-                  label: "URL",
-                  content: <UrlNotificationFields control={control} />
-                },
-                {
-                  label: "HTTP Custom",
-                  content: <HttpCustomFields control={control} />
-                }
-              ]}
-              defaultIndex={field.value === "httpCustom" ? 1 : 0}
-            />
+            <HttpCustomFields control={control} />
           )}
         />
       </FormControl>
