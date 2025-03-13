@@ -24,16 +24,12 @@ export default function FiwareServiceHistory({ onSelect }: Props) {
   // 現在の設定値を含めたオプションを作成
   const options = [
     // 現在の設定値（履歴にない場合）
-    ...(currentService && !history.some(h => h.service === currentService)
+    ...(currentService !== undefined && !history.some(h => h.service === currentService)
       ? [{ service: currentService, lastUsed: Date.now() }]
       : []),
     // 履歴の値
     ...history
   ];
-
-  if (options.length === 0) {
-    return null;
-  }
 
   return (
     <VStack spacing={2} align="stretch">
@@ -43,15 +39,18 @@ export default function FiwareServiceHistory({ onSelect }: Props) {
       <Box position="relative">
         <Select
           size="sm"
-          value={currentService || ""}
+          value={currentService ?? ""}
           onChange={(e) => onSelect(e.target.value)}
           borderColor={borderColor}
           placeholder="テナントを選択"
         >
+          <option value="">設定なし</option>
           {options.map((item) => (
-            <option key={item.service} value={item.service}>
-              {item.service}
-            </option>
+            item.service && (
+              <option key={item.service} value={item.service}>
+                {item.service}
+              </option>
+            )
           ))}
         </Select>
       </Box>
@@ -68,7 +67,7 @@ export default function FiwareServiceHistory({ onSelect }: Props) {
                 py={1}
                 _hover={{ bg: hoverBg }}
               >
-                <Text isTruncated>{item.service}</Text>
+                <Text isTruncated>{item.service || '(設定なし)'}</Text>
                 <IconButton
                   aria-label="履歴を削除"
                   icon={<FiTrash2 />}

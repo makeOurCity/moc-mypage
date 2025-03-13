@@ -56,31 +56,25 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
    */
   const onSubmit = handleSubmit((v) => {
     // 設定ボタンクリック時に保存
-    setFiwareService(inputValue);
-    setFiwareServiceHeader(inputValue || "");
+    // 空文字の場合はundefinedとして保存
+    const valueToStore = inputValue || undefined;
+    setFiwareService(valueToStore);
+    setFiwareServiceHeader(valueToStore || "");
 
-    if (inputValue) {
-      // 設定ボタンクリック時に履歴に追加
-      addHistory(inputValue);
-    }
+    // 現在の設定を履歴に追加（空文字の場合も含む）
+    addHistory(inputValue);
 
     if (onSubmitFiwareService) {
-      onSubmitFiwareService(inputValue);
+      onSubmitFiwareService(valueToStore);
     }
 
-    if (inputValue) {
-      toast({
-        title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Service: 「${inputValue}」 を使用します。`,
-        duration: 1100,
-      });
-    } else {
-      toast({
-        title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Serviceは使用しません。`,
-        duration: 900,
-      });
-    }
+    toast({
+      title: "マルチテナントの設定に成功しました。",
+      description: valueToStore
+        ? `Fiware-Service: 「${valueToStore}」 を使用します。`
+        : "Fiware-Serviceは使用しません。",
+      duration: 1100,
+    });
   });
 
   /**
@@ -95,7 +89,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
 
   // 外部から履歴が選択された場合の処理
   useEffect(() => {
-    if (fiwareService) {
+    if (fiwareService !== undefined) {
       setValue("name", fiwareService);
       setInputValue(fiwareService);
     }
