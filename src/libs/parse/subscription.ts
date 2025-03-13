@@ -13,11 +13,17 @@ function parseHttpCustomValue(value: string): string | object {
 }
 
 function convertHttpCustomFields(
-  fields: HttpCustomField[]
+  fields: HttpCustomField[],
+  url: string
 ): Record<string, any> {
-  const result: Record<string, any> = {};
+  const result: Record<string, any> = {
+    url, // notification.httpCustom.urlとしてURLを設定
+  };
+
+  // その他のカスタムフィールドを追加
   for (const field of fields) {
-    if (field.key && field.value) {
+    if (field.key && field.value && field.key !== "url") {
+      // URLフィールドは別途設定するのでスキップ
       result[field.key] = parseHttpCustomValue(field.value);
     }
   }
@@ -27,7 +33,7 @@ function convertHttpCustomFields(
 export function createSubscriptionRequest(
   data: SubscriptionFormData
 ): CreateSubscriptionRequest {
-  const httpCustom = convertHttpCustomFields(data.httpCustomFields);
+  const httpCustom = convertHttpCustomFields(data.httpCustomFields, data.url);
 
   return {
     description: data.description,
@@ -39,8 +45,7 @@ export function createSubscriptionRequest(
       ],
     },
     notification: {
-      http: { url: data.url },
-      ...(Object.keys(httpCustom).length > 0 ? { httpCustom } : {}),
+      httpCustom, // notification.httpCustomとして設定
     },
     expires: "",
     throttling: 0,
