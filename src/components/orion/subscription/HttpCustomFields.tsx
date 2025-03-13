@@ -39,6 +39,15 @@ const customParams: HttpCustomParam[] = [
 }`
   },
   {
+    name: "qs",
+    type: "object",
+    description: "クエリパラメータ",
+    placeholder: `{
+  "param1": "value1",
+  "param2": "value2"
+}`
+  },
+  {
     name: "timeout",
     type: "string",
     description: "タイムアウト時間（ミリ秒）",
