@@ -4,14 +4,18 @@ import {
   SubscriptionFormData,
 } from "@/components/orion/subscription/SubscriptionForm";
 
-function processFieldValue(key: string, value: string): string {
-  // payloadフィールドの場合はJSONをURLエンコード
-  if (key === "payload") {
+function processFieldValue(key: string, value: string): string | object {
+  // JSONとして処理するフィールド
+  if (key === "payload" || key === "qs") {
     try {
       // まずJSONとして解析可能か確認
       const jsonObject = JSON.parse(value);
-      // JSONとして有効な場合はURLエンコード
-      return encodeURIComponent(JSON.stringify(jsonObject));
+      if (key === "payload") {
+        // payloadの場合はJSONをURLエンコード
+        return encodeURIComponent(JSON.stringify(jsonObject));
+      }
+      // qsの場合はオブジェクトとして返す
+      return jsonObject;
     } catch {
       // JSON解析に失敗した場合は元の値をそのまま返す
       return value;
@@ -32,7 +36,10 @@ function convertHttpCustomFields(
   for (const field of fields) {
     if (field.key && field.value && field.key !== "url") {
       // フィールドの種類に応じて適切な処理を行う
-      result[field.key] = processFieldValue(field.key, field.value);
+      const processedValue = processFieldValue(field.key, field.value);
+      if (processedValue !== undefined) {
+        result[field.key] = processedValue;
+      }
     }
   }
   return result;
