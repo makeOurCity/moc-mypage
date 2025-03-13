@@ -1,88 +1,86 @@
 import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Box,
-  List,
-  ListItem,
+  Select,
   Text,
-  IconButton,
+  VStack,
   HStack,
+  IconButton,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FiClock, FiX } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { useFiwareServiceHistory } from "@/hooks/useFiwareServiceHistory";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Props {
   onSelect: (service: string) => void;
 }
 
 export default function FiwareServiceHistory({ onSelect }: Props) {
-  const { history, removeHistory, isOpen, toggleOpen } = useFiwareServiceHistory();
-  const hoverBg = useColorModeValue("gray.100", "gray.700");
+  const { history, removeHistory } = useFiwareServiceHistory();
+  const [currentService] = useLocalStorage<string | undefined>("fiware-service", undefined);
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const hoverBg = useColorModeValue("gray.50", "gray.700");
 
-  if (history.length === 0) {
+  // 現在の設定値を含めたオプションを作成
+  const options = [
+    // 現在の設定値（履歴にない場合）
+    ...(currentService && !history.some(h => h.service === currentService)
+      ? [{ service: currentService, lastUsed: Date.now() }]
+      : []),
+    // 履歴の値
+    ...history
+  ];
+
+  if (options.length === 0) {
     return null;
   }
 
   return (
-    <Accordion
-      allowToggle
-      defaultIndex={isOpen ? [0] : []}
-      onChange={() => toggleOpen()}
-    >
-      <AccordionItem border="none">
-        <AccordionButton
-          display="flex"
-          alignItems="center"
-          py={2}
-          _hover={{
-            bg: hoverBg,
-          }}
+    <VStack spacing={2} align="stretch">
+      <Text fontSize="sm" fontWeight="medium" color="gray.600">
+        テナント選択
+      </Text>
+      <Box position="relative">
+        <Select
+          size="sm"
+          value={currentService || ""}
+          onChange={(e) => onSelect(e.target.value)}
+          borderColor={borderColor}
+          placeholder="テナントを選択"
         >
-          <Box flex="1" textAlign="left">
-            <HStack spacing={2}>
-              <FiClock />
-              <Text>マルチテナント履歴</Text>
-            </HStack>
-          </Box>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel pb={4} px={2}>
-          <List spacing={2}>
-            {history.map((item) => (
-              <ListItem
+          {options.map((item) => (
+            <option key={item.service} value={item.service}>
+              {item.service}
+            </option>
+          ))}
+        </Select>
+      </Box>
+      {options.length > 0 && (
+        <Box maxH="200px" overflowY="auto">
+          <VStack spacing={1} align="stretch">
+            {options.map((item) => (
+              <HStack
                 key={item.service}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                p={2}
-                cursor="pointer"
-                _hover={{
-                  bg: hoverBg,
-                }}
-                onClick={() => onSelect(item.service)}
+                justify="space-between"
+                fontSize="xs"
+                color="gray.500"
+                px={2}
+                py={1}
+                _hover={{ bg: hoverBg }}
               >
-                <Text fontSize="sm" isTruncated maxW="80%">
-                  {item.service}
-                </Text>
+                <Text isTruncated>{item.service}</Text>
                 <IconButton
                   aria-label="履歴を削除"
-                  icon={<FiX />}
-                  size="sm"
+                  icon={<FiTrash2 />}
+                  size="xs"
                   variant="ghost"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeHistory(item.service);
-                  }}
+                  onClick={() => removeHistory(item.service)}
                 />
-              </ListItem>
+              </HStack>
             ))}
-          </List>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+          </VStack>
+        </Box>
+      )}
+    </VStack>
   );
 }

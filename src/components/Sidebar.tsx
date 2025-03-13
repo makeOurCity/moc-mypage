@@ -116,7 +116,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       ))}
       <Box mt={4}>
         <Divider />
-        <Box px={4} py={2}>aaa
+        <Box px={4} py={2}>
           <FiwareServiceHistory onSelect={handleHistorySelect} />
         </Box>
       </Box>
