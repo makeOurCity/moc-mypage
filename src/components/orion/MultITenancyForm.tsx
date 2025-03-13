@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useFiwareServiceHistory } from "@/hooks/useFiwareServiceHistory";
 
 type Props = {
   onSubmitFiwareService?: (fiwareService?: string) => void;
@@ -25,9 +26,11 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
   const [fiwareService, setFiwareService, loadingLocalStorage] = useLocalStorage<string | undefined>("fiware-service", undefined);
+  const { addHistory } = useFiwareServiceHistory();
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -51,6 +54,11 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
   const onSubmit = handleSubmit((v) => {
     setFiwareService(fiwareService);
     setFiwareServiceHeader(fiwareService || "");
+
+    if (fiwareService) {
+      // 履歴に追加
+      addHistory(fiwareService);
+    }
 
     if (onSubmitFiwareService) {
       onSubmitFiwareService(fiwareService);
@@ -76,10 +84,17 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
    */
   const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
-    const { name, value } = e.target
+    const { name, value } = e.target;
     logger.debug("on name change handler", { name, value });
-    setFiwareService(value)
+    setFiwareService(value);
   }, [setFiwareService, register]);
+
+  // 外部から履歴が選択された場合の処理
+  useEffect(() => {
+    if (fiwareService) {
+      setValue("name", fiwareService);
+    }
+  }, [fiwareService, setValue]);
 
   return (
     <>
