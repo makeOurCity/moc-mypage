@@ -4,14 +4,6 @@ import {
   SubscriptionFormData,
 } from "@/components/orion/subscription/SubscriptionForm";
 
-function parseHttpCustomValue(value: string): string | object {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return value;
-  }
-}
-
 function convertHttpCustomFields(
   fields: HttpCustomField[],
   url: string
@@ -23,8 +15,8 @@ function convertHttpCustomFields(
   // その他のカスタムフィールドを追加
   for (const field of fields) {
     if (field.key && field.value && field.key !== "url") {
-      // URLフィールドは別途設定するのでスキップ
-      result[field.key] = parseHttpCustomValue(field.value);
+      // 全ての値を文字列として扱う
+      result[field.key] = field.value;
     }
   }
   return result;
