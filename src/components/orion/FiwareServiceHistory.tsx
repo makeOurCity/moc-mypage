@@ -68,13 +68,15 @@ export default function FiwareServiceHistory({ onSelect }: Props) {
                 _hover={{ bg: hoverBg }}
               >
                 <Text isTruncated>{item.service || '(設定なし)'}</Text>
-                <IconButton
-                  aria-label="履歴を削除"
-                  icon={<FiTrash2 />}
-                  size="xs"
-                  variant="ghost"
-                  onClick={() => removeHistory(item.service)}
-                />
+                {item.service && (
+                  <IconButton
+                    aria-label="履歴を削除"
+                    icon={<FiTrash2 />}
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => removeHistory(item.service)}
+                  />
+                )}
               </HStack>
             ))}
           </VStack>
