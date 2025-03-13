@@ -10,16 +10,24 @@ import {
 import { FiTrash2 } from "react-icons/fi";
 import { useFiwareServiceHistory } from "@/hooks/useFiwareServiceHistory";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useEffect } from "react";
 
 interface Props {
   onSelect: (service: string) => void;
 }
 
 export default function FiwareServiceHistory({ onSelect }: Props) {
-  const { history, removeHistory } = useFiwareServiceHistory();
+  const { history, removeHistory, addHistory } = useFiwareServiceHistory();
   const [currentService] = useLocalStorage<string | undefined>("fiware-service", undefined);
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const hoverBg = useColorModeValue("gray.50", "gray.700");
+
+  // 現在のサービスを監視し、変更があれば履歴に追加
+  useEffect(() => {
+    if (currentService) {
+      addHistory(currentService);
+    }
+  }, [currentService, addHistory]);
 
   // 現在の設定値を含めたオプションを作成
   const options = [
