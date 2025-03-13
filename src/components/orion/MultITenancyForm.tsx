@@ -56,7 +56,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
     setFiwareServiceHeader(fiwareService || "");
 
     if (fiwareService) {
-      // 履歴に追加
+      // 設定ボタンクリック時に履歴に追加
       addHistory(fiwareService);
     }
 
