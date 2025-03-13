@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link, Select, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link, Select, Textarea, Text, VStack } from "@chakra-ui/react";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import { SubscriptionFormData } from "./SubscriptionForm";
 
@@ -135,24 +135,22 @@ export default function HttpCustomFields({ control }: Props) {
                 e.target.value = "";
               }
             }}
-            size="md"
-            variant="outline"
-            height="auto"
+            mb={2}
           >
             {availableParams.map(param => (
-              <option
-                key={param.name}
-                value={param.name}
-                style={{
-                  padding: "8px",
-                  height: "auto",
-                  minHeight: "40px"
-                }}
-              >
-                {param.name} - {param.description}
+              <option key={param.name} value={param.name}>
+                {param.name}
               </option>
             ))}
           </Select>
+          {availableParams.map(param => (
+            <Box key={param.name} mb={2} pl={2}>
+              <Text fontWeight="bold">{param.name}</Text>
+              <Text fontSize="sm" color="gray.600">
+                {param.description}
+              </Text>
+            </Box>
+          ))}
         </FormControl>
       )}
     </FormControl>
