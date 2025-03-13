@@ -1,6 +1,7 @@
 import { Box, Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@chakra-ui/react";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
 import HttpCustomFields from "./HttpCustomFields";
+import NotificationTypeSelector from "./NotificationTypeSelector";
 
 export type NotificationType = "url" | "httpCustom";
 
@@ -60,6 +61,8 @@ export default function SubscriptionForm({
         />
       </FormControl>
 
+      <NotificationTypeSelector control={control} />
+
       <FormControl mb={4}>
         <FormLabel>URL設定</FormLabel>
         <Controller
@@ -86,15 +89,15 @@ export default function SubscriptionForm({
         />
       </FormControl>
 
-      <FormControl mb={4}>
-        <Controller
-          control={control}
-          name="notificationType"
-          render={({ field }) => (
-            <HttpCustomFields control={control} />
-          )}
-        />
-      </FormControl>
+      <Controller
+        control={control}
+        name="notificationType"
+        render={({ field }) => (
+          <>
+            {field.value === "httpCustom" && <HttpCustomFields control={control} />}
+          </>
+        )}
+      />
 
       <FormControl mb={4}>
         <FormLabel>説明</FormLabel>
