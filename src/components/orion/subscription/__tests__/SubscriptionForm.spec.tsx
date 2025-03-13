@@ -32,7 +32,7 @@ describe("SubscriptionForm", () => {
     jest.clearAllMocks();
   });
 
-  it("shows URL field when URL notification type is selected", () => {
+  it("shows URL field and hides HTTP Custom fields when URL notification type is selected", () => {
     render(<TestComponent />);
 
     const urlRadio = screen.getByLabelText("標準 URL 通知");
@@ -47,15 +47,15 @@ describe("SubscriptionForm", () => {
     expect(httpCustomField).not.toBeInTheDocument();
   });
 
-  it("shows HTTP Custom fields when HTTP Custom notification type is selected", () => {
+  it("shows both URL and HTTP Custom fields when HTTP Custom notification type is selected", () => {
     render(<TestComponent />);
 
     const httpCustomRadio = screen.getByLabelText("HTTP カスタム通知");
     fireEvent.click(httpCustomRadio);
 
-    // URL入力フィールドが非表示であることを確認
-    const urlInput = screen.queryByPlaceholderText("https://example.com");
-    expect(urlInput).not.toBeInTheDocument();
+    // URL入力フィールドが表示されていることを確認
+    const urlInput = screen.getByPlaceholderText("https://example.com");
+    expect(urlInput).toBeInTheDocument();
 
     // HTTPカスタムフィールドの表示を確認
     const httpCustomField = screen.getByText("HTTP Custom設定");
