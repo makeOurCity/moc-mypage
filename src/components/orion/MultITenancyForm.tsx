@@ -62,8 +62,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
     setFiwareServiceHeader(valueToStore || "");
 
     // 現在の設定を履歴に追加（空文字の場合も含む）
-    addHistory(inputValue);
-
+    addHistory(inputValue.trim());
     if (onSubmitFiwareService) {
       onSubmitFiwareService(valueToStore);
     }
