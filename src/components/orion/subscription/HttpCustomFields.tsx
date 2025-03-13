@@ -48,6 +48,15 @@ const customParams: HttpCustomParam[] = [
 }`
   },
   {
+    name: "headers",
+    type: "object",
+    description: "HTTPヘッダー",
+    placeholder: `{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer token"
+}`
+  },
+  {
     name: "timeout",
     type: "string",
     description: "タイムアウト時間（ミリ秒）",

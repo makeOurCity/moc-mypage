@@ -6,7 +6,7 @@ import {
 
 function processFieldValue(key: string, value: string): string | object {
   // JSONとして処理するフィールド
-  if (key === "payload" || key === "qs") {
+  if (key === "payload" || key === "qs" || key === "headers") {
     try {
       // まずJSONとして解析可能か確認
       const jsonObject = JSON.parse(value);
