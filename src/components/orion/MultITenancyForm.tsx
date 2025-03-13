@@ -8,7 +8,7 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFiwareServiceHistory } from "@/hooks/useFiwareServiceHistory";
 
@@ -26,6 +26,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
   const [fiwareService, setFiwareService, loadingLocalStorage] = useLocalStorage<string | undefined>("fiware-service", undefined);
+  const [inputValue, setInputValue] = useState<string>("");
   const { addHistory } = useFiwareServiceHistory();
   const {
     handleSubmit,
@@ -45,6 +46,8 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
       if (onSubmitFiwareService) {
         onSubmitFiwareService(fiwareService);
       }
+      // 初期値を入力欄にセット
+      setInputValue(fiwareService || "");
     }
   }, [loadingLocalStorage]);
 
@@ -52,22 +55,23 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
    * Fiware-Serviceの設定ボタンsubmit時の挙動
    */
   const onSubmit = handleSubmit((v) => {
-    setFiwareService(fiwareService);
-    setFiwareServiceHeader(fiwareService || "");
+    // 設定ボタンクリック時に保存
+    setFiwareService(inputValue);
+    setFiwareServiceHeader(inputValue || "");
 
-    if (fiwareService) {
+    if (inputValue) {
       // 設定ボタンクリック時に履歴に追加
-      addHistory(fiwareService);
+      addHistory(inputValue);
     }
 
     if (onSubmitFiwareService) {
-      onSubmitFiwareService(fiwareService);
+      onSubmitFiwareService(inputValue);
     }
 
-    if (fiwareService) {
+    if (inputValue) {
       toast({
         title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Service: 「${fiwareService}」 を使用します。`,
+        description: `Fiware-Service: 「${inputValue}」 を使用します。`,
         duration: 1100,
       });
     } else {
@@ -80,19 +84,20 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
   });
 
   /**
-   * フォームに入力された内容をリアルタイムでlocalStorageに反映する。
+   * フォームの入力値を状態として保持
    */
   const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
-    const { name, value } = e.target;
-    logger.debug("on name change handler", { name, value });
-    setFiwareService(value);
-  }, [setFiwareService, register]);
+    const { value } = e.target;
+    logger.debug("on name change handler", { value });
+    setInputValue(value);
+  }, [register]);
 
   // 外部から履歴が選択された場合の処理
   useEffect(() => {
     if (fiwareService) {
       setValue("name", fiwareService);
+      setInputValue(fiwareService);
     }
   }, [fiwareService, setValue]);
 
@@ -102,7 +107,7 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
         <FormControl isInvalid={Boolean(errors.name)}>
           <Input
             id="name"
-            value={fiwareService || ""}
+            value={inputValue}
             placeholder="Fiware-Serviceヘッダーに値を入れたい場合はここに入力してください"
             {...register("name", {
               required: false,
