@@ -106,6 +106,10 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
             {...register("name", {
               required: false,
               maxLength: { value: 50, message: "最大文字数は50文字です" },
+              pattern: {
+                value: /^[a-zA-Z-_]*$/,
+                message: "英字、ハイフン(-)、アンダースコア(_)のみ使用できます"
+              }
             })}
             onChange={onNameChangeHandler}
           />
