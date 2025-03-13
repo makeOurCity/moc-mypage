@@ -24,11 +24,15 @@ describe("useFiwareServiceHistory", () => {
       value: mockLocalStorage(),
       writable: true
     });
+    // フェイクタイマーを有効化
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     window.localStorage.clear();
     jest.clearAllMocks();
+    // フェイクタイマーをリセット
+    jest.useRealTimers();
   });
 
   it("初期状態では空の履歴を返す", () => {
@@ -71,7 +75,8 @@ describe("useFiwareServiceHistory", () => {
     expect(result.current.history[0].lastUsed).toBeDefined();
   });
 
-  it("重複する履歴は追加せず、最新の使用時間で更新する", async () => {
+  it("重複する履歴は追加せず、最新の使用時間で更新する", () => {
+    jest.setSystemTime(new Date('2025-01-01')); // システム時間を固定
     const { result, rerender } = renderHook(() => useFiwareServiceHistory());
     const testService = "test-service";
 
@@ -82,9 +87,9 @@ describe("useFiwareServiceHistory", () => {
     rerender();
     const firstTimestamp = result.current.history[0].lastUsed;
 
-    // 時間をおいて2回目の追加
+    // 時間を進めて2回目の追加
+    jest.setSystemTime(new Date('2025-01-02')); // 1日進める
     act(() => {
-      jest.advanceTimersByTime(1000);
       result.current.addHistory(testService);
     });
     rerender();
