@@ -1,7 +1,6 @@
 import { Box, Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@chakra-ui/react";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
 import HttpCustomFields from "./HttpCustomFields";
-import UrlNotificationFields from "./UrlNotificationFields";
 
 export type NotificationType = "url" | "httpCustom";
 
