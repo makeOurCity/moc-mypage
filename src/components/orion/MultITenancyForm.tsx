@@ -8,8 +8,9 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useFiwareServiceHistory } from "@/hooks/useFiwareServiceHistory";
 
 type Props = {
   onSubmitFiwareService?: (fiwareService?: string) => void;
@@ -25,9 +26,12 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
   const toast = useToast();
   const {setFiwareServiceHeader} = useOrion();
   const [fiwareService, setFiwareService, loadingLocalStorage] = useLocalStorage<string | undefined>("fiware-service", undefined);
+  const [inputValue, setInputValue] = useState<string>("");
+  const { addHistory } = useFiwareServiceHistory();
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -42,6 +46,8 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
       if (onSubmitFiwareService) {
         onSubmitFiwareService(fiwareService);
       }
+      // 初期値を入力欄にセット
+      setInputValue(fiwareService || "");
     }
   }, [loadingLocalStorage]);
 
@@ -49,37 +55,44 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
    * Fiware-Serviceの設定ボタンsubmit時の挙動
    */
   const onSubmit = handleSubmit((v) => {
-    setFiwareService(fiwareService);
-    setFiwareServiceHeader(fiwareService || "");
+    // 設定ボタンクリック時に保存
+    // 空文字の場合はundefinedとして保存
+    const valueToStore = inputValue || undefined;
+    setFiwareService(valueToStore);
+    setFiwareServiceHeader(valueToStore || "");
 
+    // 現在の設定を履歴に追加（空文字の場合も含む）
+    addHistory(inputValue.trim());
     if (onSubmitFiwareService) {
-      onSubmitFiwareService(fiwareService);
+      onSubmitFiwareService(valueToStore);
     }
 
-    if (fiwareService) {
-      toast({
-        title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Service: 「${fiwareService}」 を使用します。`,
-        duration: 1100,
-      });
-    } else {
-      toast({
-        title: "マルチテナントの設定に成功しました。",
-        description: `Fiware-Serviceは使用しません。`,
-        duration: 900,
-      });
-    }
+    toast({
+      title: "マルチテナントの設定に成功しました。",
+      description: valueToStore
+        ? `Fiware-Service: 「${valueToStore}」 を使用します。`
+        : "Fiware-Serviceは使用しません。",
+      duration: 1100,
+    });
   });
 
   /**
-   * フォームに入力された内容をリアルタイムでlocalStorageに反映する。
+   * フォームの入力値を状態として保持
    */
   const onNameChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     register("name").onChange(e);
-    const { name, value } = e.target
-    logger.debug("on name change handler", { name, value });
-    setFiwareService(value)
-  }, [setFiwareService, register]);
+    const { value } = e.target;
+    logger.debug("on name change handler", { value });
+    setInputValue(value);
+  }, [register]);
+
+  // 外部から履歴が選択された場合の処理
+  useEffect(() => {
+    if (fiwareService !== undefined) {
+      setValue("name", fiwareService);
+      setInputValue(fiwareService);
+    }
+  }, [fiwareService, setValue]);
 
   return (
     <>
@@ -87,11 +100,15 @@ export default function MultiTenancyForm({ onSubmitFiwareService }: Props = {}) 
         <FormControl isInvalid={Boolean(errors.name)}>
           <Input
             id="name"
-            value={fiwareService || ""}
+            value={inputValue}
             placeholder="Fiware-Serviceヘッダーに値を入れたい場合はここに入力してください"
             {...register("name", {
               required: false,
               maxLength: { value: 50, message: "最大文字数は50文字です" },
+              pattern: {
+                value: /^[a-zA-Z-_]*$/,
+                message: "英字、ハイフン(-)、アンダースコア(_)のみ使用できます"
+              }
             })}
             onChange={onNameChangeHandler}
           />

@@ -9,6 +9,7 @@ import {
   useDisclosure,
   BoxProps,
   Image,
+  Divider,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -20,6 +21,9 @@ import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
 import Header from "@/components/header/Header";
 import { useSession } from "next-auth/react";
+import FiwareServiceHistory from "./orion/FiwareServiceHistory";
+import { useRouter } from "next/router";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface LinkItemProps {
   name: string;
@@ -27,15 +31,12 @@ interface LinkItemProps {
   showAnonymousUser?: boolean;
   icon: IconType;
 }
+
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, href: "/", showAnonymousUser: true },
   { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
   { name: "Entity", icon: FiFile, href: "/fiware/orion/entities" },
   { name: "Subscriptions", icon: FiPackage, href: "/fiware/orion/subscriptions" },
-  // { name: "Trending", icon: FiTrendingUp },
-  // { name: "Explore", icon: FiCompass },
-  // { name: "Favourites", icon: FiStar },
-  // { name: "Settings", icon: FiSettings },
 ];
 
 export default function SidebarWithHeader({
@@ -63,7 +64,6 @@ export default function SidebarWithHeader({
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
       <Header onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
@@ -78,7 +78,19 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const items = LinkItems.filter((item) => session || item.showAnonymousUser);
+  const [, setFiwareService] = useLocalStorage<string | undefined>("fiware-service", undefined);
+
+  const handleHistorySelect = (service: string) => {
+    // 選択された値を保存
+    setFiwareService(service);
+
+    // 現在のページがテナント設定ページでない場合は、テナント設定ページに遷移
+    if (router.pathname !== "/fiware/orion/types") {
+      router.push("/fiware/orion/types");
+    }
+  };
 
   return (
     <Box
@@ -102,6 +114,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           {link.name}
         </NavItem>
       ))}
+      <Box mt={4}>
+        <Divider />
+        <Box px={4} py={2}>
+          <FiwareServiceHistory onSelect={handleHistorySelect} />
+        </Box>
+      </Box>
     </Box>
   );
 };
