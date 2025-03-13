@@ -1,4 +1,25 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link, Select, Textarea, Text, VStack } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  HStack,
+  Input,
+  Link,
+  Select,
+  Textarea,
+  Text,
+  VStack,
+  Tooltip,
+  IconButton
+} from "@chakra-ui/react";
+import { DeleteIcon, InfoIcon } from "@chakra-ui/icons";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import { SubscriptionFormData } from "./SubscriptionForm";
 
@@ -75,102 +96,130 @@ export default function HttpCustomFields({ control }: Props) {
   );
 
   return (
-    <FormControl>
-      <FormLabel>HTTP Custom設定</FormLabel>
-      <FormHelperText mb={4}>
-        詳細なパラメータについては
-        <Link
-          href="https://github.com/telefonicaid/fiware-orion/blob/master/doc/manuals.jp/orion-api.md#subscriptionnotificationhttpcustom"
-          color="teal.500"
-          isExternal
-          ml={1}
-        >
-          Orion APIドキュメント
-        </Link>
-        を参照してください。
-      </FormHelperText>
+    <Box>
+      <FormControl>
+        <HStack mb={4} align="center">
+          <FormLabel mb={0}>HTTP Custom設定</FormLabel>
+          <Tooltip label="詳細なパラメータについてはOrion APIドキュメントを参照してください">
+            <Link
+              href="https://github.com/telefonicaid/fiware-orion/blob/master/doc/manuals.jp/orion-api.md#subscriptionnotificationhttpcustom"
+              color="teal.500"
+              isExternal
+            >
+              <InfoIcon />
+            </Link>
+          </Tooltip>
+        </HStack>
 
-      {/* 既存のパラメータ */}
-      <VStack spacing={4} align="stretch" mb={4}>
-        {fields.map((field, index) => {
-          const param = customParams.find(p => p.name === field.key);
-          if (!param) return null;
+        {/* 既存のパラメータ */}
+        <VStack spacing={3} align="stretch" mb={4}>
+          {fields.map((field, index) => {
+            const param = customParams.find(p => p.name === field.key);
+            if (!param) return null;
 
-          return (
-            <Box key={field.id}>
-              <HStack spacing={2} align="flex-start">
-                <FormControl flex={1}>
-                  <FormLabel fontSize="sm">{param.name}</FormLabel>
-                  <FormHelperText>{param.description}</FormHelperText>
-                </FormControl>
-                <FormControl flex={2}>
-                  <FormLabel fontSize="sm">値</FormLabel>
-                  <Controller
-                    control={control}
-                    name={`httpCustomFields.${index}.value`}
-                    render={({ field: { onChange, value } }) => (
-                      param.type === "object" ? (
-                        <Textarea
-                          value={value}
-                          onChange={onChange}
-                          placeholder={param.placeholder}
-                          minHeight="100px"
-                          fontFamily="monospace"
-                        />
-                      ) : (
-                        <Input
-                          value={value}
-                          onChange={onChange}
-                          placeholder={param.placeholder}
-                        />
-                      )
-                    )}
+            return (
+              <Box
+                key={field.id}
+                p={3}
+                borderWidth="1px"
+                borderRadius="md"
+                position="relative"
+              >
+                <HStack spacing={4} align="flex-start">
+                  <Box flex={1}>
+                    <HStack mb={1}>
+                      <Text fontWeight="medium">{param.name}</Text>
+                      <Tooltip label={param.description}>
+                        <InfoIcon color="gray.500" />
+                      </Tooltip>
+                    </HStack>
+                    <Controller
+                      control={control}
+                      name={`httpCustomFields.${index}.value`}
+                      render={({ field: { onChange, value } }) => (
+                        param.type === "object" ? (
+                          <Textarea
+                            value={value}
+                            onChange={onChange}
+                            placeholder={param.placeholder}
+                            size="sm"
+                            minHeight="80px"
+                            fontFamily="monospace"
+                          />
+                        ) : (
+                          <Input
+                            value={value}
+                            onChange={onChange}
+                            placeholder={param.placeholder}
+                            size="sm"
+                          />
+                        )
+                      )}
+                    />
+                  </Box>
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    onClick={() => remove(index)}
+                    aria-label="パラメータを削除"
+                    size="sm"
+                    colorScheme="red"
+                    variant="ghost"
+                    position="absolute"
+                    top={2}
+                    right={2}
                   />
-                </FormControl>
-                <Button
-                  onClick={() => remove(index)}
-                  size="sm"
-                  colorScheme="red"
-                  mt={8}
-                >
-                  削除
-                </Button>
-              </HStack>
-            </Box>
-          );
-        })}
-      </VStack>
+                </HStack>
+              </Box>
+            );
+          })}
+        </VStack>
 
-      {/* パラメータ追加 */}
-      {availableParams.length > 0 && (
-        <FormControl>
-          <FormLabel>パラメータを追加</FormLabel>
-          <Select
-            placeholder="追加するパラメータを選択"
-            onChange={(e) => {
-              if (e.target.value) {
-                append({ key: e.target.value, value: "" });
-                e.target.value = "";
-              }
-            }}
-            mb={2}
-          >
-            {availableParams.map(param => (
-              <option key={param.name} value={param.name}>
-                {param.name}
-              </option>
-            ))}
-          </Select>
-          {availableParams.map(param => (
-            <Box key={param.name} mb={2} pl={2}>
-              <Text fontWeight="bold">{param.name}</Text>
-              <Text fontSize="sm" color="gray.600">
-                {param.description}
-              </Text>
-            </Box>
-          ))}
-        </FormControl>
-      )}
-    </FormControl>
+        {/* パラメータ追加セクション */}
+        {availableParams.length > 0 && (
+          <Box mt={4}>
+            <Select
+              placeholder="パラメータを追加"
+              onChange={(e) => {
+                if (e.target.value) {
+                  append({ key: e.target.value, value: "" });
+                  e.target.value = "";
+                }
+              }}
+              size="sm"
+              mb={2}
+            >
+              {availableParams.map(param => (
+                <option key={param.name} value={param.name}>
+                  {param.name}
+                </option>
+              ))}
+            </Select>
+
+            <Accordion allowToggle>
+              <AccordionItem>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    パラメータの説明
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+                <AccordionPanel>
+                  <VStack align="stretch" spacing={2}>
+                    {availableParams.map(param => (
+                      <Box key={param.name} p={2} bg="gray.50" borderRadius="md">
+                        <Text fontWeight="bold">{param.name}</Text>
+                        <Text fontSize="sm" color="gray.600">
+                          {param.description}
+                        </Text>
+                      </Box>
+                    ))}
+                  </VStack>
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          </Box>
+        )}
+      </FormControl>
+    </Box>
   );
 }
