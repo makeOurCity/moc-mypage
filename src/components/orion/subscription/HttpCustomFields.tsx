@@ -52,11 +52,9 @@ export default function HttpCustomFields({ control }: Props) {
     name: "httpCustomFields",
   });
 
-  const getAvailableParams = (currentParam?: string) => {
-    return customParams.filter(
-      param => currentParam === param.name || !fields.some(field => field.key === param.name)
-    );
-  };
+  const availableParams = customParams.filter(
+    param => !fields.some(field => field.key === param.name)
+  );
 
   return (
     <FormControl>
@@ -73,31 +71,18 @@ export default function HttpCustomFields({ control }: Props) {
         </Link>
         を参照してください。
       </FormHelperText>
-      <VStack spacing={4} align="stretch">
+
+      {/* 既存のパラメータ */}
+      <VStack spacing={4} align="stretch" mb={4}>
         {fields.map((field, index) => {
           const param = customParams.find(p => p.name === field.key);
-          const availableParams = getAvailableParams(field.key);
-
           if (!param) return null;
 
           return (
             <Box key={field.id}>
               <HStack spacing={2} align="flex-start">
                 <FormControl flex={1}>
-                  <FormLabel fontSize="sm">パラメータ</FormLabel>
-                  <Controller
-                    control={control}
-                    name={`httpCustomFields.${index}.key`}
-                    render={({ field: { onChange, value } }) => (
-                      <Select value={value} onChange={onChange}>
-                        {availableParams.map(p => (
-                          <option key={p.name} value={p.name}>
-                            {p.name}
-                          </option>
-                        ))}
-                      </Select>
-                    )}
-                  />
+                  <FormLabel fontSize="sm">{param.name}</FormLabel>
                   <FormHelperText>{param.description}</FormHelperText>
                 </FormControl>
                 <FormControl flex={2}>
@@ -136,21 +121,29 @@ export default function HttpCustomFields({ control }: Props) {
             </Box>
           );
         })}
-        {customParams.length > fields.length && (
-          <Button
-            onClick={() => {
-              const availableParams = getAvailableParams();
-              if (availableParams.length > 0) {
-                append({ key: availableParams[0].name, value: "" });
+      </VStack>
+
+      {/* パラメータ追加 */}
+      {availableParams.length > 0 && (
+        <FormControl>
+          <FormLabel>パラメータを追加</FormLabel>
+          <Select
+            placeholder="追加するパラメータを選択"
+            onChange={(e) => {
+              if (e.target.value) {
+                append({ key: e.target.value, value: "" });
+                e.target.value = "";
               }
             }}
-            size="sm"
-            width="fit-content"
           >
-            + パラメータを追加
-          </Button>
-        )}
-      </VStack>
+            {availableParams.map(param => (
+              <option key={param.name} value={param.name}>
+                {param.name} - {param.description}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+      )}
     </FormControl>
   );
 }
