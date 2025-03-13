@@ -4,6 +4,15 @@ import { useState, useEffect, SetStateAction, Dispatch } from "react";
 
 interface UseLocalStorageOptions {}
 
+// カスタムイベント名
+const LOCAL_STORAGE_CHANGE_EVENT = "localStorageChange";
+
+// カスタムイベントの型定義
+interface LocalStorageChangeEvent {
+  key: string;
+  newValue: string;
+}
+
 export const useLocalStorage = <T>(
   key: string,
   initialValue: T
@@ -20,6 +29,19 @@ export const useLocalStorage = <T>(
 
       // LocalStorageを更新
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
+
+      // カスタムイベントを発火
+      const event = new CustomEvent<LocalStorageChangeEvent>(
+        LOCAL_STORAGE_CHANGE_EVENT,
+        {
+          detail: {
+            key,
+            newValue: JSON.stringify(valueToStore),
+          },
+        }
+      );
+      window.dispatchEvent(event);
+
       // Stateも更新
       setStoredValue(valueToStore);
     } catch (error) {
@@ -50,9 +72,10 @@ export const useLocalStorage = <T>(
   }, [key]); // keyが変更された場合にも再読み込み
 
   /**
-   * localStorageの値が外部で変更された場合に同期を取る
+   * localStorageの値が変更された場合に同期を取る
    */
   useEffect(() => {
+    // 他のタブでの変更を監視
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key && e.newValue !== null) {
         try {
@@ -64,8 +87,31 @@ export const useLocalStorage = <T>(
       }
     };
 
+    // 同じタブでの変更を監視
+    const handleCustomEvent = (e: CustomEvent<LocalStorageChangeEvent>) => {
+      if (e.detail.key === key) {
+        try {
+          const newValue = JSON.parse(e.detail.newValue) as T;
+          setStoredValue(newValue);
+        } catch (error) {
+          logger.error("Error parsing custom event", error);
+        }
+      }
+    };
+
     window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    window.addEventListener(
+      LOCAL_STORAGE_CHANGE_EVENT,
+      handleCustomEvent as EventListener
+    );
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener(
+        LOCAL_STORAGE_CHANGE_EVENT,
+        handleCustomEvent as EventListener
+      );
+    };
   }, [key]);
 
   return [storedValue, setValue, loading];
