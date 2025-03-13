@@ -135,17 +135,20 @@ export default function HttpCustomFields({ control }: Props) {
                 e.target.value = "";
               }
             }}
-            sx={{
-              "& option": {
-                whiteSpace: "normal",
-                wordWrap: "break-word",
-                paddingTop: "0.5rem",
-                paddingBottom: "0.5rem",
-              }
-            }}
+            size="md"
+            variant="outline"
+            height="auto"
           >
             {availableParams.map(param => (
-              <option key={param.name} value={param.name}>
+              <option
+                key={param.name}
+                value={param.name}
+                style={{
+                  padding: "8px",
+                  height: "auto",
+                  minHeight: "40px"
+                }}
+              >
                 {param.name} - {param.description}
               </option>
             ))}
