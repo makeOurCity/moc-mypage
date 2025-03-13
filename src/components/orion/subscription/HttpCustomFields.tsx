@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Link, Select, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link, Select, Textarea, VStack } from "@chakra-ui/react";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import { SubscriptionFormData } from "./SubscriptionForm";
 
@@ -10,13 +10,40 @@ type HttpCustomParam = {
   name: string;
   type: "string" | "object";
   description: string;
+  placeholder?: string;
 };
 
 const customParams: HttpCustomParam[] = [
-  { name: "method", type: "string", description: "HTTP メソッド (GET, POST, etc.)" },
-  { name: "payload", type: "object", description: "リクエストボディ" },
-  { name: "json", type: "object", description: "JSON形式のリクエストボディ" },
-  { name: "timeout", type: "string", description: "タイムアウト時間（ミリ秒）" },
+  {
+    name: "method",
+    type: "string",
+    description: "HTTP メソッド",
+    placeholder: "POST"
+  },
+  {
+    name: "payload",
+    type: "object",
+    description: "リクエストボディ",
+    placeholder: `{
+  "key": "value"
+}`
+  },
+  {
+    name: "json",
+    type: "object",
+    description: "JSON形式のリクエストボディ",
+    placeholder: `{
+  "data": {
+    "key": "value"
+  }
+}`
+  },
+  {
+    name: "timeout",
+    type: "string",
+    description: "タイムアウト時間（ミリ秒）",
+    placeholder: "5000"
+  },
 ];
 
 export default function HttpCustomFields({ control }: Props) {
@@ -25,9 +52,11 @@ export default function HttpCustomFields({ control }: Props) {
     name: "httpCustomFields",
   });
 
-  const availableParams = customParams.filter(
-    param => !fields.some(field => field.key === param.name)
-  );
+  const getAvailableParams = (currentParam?: string) => {
+    return customParams.filter(
+      param => currentParam === param.name || !fields.some(field => field.key === param.name)
+    );
+  };
 
   return (
     <FormControl>
@@ -38,6 +67,7 @@ export default function HttpCustomFields({ control }: Props) {
           href="https://github.com/telefonicaid/fiware-orion/blob/master/doc/manuals.jp/orion-api.md#subscriptionnotificationhttpcustom"
           color="teal.500"
           isExternal
+          ml={1}
         >
           Orion APIドキュメント
         </Link>
@@ -46,38 +76,49 @@ export default function HttpCustomFields({ control }: Props) {
       <VStack spacing={4} align="stretch">
         {fields.map((field, index) => {
           const param = customParams.find(p => p.name === field.key);
+          const availableParams = getAvailableParams(field.key);
+
+          if (!param) return null;
+
           return (
             <Box key={field.id}>
               <HStack spacing={2} align="flex-start">
-                <FormControl>
+                <FormControl flex={1}>
                   <FormLabel fontSize="sm">パラメータ</FormLabel>
                   <Controller
                     control={control}
                     name={`httpCustomFields.${index}.key`}
-                    render={({ field: { value, onChange } }) => (
+                    render={({ field: { onChange, value } }) => (
                       <Select value={value} onChange={onChange}>
-                        <option value={value}>{value}</option>
+                        {availableParams.map(p => (
+                          <option key={p.name} value={p.name}>
+                            {p.name}
+                          </option>
+                        ))}
                       </Select>
                     )}
                   />
+                  <FormHelperText>{param.description}</FormHelperText>
                 </FormControl>
-                <FormControl>
+                <FormControl flex={2}>
                   <FormLabel fontSize="sm">値</FormLabel>
                   <Controller
                     control={control}
                     name={`httpCustomFields.${index}.value`}
-                    render={({ field }) => (
-                      param?.type === "object" ? (
+                    render={({ field: { onChange, value } }) => (
+                      param.type === "object" ? (
                         <Textarea
-                          {...field}
-                          placeholder={`{
-  "key": "value"
-}`}
+                          value={value}
+                          onChange={onChange}
+                          placeholder={param.placeholder}
+                          minHeight="100px"
+                          fontFamily="monospace"
                         />
                       ) : (
-                        <Textarea
-                          {...field}
-                          placeholder={param?.description}
+                        <Input
+                          value={value}
+                          onChange={onChange}
+                          placeholder={param.placeholder}
                         />
                       )
                     )}
@@ -95,12 +136,16 @@ export default function HttpCustomFields({ control }: Props) {
             </Box>
           );
         })}
-        {availableParams.length > 0 && (
+        {customParams.length > fields.length && (
           <Button
-            onClick={() => append({ key: availableParams[0].name, value: "" })}
+            onClick={() => {
+              const availableParams = getAvailableParams();
+              if (availableParams.length > 0) {
+                append({ key: availableParams[0].name, value: "" });
+              }
+            }}
             size="sm"
             width="fit-content"
-            isDisabled={availableParams.length === 0}
           >
             + パラメータを追加
           </Button>
