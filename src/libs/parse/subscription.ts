@@ -4,6 +4,22 @@ import {
   SubscriptionFormData,
 } from "@/components/orion/subscription/SubscriptionForm";
 
+function processFieldValue(key: string, value: string): string {
+  // payloadフィールドの場合はJSONをURLエンコード
+  if (key === "payload") {
+    try {
+      // まずJSONとして解析可能か確認
+      const jsonObject = JSON.parse(value);
+      // JSONとして有効な場合はURLエンコード
+      return encodeURIComponent(JSON.stringify(jsonObject));
+    } catch {
+      // JSON解析に失敗した場合は元の値をそのまま返す
+      return value;
+    }
+  }
+  return value;
+}
+
 function convertHttpCustomFields(
   fields: HttpCustomField[],
   url: string
@@ -15,8 +31,8 @@ function convertHttpCustomFields(
   // その他のカスタムフィールドを追加
   for (const field of fields) {
     if (field.key && field.value && field.key !== "url") {
-      // 全ての値を文字列として扱う
-      result[field.key] = field.value;
+      // フィールドの種類に応じて適切な処理を行う
+      result[field.key] = processFieldValue(field.key, field.value);
     }
   }
   return result;
