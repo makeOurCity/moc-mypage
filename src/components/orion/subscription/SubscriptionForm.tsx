@@ -1,6 +1,7 @@
 import { Box, Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Input, Textarea } from "@chakra-ui/react";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
 import HttpCustomFields from "./HttpCustomFields";
+import NotificationTypeSelector from "./NotificationTypeSelector";
 
 export type NotificationType = "url" | "httpCustom";
 
@@ -86,15 +87,44 @@ export default function SubscriptionForm({
         />
       </FormControl>
 
-      <FormControl mb={4}>
-        <Controller
-          control={control}
-          name="notificationType"
-          render={({ field }) => (
-            <HttpCustomFields control={control} />
-          )}
-        />
-      </FormControl>
+      <NotificationTypeSelector control={control} />
+
+      <Controller
+        control={control}
+        name="notificationType"
+        render={({ field }) => (
+          <>
+            {field.value === "url" && (
+              <FormControl mb={4}>
+                <FormLabel>URL設定</FormLabel>
+                <Controller
+                  control={control}
+                  name="url"
+                  render={({ field, fieldState: { error } }) => (
+                    <>
+                      <Input
+                        type="text"
+                        placeholder="https://example.com"
+                        value={field.value}
+                        onChange={field.onChange}
+                        isInvalid={!!error}
+                      />
+                      {error ? (
+                        <FormHelperText color="red.500">{error.message}</FormHelperText>
+                      ) : (
+                        <FormHelperText>
+                          連携先のURLをhttpsから始まる形で記入してください。
+                        </FormHelperText>
+                      )}
+                    </>
+                  )}
+                />
+              </FormControl>
+            )}
+            {field.value === "httpCustom" && <HttpCustomFields control={control} />}
+          </>
+        )}
+      />
 
       <FormControl mb={4}>
         <FormLabel>説明</FormLabel>
