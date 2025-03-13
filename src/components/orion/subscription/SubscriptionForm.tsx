@@ -61,32 +61,6 @@ export default function SubscriptionForm({
         />
       </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel>URL設定</FormLabel>
-        <Controller
-          control={control}
-          name="url"
-          render={({ field, fieldState: { error } }) => (
-            <>
-              <Input
-                type="text"
-                placeholder="https://example.com"
-                value={field.value}
-                onChange={field.onChange}
-                isInvalid={!!error}
-              />
-              {error ? (
-                <FormHelperText color="red.500">{error.message}</FormHelperText>
-              ) : (
-                <FormHelperText>
-                  連携先のURLをhttpsから始まる形で記入してください。
-                </FormHelperText>
-              )}
-            </>
-          )}
-        />
-      </FormControl>
-
       <NotificationTypeSelector control={control} />
 
       <Controller
