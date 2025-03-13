@@ -21,11 +21,11 @@ export const useFiwareServiceHistory = () => {
     (service: string) => {
       if (!service) return; // 空文字列は保存しない
 
-      setHistory((prev) => {
+      setHistory((prev: FiwareServiceHistoryItem[]) => {
         const currentHistory = prev || [];
         const now = Date.now();
         const newHistory = currentHistory.filter(
-          (item) => item.service !== service
+          (item: FiwareServiceHistoryItem) => item.service !== service
         ); // 重複を除去
 
         // 新しい項目を先頭に追加
@@ -45,9 +45,11 @@ export const useFiwareServiceHistory = () => {
   // 履歴の削除
   const removeHistory = useCallback(
     (service: string) => {
-      setHistory((prev) => {
+      setHistory((prev: FiwareServiceHistoryItem[]) => {
         const currentHistory = prev || [];
-        return currentHistory.filter((item) => item.service !== service);
+        return currentHistory.filter(
+          (item: FiwareServiceHistoryItem) => item.service !== service
+        );
       });
     },
     [setHistory]
@@ -61,10 +63,10 @@ export const useFiwareServiceHistory = () => {
   // 履歴の更新（最終使用時間の更新）
   const updateLastUsed = useCallback(
     (service: string) => {
-      setHistory((prev) => {
+      setHistory((prev: FiwareServiceHistoryItem[]) => {
         const currentHistory = prev || [];
         const index = currentHistory.findIndex(
-          (item) => item.service === service
+          (item: FiwareServiceHistoryItem) => item.service === service
         );
         if (index === -1) return currentHistory;
 
