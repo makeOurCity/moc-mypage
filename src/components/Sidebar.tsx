@@ -16,6 +16,7 @@ import {
   FiCompass,
   FiFile,
   FiPackage,
+  FiSend,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import NavItem from "@/components/header/NavItem";
@@ -37,6 +38,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Tenant", icon: FiCompass, href: "/fiware/orion/types" },
   { name: "Entity", icon: FiFile, href: "/fiware/orion/entities" },
   { name: "Subscriptions", icon: FiPackage, href: "/fiware/orion/subscriptions" },
+  { name: "Postman", icon: FiSend, href: "/fiware/orion/postman" },
 ];
 
 export default function SidebarWithHeader({
