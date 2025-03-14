@@ -195,28 +195,24 @@ export default function HttpCustomFields({ control }: Props) {
               ))}
             </Select>
 
-            <Accordion allowToggle>
-              <AccordionItem>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    パラメータの説明
+            <Box mt={4} p={4} bg="gray.50" borderRadius="md">
+              <Text fontWeight="bold" mb={3}>利用可能なパラメータ</Text>
+              <VStack align="stretch" spacing={3}>
+                {availableParams.map(param => (
+                  <Box key={param.name} p={3} bg="white" borderRadius="md" shadow="sm">
+                    <Text fontWeight="bold" color="teal.600">{param.name}</Text>
+                    <Text fontSize="sm" color="gray.600" mt={1}>
+                      {param.description}
+                    </Text>
+                    {param.placeholder && (
+                      <Text fontSize="xs" fontFamily="monospace" mt={2} color="gray.500">
+                        例: {param.placeholder}
+                      </Text>
+                    )}
                   </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel>
-                  <VStack align="stretch" spacing={2}>
-                    {availableParams.map(param => (
-                      <Box key={param.name} p={2} bg="gray.50" borderRadius="md">
-                        <Text fontWeight="bold">{param.name}</Text>
-                        <Text fontSize="sm" color="gray.600">
-                          {param.description}
-                        </Text>
-                      </Box>
-                    ))}
-                  </VStack>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
+                ))}
+              </VStack>
+            </Box>
           </Box>
         )}
       </FormControl>
