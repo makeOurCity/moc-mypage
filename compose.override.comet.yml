@@ -1,0 +1,14 @@
+services:
+  comet:
+    image: fiware/sth-comet:2.10.0
+    ports:
+      - "8666:8666"
+    environment:
+      STH_HOST: 0.0.0.0
+      STH_PORT: 8666
+      DB_PREFIX: sth_
+      DB_URI: mongodb://mongodb:27017
+      LOGOPS_LEVEL: DEBUG
+    restart: "on-failure:3"
+    depends_on:
+      - mongodb
