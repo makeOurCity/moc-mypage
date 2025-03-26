@@ -87,7 +87,8 @@ $ curl -X "PUT" "https://localhost:8443/orion/v2/entities/urn:ngsild:Test:00001/
 cometにアクセスし、id, attributeを選択すると履歴が見れます。
 
 ```console
-$ curl "http://localhost:8666/STH/v1/contextEntities/type/Test/id/urn:ngsild:Test:00001/attributes/name?lastN=10" \
+curl "https://localhost:8443/comet/STH/v1/contextEntities/type/Test/id/urn:ngsild:Test:00001/attributes/name?lastN=10" \
+     -H 'Authorization: Bearer ${YOUR_TOKEN}' \
      -H 'Fiware-Service: ${YOUR_TENANT}' \
-     -H 'Fiware-ServicePath: /'
+     -H 'Fiware-ServicePath: /' 
 ```
