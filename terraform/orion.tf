@@ -1,7 +1,7 @@
-resource "kong-gateway_service" "comet_service" {
-  name            = "comet"
-  host            = "comet"
-  port            = 8666
+resource "kong-gateway_service" "orion_service" {
+  name            = "orion"
+  host            = "orion"
+  port            = 1026
   protocol        = "http"
   retries         = 5
   connect_timeout = 60000
@@ -9,18 +9,18 @@ resource "kong-gateway_service" "comet_service" {
   read_timeout    = 60000
 }
 
-resource "kong-gateway_route" "comet_route" {
-  name = "comet"
+resource "kong-gateway_route" "orion_route" {
+  name = "orion"
   service = {
-    id = kong-gateway_service.comet_service.id
+    id = kong-gateway_service.orion_service.id
   }
 
-  paths         = ["/comet"]
+  paths         = ["/orion"]
   strip_path    = true
   preserve_host = true
 }
 
-resource "kong-gateway_plugin_oauth2" "pluginoauth2_comet" {
+resource "kong-gateway_plugin_oauth2" "pluginoauth2" {
   config = {
     global_credentials                = true
     accept_http_if_already_terminated = true
@@ -34,6 +34,6 @@ resource "kong-gateway_plugin_oauth2" "pluginoauth2_comet" {
   protocols = ["http", "https"]
 
   route = {
-    id = kong-gateway_route.comet_route.id
+    id = kong-gateway_route.orion_route.id
   }
 }
