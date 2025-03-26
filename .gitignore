@@ -43,6 +43,7 @@ src/codegens
 
 # docker
 data
+compose.override.yml
 
 # env
 .env
