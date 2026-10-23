@@ -1,6 +1,6 @@
 import KongProvider, { KongCallbacks } from "../../../providers/KongProvider";
 import NextAuth, { CallbacksOptions, type NextAuthOptions } from "next-auth";
-import { Provider } from "next-auth/providers";
+import type { Provider } from "next-auth/providers/index";
 import CognitoProvider, { CognitoCallbacks } from "@/providers/CognitoProvider";
 
 const providers: Provider[] = [];

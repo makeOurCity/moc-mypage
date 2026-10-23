@@ -5,8 +5,8 @@ const { version } = require('./package.json');
 
 const nextConfig = {
   reactStrictMode: true,
-  publicRuntimeConfig: {
-    version,
+  env: {
+    NEXT_PUBLIC_APP_VERSION: version,
   },
 }
 
