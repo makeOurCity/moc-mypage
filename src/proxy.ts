@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt";
 
 // https://github.com/nextauthjs/next-auth/blob/v4/packages/next-auth/src/next/middleware.ts
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
 
   const token = await getToken({
     req,
