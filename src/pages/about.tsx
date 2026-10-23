@@ -1,12 +1,11 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardBody, CardHeader, Heading, Stack } from "@chakra-ui/react";
-import getConfig from 'next/config';
+import { Environments } from "@/libs/environments";
 
 
 export default function About() {
 
-  const { publicRuntimeConfig } = getConfig()
-  const version = publicRuntimeConfig.version || 'x.x.x'
+  const version = Environments.getAppVersion()
 
   return (
     <Layout>

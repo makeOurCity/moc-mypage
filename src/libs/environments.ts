@@ -56,4 +56,13 @@ export class Environments {
       "MoCデータ連携基盤マイページ"
     );
   }
+
+  /**
+   * アプリのバージョン取得
+   * next.config.js で package.json の version が設定される。
+   * @returns
+   */
+  public static getAppVersion(): string {
+    return process.env.NEXT_PUBLIC_APP_VERSION || "x.x.x";
+  }
 }
