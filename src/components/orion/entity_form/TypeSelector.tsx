@@ -3,6 +3,10 @@ import { useOrion } from "@/hooks/useOrion";
 import { Select } from "@chakra-ui/react";
 import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { ListEntityTypesResponse } from "@/codegens/orion";
+import {
+  fetchEntityTypeSummaries,
+  fetchEntityTypeWithAttrTypes,
+} from "@/libs/orion/entityTypes";
 
 type Props = {
   onChange: (data: ListEntityTypesResponse) => void;
@@ -19,7 +23,7 @@ const TypeSelector: FC<Props> = ({ onChange, value }) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await api.typesApi.listEntityTypes();
+      const data = await fetchEntityTypeSummaries(api.typesApi);
       setTypes(data);
     };
     fetch();
@@ -34,10 +38,10 @@ const TypeSelector: FC<Props> = ({ onChange, value }) => {
     });
   }, [types]);
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = async (e: ChangeEvent<HTMLSelectElement>) => {
     const type = types.find((type) => type.type === e.target.value);
     if (!type) return;
-    onChange(type);
+    onChange(await fetchEntityTypeWithAttrTypes(api.entitiesApi, type));
   };
 
   return (

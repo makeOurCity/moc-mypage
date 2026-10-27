@@ -5,6 +5,10 @@ import { useOrion } from "@/hooks/useOrion";
 import { FC, useEffect, useRef, useState } from "react";
 import { Stack, Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
+import {
+  fetchEntityTypeSummaries,
+  fetchEntityTypeWithAttrTypes,
+} from "@/libs/orion/entityTypes";
 
 const FiwareOrionEntitiesNew: FC = () => {
   const searchParams = useSearchParams();
@@ -23,11 +27,13 @@ const FiwareOrionEntitiesNew: FC = () => {
   useEffect(() => {
     setFiwareServiceHeader(paramFiwareService || fiwareService || "");
     const fetch = async () => {
-      const { data } = await api.typesApi.listEntityTypes();
+      const data = await fetchEntityTypeSummaries(api.typesApi);
       if (paramType) {
         const target = data.find((type) => type.type === paramType);
         if (target) {
-          entityFormRef.current.handleSelectType(target);
+          entityFormRef.current.handleSelectType(
+            await fetchEntityTypeWithAttrTypes(api.entitiesApi, target)
+          );
         }
       }
     };
