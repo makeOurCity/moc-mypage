@@ -17,6 +17,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import { ListEntityTypesResponse } from "@/codegens/orion";
+import { fetchEntityTypeSummaries } from "@/libs/orion/entityTypes";
 
 export default function FiwareOrionTypesIndex() {
   const { api, setFiwareServiceHeader } = useOrion();
@@ -32,8 +33,8 @@ export default function FiwareOrionTypesIndex() {
       if (fiwareService) {
         setFiwareServiceHeader(fiwareService);
       }
-      api.typesApi.listEntityTypes().then((res) => {
-        setList(res.data);
+      fetchEntityTypeSummaries(api.typesApi).then((data) => {
+        setList(data);
       });
     },
     [api.typesApi, setFiwareServiceHeader]
@@ -43,8 +44,8 @@ export default function FiwareOrionTypesIndex() {
    * 更新ボタンクリック時の挙動
    */
   const onClickHandler = useCallback(() => {
-    api.typesApi.listEntityTypes().then((res) => {
-      setList(res.data);
+    fetchEntityTypeSummaries(api.typesApi).then((data) => {
+      setList(data);
     });
   }, []);
 
