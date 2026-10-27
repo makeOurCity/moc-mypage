@@ -7,6 +7,7 @@ import {
   ListEntityTypesResponse,
 } from "@/codegens/orion";
 import { EntityFormData } from "./EntityForm";
+import { fetchEntityTypeSummaries } from "@/libs/orion/entityTypes";
 
 type Props = {
   field: FieldArrayWithId<EntityFormData, "data", "id">;
@@ -22,7 +23,7 @@ const RelationInput: FC<Props> = ({ field, control, index }) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await api.typesApi.listEntityTypes();
+      const data = await fetchEntityTypeSummaries(api.typesApi);
       setTypes(data);
     };
     fetch();
