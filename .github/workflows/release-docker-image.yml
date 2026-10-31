@@ -5,6 +5,11 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: read
+  # ghcr.io へイメージを push するため
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
