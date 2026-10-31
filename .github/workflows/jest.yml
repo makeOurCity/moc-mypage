@@ -9,6 +9,12 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+  # jest-coverage-report-action が PR コメントとチェックの注釈を書き込むため
+  checks: write
+  pull-requests: write
+
 jobs:
   unit_test:
     runs-on: ubuntu-latest
