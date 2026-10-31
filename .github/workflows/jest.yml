@@ -14,16 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7.0.1
 
       - name: setup-node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7.1.0
         with:
           node-version-file: "package.json"
           cache: npm
 
       - name: cache-node-modules
-        uses: actions/cache@v3
+        uses: actions/cache@v6.1.0
         id: node_modules_cache_id
         env:
           cache-name: cache-node-modules
@@ -39,7 +39,7 @@ jobs:
         run: npm run codegen
 
       - name: jest
-        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
+        uses: ArtiomTr/jest-coverage-report-action@v2.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-script: npm run test:ci
