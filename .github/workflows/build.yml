@@ -8,6 +8,9 @@ on:
       - release/*
       - hotfix/*
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
