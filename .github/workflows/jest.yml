@@ -45,7 +45,16 @@ jobs:
         run: npm run codegen
 
       - name: jest
+        id: coverage
         uses: ArtiomTr/jest-coverage-report-action@v2.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-script: npm run test:ci
+          # push 時のコミットコメントには contents: write が必要なため、PR 以外はジョブサマリーに出す
+          output: ${{ github.event_name == 'pull_request' && 'comment' || 'report-markdown' }}
+
+      - name: coverage summary
+        if: ${{ always() && github.event_name != 'pull_request' && steps.coverage.outputs.report != '' }}
+        env:
+          REPORT: ${{ steps.coverage.outputs.report }}
+        run: echo "$REPORT" >> "$GITHUB_STEP_SUMMARY"
