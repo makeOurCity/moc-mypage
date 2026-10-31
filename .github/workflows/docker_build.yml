@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7.0.1
 
       - name: create certs
         run: openssl req -newkey rsa:2048 -nodes -keyout ssl/key.pem -x509 -days 365 -out ssl/cert.pem -subj "/C=AU/ST=Some-State/L=City/O=Organization/OU=Unit/CN=example.com/emailAddress=email@example.com"
